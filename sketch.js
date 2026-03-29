@@ -3,12 +3,17 @@ function setup() {
   x = 0;
 }
 
+function preload() {
+  menuSong = loadSound("Assets/Music/Fire Ah PlaceHolder.mp3"); // change this to the actual music when ready
+}
+
 function draw() {
   background(220);
   startButton();
   levelButton();
   tutorialButton();
   settingsButton();
+  menuSong.loop();
 }
 
 function startButton() {
