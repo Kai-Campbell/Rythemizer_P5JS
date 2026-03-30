@@ -25,7 +25,7 @@ function startButton() {
      mouseY >= 180 - 50 && mouseY <= 240 - 50 &&
      mouseIsPressed == true) {
     console.log("Start");
-    levelRender = 3; // this moves to the test level right now
+    levelRender = 'rock'; // this moves to the test level right now
     playLevelMusic(); // Update game music
   }
 }

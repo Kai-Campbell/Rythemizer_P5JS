@@ -6,12 +6,13 @@
 */
 
 // Variable for keeping track of the game state (level)
-// 0 = Menu
-// 1 = LoFi
-// 2 = EDM
-// 3 = Rock
-// 4 = Transitioning (?)
-let levelRender = 0; 
+// Possible States
+// 0 = menu
+// 1 = lofi
+// 2 = edm
+// 3 = rock
+// 4 = trans
+let levelRender = 'menu'; 
 
 // Screen size
 const CANVAS_HEIGHT = 960;
@@ -46,10 +47,10 @@ function setup() {
 
 function draw() {
     switch (levelRender) {
-        case 0:
+        case 'menu':
             menuDraw();
             break;
-        case 3:
+        case 'rock':
             rockDraw();
             break;
         default:
@@ -71,10 +72,10 @@ function playLevelMusic() {
     if (levelMusic != undefined)
         levelMusic.stop();
     switch (levelRender) {
-        case 0:
+        case 'menu':
             levelMusic = menuMusic;
             break;
-        case 3:
+        case 'rock':
             levelMusic = rockMusic;
             break;
         default:
