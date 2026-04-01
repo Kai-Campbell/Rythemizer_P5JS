@@ -14,19 +14,15 @@ function menuDraw() {
 }
 
 function startButton() {
-  fill("red");
-  rect(360, 180 - 50, 240, 60); // the minus 50 was for when the menu asset was placed and the buttons were adjusted
+  image(menuStartButton[0], 400, 180 - 50, 162, 75);
   
-  textSize(20);
-  textAlign(CENTER);
-  fill("black");
-  text("Start", 480, 215 - 50);
-  
-  if (mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 180 - 50 && mouseY <= 240 - 50 &&
-     mouseIsPressed == true) {
-    console.log("Start");
-    switchLevel('rock');
+  if (mouseX >= 420 && mouseX <= 542 &&
+     mouseY >= 180 - 50 && mouseY <= 255 - 50) {
+    image(menuStartButton[1], 400, 180 - 50, 162, 75);
+
+    if (mouseIsPressed) {
+      switchLevel('rock');
+    }
   }
 }
   
