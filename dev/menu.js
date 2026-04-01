@@ -1,6 +1,7 @@
 
 
 let x = 0;
+let levelClicked = false;
 
 function menuDraw() {
   background(220);
@@ -30,25 +31,25 @@ function startButton() {
 }
   
 function levelButton() {
-  level = ["Story Mode", "Arcade Mode", "Chao Mode"];
+  const levels = ["Story Mode", "Arcade Mode", "Chao Mode"];
   fill("red");
   rect(360, 260 - 50, 240, 60);
   
   textSize(20);
   textAlign(CENTER);
   fill("black");
-  text(level[x], 480, 295 - 50);
+  text(levels[x], 480, 295 - 50);
   
-  if (mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 260 - 50 && mouseY <= 320 - 50 &&
-     mouseIsPressed == true) {
-    if (x == 2) {
-      x = 0;
-      mouseIsPressed = false;
-    } else {
-      x++;
-      mouseIsPressed = false;
-    }
+  const hovering = mouseX >= 360 && mouseX <= 600 &&
+     mouseY >= 260 - 50 && mouseY <= 320 - 50;
+  
+  if (hovering && mouseIsPressed && !levelClicked) {
+    levelClicked = true;
+    x = (x + 1) % levels.length;
+  }
+  
+  if (!mouseIsPressed) {
+    levelClicked = false;
   }
 }
 
