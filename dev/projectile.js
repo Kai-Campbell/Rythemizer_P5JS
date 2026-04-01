@@ -20,9 +20,11 @@ class Projectile {
         return (this.pos.x < 0 || this.pos.x > width || this.pos.y < 0 || this.pos.y > height);
     }
 
+    /*
     isHitting() {
-
+        
     }
+    */
 
     /*
     insert these into the level so the class will work
