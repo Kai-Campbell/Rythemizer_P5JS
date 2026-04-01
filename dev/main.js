@@ -66,7 +66,7 @@ function draw() {
 */
 
 /**
- * 
+ * Switches current level and re-freshes the music
  */
 function switchLevel(levelName) {
     levelRender = levelName;
