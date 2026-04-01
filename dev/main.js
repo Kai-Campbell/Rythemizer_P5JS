@@ -66,6 +66,14 @@ function draw() {
 */
 
 /**
+ * Switches current level and re-freshes the music
+ */
+function switchLevel(levelName) {
+    levelRender = levelName;
+    playLevelMusic();
+}
+
+/**
  * Plays the music track for the appropriate level (or main menu).
  */
 function playLevelMusic() {
