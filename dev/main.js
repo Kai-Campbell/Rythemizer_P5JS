@@ -34,7 +34,7 @@ function preload() {
     menuBacking = loadImage('../Assets/menu_lava.png');
     menuMusic = loadSound('../Assets/Music/Fire_Ah_PlaceHolder.mp3'); // change file path when we have the actual menu music
     menuLargeBg = loadImage('../Assets/menu_background.png');
-    menuStartButton = [loadImage('../Assets/start.png'), loadImage('../Assets/start_select.png')];
+    menuStartButton = [loadImage('../Assets/Buttons/start.png'), loadImage('../Assets/Buttons/start_select.png')];
 
     // Metal level
     metal_back = loadImage('../Assets/Test_Level_Lava.png');
