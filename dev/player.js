@@ -1,5 +1,6 @@
 let player;
 
+let spriteImages = [];
 let pressedKeys = {};
 
 class Player {
@@ -26,9 +27,7 @@ class Player {
       mvmt.y += 1;
     }
     
-    if (mvmt.mag() > 0) {
-      mvmt.setMag(this.speed);
-    }
+    mvmt.setMag(this.speed);
     
     this.x += mvmt.x;
     this.y += mvmt.y;
@@ -37,71 +36,19 @@ class Player {
   draw() {
     fill(255, 0, 0);
     circle(this.x, this.y, 30);
+    //image(spriteImages[0], this.x, this.y, 50, 50) // this is unfinished
   }
-}
-
-let animation = [];
-let animation2 = [];
-let guy, spriteData, spritesheet, mapsheet;
-let bgX = 0;
-
-const SPEED = 2;
-
-function preload() {
-  spriteData = loadJSON("red_guy.json");
-  spritesheet = loadImage("assets/red_guy_sheet.png");
-  mapsheet = loadImage("assets/lava_background.png");
-}
-
-function setup() {
-  createCanvas(400, 400);
-  textSize(32);
-  
-  const frames = spriteData.frames;
-  const frameCount = frames.length;
-
-  for (let i = 0; i < frameCount; i++) {
-    const pos = frames[i].position;
-    animation.push(spritesheet.get(pos.x, pos.y, pos.w, pos.h));
+/*
+  setup() {
+    spriteImages.push(spritesheet)
   }
 
-  guy = new Sprite(animation, 0, 75, 0.1);
-  guy.size = 0.5;
-}
-
-function draw() {
-  background(220);
-
-  const moving = keyIsDown(LEFT_ARROW) || keyIsDown(RIGHT_ARROW) ||
-                 keyIsDown(UP_ARROW)   || keyIsDown(DOWN_ARROW);
-
-  if (keyIsDown(LEFT_ARROW)) { 
-    guy.x -= SPEED;
-    guy.direction = -1;
-    bgX += SPEED * 0.3;
+  keyPressed() {
+    pressedKeys[key] = true
   }
-  if (keyIsDown(RIGHT_ARROW)) { 
-    guy.x += SPEED;
-    guy.direction = 1;
-    bgX -= SPEED * 0.3;
-  }
-  if (keyIsDown(UP_ARROW))    guy.y -= SPEED;
-  if (keyIsDown(DOWN_ARROW))  guy.y += SPEED;
-  
-  bgX = bgX % mapsheet.width;
-  
-  image(mapsheet, bgX, 0, width, height);
-  image(mapsheet, bgX - mapsheet.width, 0, width, height);
-  image(mapsheet, bgX + mapsheet.width, 0, width, height);
 
-  // Switch frame range based on movement
-  if (moving) {
-    guy.setFrameRange(3, 6); // walking frames
-    
-  } else {
-    guy.setFrameRange(0, 2); // idle frames
+  keyReleased() {
+    delete pressedKeys[key];
   }
-  
-  guy.show();
-  guy.animate();
+  */
 }
