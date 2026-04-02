@@ -1,5 +1,3 @@
-
-
 let x = 0;
 let levelClicked = false;
 

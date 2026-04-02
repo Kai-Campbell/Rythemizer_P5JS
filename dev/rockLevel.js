@@ -1,27 +1,30 @@
 let projectiles = [];
+let player_x = 200;
+let player_y = 200;
+let player_1;
+
 
 function rockSetup() {
-  player = new Player(CANVAS_HEIGHT / 2, CANVAS_WIDTH / 2);
+  player_1 = new Player(player_x, player_y);
   projectiles = [];
 }
 
 function rockDraw() {
   image(metal_back, 0, 0, CANVAS_HEIGHT, CANVAS_WIDTH);
-  player.update();
-  player.draw();
-  for (let i = projectiles.length - 1; i >= 0; i--) {
+  player_1.update();
+  player_1.draw();
+  for (let i = 0; i < projectiles.length; i++) {
     projectiles[i].update();
     projectiles[i].display();
 
     if (projectiles[i].isOffScreen()) {
-      projectiles.splice(i, 1);
+      projectiles.splice(i, 0)
     }
   }
 }
 
 function mousePressed() {
-  if (levelRender === 'rock') {
-    projectiles.push(new Projectile(player.x, player.y, mouseX, mouseY));
-  }
+  console.log("click")
+  projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY));
 }
 

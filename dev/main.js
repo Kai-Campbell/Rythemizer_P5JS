@@ -36,10 +36,11 @@ function preload() {
     menuLargeBg = loadImage('../Assets/menu_background.png');
     menuStartButton = [loadImage('../Assets/Buttons/start.png'), loadImage('../Assets/Buttons/start_select.png')];
     
-
     // Metal level
     metal_back = loadImage('../Assets/Test_Level_Lava.png');
     rockMusic = loadSound('../Assets/Music/Terrible_Placeholder_Music.mp3');
+
+    spritesheet = loadImage('../Assets/red_guy_sheet.png');
 }
 
 function setup() {
