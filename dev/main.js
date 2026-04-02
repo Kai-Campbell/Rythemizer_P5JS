@@ -40,7 +40,9 @@ function preload() {
     metal_back = loadImage('../Assets/Test_Level_Lava.png');
     rockMusic = loadSound('../Assets/Music/Terrible_Placeholder_Music.mp3');
 
+    // Player 
     spritesheet = loadImage('../Assets/red_guy_sheet.png');
+    bullet = loadImage('../Assets/bullet.png')
 }
 
 function setup() {

@@ -25,6 +25,6 @@ function rockDraw() {
 
 function mousePressed() {
   console.log("click")
-  projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY));
+  projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
 }
 

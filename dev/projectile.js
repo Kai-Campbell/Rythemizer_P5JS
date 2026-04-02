@@ -1,5 +1,6 @@
 class Projectile {
-    constructor(x, y, targetX, targetY) {
+    constructor(x, y, targetX, targetY, playType) {
+    this.playType = playType
     this.pos = createVector(x, y);
     // Calculate direction vector
     this.vel = createVector(targetX - x, targetY - y);
@@ -10,10 +11,13 @@ class Projectile {
         this.pos.add(this.vel);
     }
 
-    display() { // test method
-        fill(255);
-        noStroke();
-        ellipse(this.pos.x, this.pos.y, 20, 20);
+    display() {
+        if (this.playType == "player") {
+            fill(255);
+            noStroke();
+            ellipse(this.pos.x, this.pos.y, 20, 20);
+            image(bullet, this.pos.x, this.pos.y, 50, 25, 90)
+        }
     }
 
     isOffScreen() {
