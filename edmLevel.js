@@ -12,7 +12,7 @@ function setup() {
 }
 
 function preload() {
-  back = loadImage('Assets/Test_Level_Lava.png');
+  back = loadImage('Assets/test_level_edm.png');
   levelMusic = loadSound('Assets/Music/Terrible_Placeholder_Music.mp3');
 }
 
@@ -42,9 +42,6 @@ function mousePressed() {
 
 function keyPressed() {
   pressedKeys[key] = true;
-  if (key === 'c') {
-    window.location.href = 'edmLevel.html';
-  }
 }
 
 function keyReleased() {
