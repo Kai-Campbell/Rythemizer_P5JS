@@ -37,8 +37,11 @@ function preload() {
     menuStartButton = [loadImage('../Assets/Buttons/start.png'), loadImage('../Assets/Buttons/start_select.png')];
 
     // Metal level
-    metal_back = loadImage('../Assets/Test_Level_Lava.png');
+    metal_back = loadImage('../Assets/test_level_lava.png');
     rockMusic = loadSound('../Assets/Music/Terrible_Placeholder_Music.mp3');
+
+    // EDM level
+    edm_back = loadImage('../Assets/test_level_edm.png');
 
     // Player 
     spritesheet = loadImage('../Assets/red_guy_sheet.png');
@@ -58,6 +61,9 @@ function draw() {
             break;
         case 'rock':
             rockDraw();
+            break;
+        case 'edm':
+            edmDraw();
             break;
         default:
             break;
@@ -79,15 +85,27 @@ function switchLevel(levelName) {
     if (levelName === 'rock') {
         rockSetup();
     }
+    if (levelName == 'edm') { // edm level
+        edmSetup();
+    }
     playLevelMusic();
 }
 
 function keyPressed() {
     pressedKeys[key] = true;
+    if (key === 'c') { // added for testing
+        switchLevel('edm');
+    }
 }
 
 function keyReleased() {
     pressedKeys[key] = false;
+}
+
+function mousePressed() {
+    if (levelRender === 'rock' || levelRender === 'edm') {
+        projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
+    }
 }
 
 /**
