@@ -6,7 +6,7 @@ class Projectile {
     this.vel = createVector(targetX - x, targetY - y);
     this.vel.setMag(8); // Speed
   }
-  
+
     update() {
         this.pos.add(this.vel);
     }
