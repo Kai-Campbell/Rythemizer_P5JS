@@ -22,6 +22,12 @@ const CANVAS_WIDTH = 540;
 // See: https://p5js.org/reference/p5.sound/
 let levelMusic;
 
+// Assets loaded in preload()
+var menuBacking, menuMusic, menuLargeBg, menuStartButton, menuModeButton;
+var metal_back, rockMusic;
+var edm_back;
+var spritesheet, bullet;
+
 /*
 ======================================
 ---------- p5.js core functions ------
@@ -35,6 +41,9 @@ function preload() {
     menuMusic = loadSound('../Assets/Music/Fire_Ah_PlaceHolder.mp3'); // change file path when we have the actual menu music
     menuLargeBg = loadImage('../Assets/menu_background.png');
     menuStartButton = [loadImage('../Assets/Buttons/start.png'), loadImage('../Assets/Buttons/start_select.png')];
+    menuModeButton = [[loadImage('../Assets/Buttons/story.png'), loadImage('../Assets/Buttons/story_select.png')], 
+                    [loadImage('../Assets/Buttons/arcade.png'), loadImage('../Assets/Buttons/arcade_select.png')],
+                    [loadImage('../Assets/Buttons/chao.png'), loadImage('../Assets/Buttons/chao_select.png')]];
 
     // Metal level
     metal_back = loadImage('../Assets/test_level_lava.png');

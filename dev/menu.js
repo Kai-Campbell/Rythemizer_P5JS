@@ -25,23 +25,20 @@ function startButton() {
 }
   
 function levelButton() {
-  const levels = ["Story Mode", "Arcade Mode", "Chao Mode"];
-  fill("red");
-  rect(360, 260 - 50, 240, 60);
-  
-  textSize(20);
-  textAlign(CENTER);
-  fill("black");
-  text(levels[x], 480, 295 - 50);
-  
-  const hovering = mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 260 - 50 && mouseY <= 320 - 50;
-  
-  if (hovering && mouseIsPressed && !levelClicked) {
-    levelClicked = true;
-    x = (x + 1) % levels.length;
+  image(menuModeButton[x][0], 400, 260 - 50, 162, 75);
+
+  let hovering = mouseX >= 420 && mouseX <= 542 &&
+     mouseY >= 260 - 50 && mouseY <= 335 - 50;
+
+  if (hovering) {
+    image(menuModeButton[x][1], 400, 260 - 50, 162, 75);
+
+    if (mouseIsPressed && !levelClicked) {
+      levelClicked = true;
+      x = (x + 1) % menuModeButton.length;
+    }
   }
-  
+
   if (!mouseIsPressed) {
     levelClicked = false;
   }
