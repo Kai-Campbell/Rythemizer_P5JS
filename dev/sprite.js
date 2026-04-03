@@ -10,8 +10,6 @@ class Sprite {
             let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h)
             this.animation.push(img);
         }
-        //this.x = x;
-        //this.y = y;
         this.speed = speed;
         this.len = this.animation.length;
         this.index = 0;
