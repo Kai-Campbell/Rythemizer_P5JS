@@ -27,7 +27,9 @@ class Player {
       mvmt.y += 1;
     }
     
-    mvmt.setMag(this.speed);
+    if (mvmt.mag() > 0) {
+      mvmt.setMag(this.speed);
+    }
     
     this.x += mvmt.x;
     this.y += mvmt.y;
