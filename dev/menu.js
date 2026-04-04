@@ -1,6 +1,3 @@
-let x = 0;
-let levelClicked = false;
-
 function menuDraw() {
   background(220);
   image(menuLargeBg, 0, 0, CANVAS_HEIGHT, CANVAS_WIDTH);
@@ -11,12 +8,15 @@ function menuDraw() {
   settingsButton();
 }
 
+let currentMode = 0;
+let modeClicked = false;
+
 function startButton() {
-  image(menuStartButton[0], 400, 180 - 50, 162, 75);
+  image(menuStartButton[0], 360, 130, 240, 60);
   
-  if (mouseX >= 420 && mouseX <= 542 &&
-     mouseY >= 180 - 50 && mouseY <= 255 - 50) {
-    image(menuStartButton[1], 400, 180 - 50, 162, 75);
+  if (mouseX >= 360 && mouseX <= 600 &&
+     mouseY >= 130 && mouseY <= 190) {
+    image(menuStartButton[1], 360, 130, 240, 60);
 
     if (mouseIsPressed) {
       switchLevel('rock');
@@ -25,56 +25,41 @@ function startButton() {
 }
   
 function levelButton() {
-  const levels = ["Story Mode", "Arcade Mode", "Chao Mode"];
-  fill("red");
-  rect(360, 260 - 50, 240, 60);
+  const modeButtons = [menuStoryButton, menuArcadeButton, menuChaoButton];
   
-  textSize(20);
-  textAlign(CENTER);
-  fill("black");
-  text(levels[x], 480, 295 - 50);
+  image(modeButtons[currentMode][0], 360, 210, 240, 60);
   
   const hovering = mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 260 - 50 && mouseY <= 320 - 50;
+     mouseY >= 210 && mouseY <= 270;
   
-  if (hovering && mouseIsPressed && !levelClicked) {
-    levelClicked = true;
-    x = (x + 1) % levels.length;
+  if (hovering) {
+    image(modeButtons[currentMode][1], 360, 210, 240, 60);
+
+    if (mouseIsPressed && !modeClicked) {
+      modeClicked = true;
+      currentMode = (currentMode + 1) % 3;
+    }
   }
   
   if (!mouseIsPressed) {
-    levelClicked = false;
+    modeClicked = false;
   }
 }
 
 function tutorialButton() {
-  fill("red");
-  rect(360, 340 - 50, 240, 60);
-  
-  textSize(20);
-  textAlign(CENTER);
-  fill("black");
-  text("How To Play", 480, 375 - 50);
+  image(menuHowToButton[0], 360, 340 - 50, 240, 60);
   
   if (mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 340 - 50 && mouseY <= 400 - 50 &&
-     mouseIsPressed == true) {
-    console.log("How To");
+     mouseY >= 340 - 50 && mouseY <= 400 - 50) {
+    image(menuHowToButton[1], 360, 340 - 50, 240, 60);
   }
 }
   
 function settingsButton() {
-  fill("red");
-  rect(360, 420 - 50, 240, 60);
-  
-  textSize(20);
-  textAlign(CENTER);
-  fill("black");
-  text("Settings", 480, 455 - 50);
+  image(menuSettingsButton[0], 360, 420 - 50, 240, 60);
   
   if (mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 420 - 50 && mouseY <= 480 - 50 &&
-     mouseIsPressed == true) {
-    console.log("Settings");
+     mouseY >= 420 - 50 && mouseY <= 480 - 50) {
+    image(menuSettingsButton[1], 360, 420 - 50, 240, 60);
   }
 }

@@ -41,6 +41,11 @@ function preload() {
     menuMusic = loadSound('../Assets/Music/Fire_Ah_PlaceHolder.mp3'); // change file path when we have the actual menu music
     menuLargeBg = loadImage('../Assets/menu_background.png');
     menuStartButton = [loadImage('../Assets/Buttons/start.png'), loadImage('../Assets/Buttons/start_select.png')];
+    menuSettingsButton = [loadImage('../Assets/Buttons/settings.png'), loadImage('../Assets/Buttons/settings_select.png')];
+    menuHowToButton = [loadImage('../Assets/Buttons/how_to_play.png'), loadImage('../Assets/Buttons/how_to_play_select.png')];
+    menuStoryButton = [loadImage('../Assets/Buttons/story.png'), loadImage('../Assets/Buttons/story_select.png')];
+    menuArcadeButton = [loadImage('../Assets/Buttons/arcade.png'), loadImage('../Assets/Buttons/arcade_select.png')];
+    menuChaoButton = [loadImage('../Assets/Buttons/chao.png'), loadImage('../Assets/Buttons/chao_select.png')];
 
     // Metal level
     metal_back = loadImage('../Assets/test_level_lava.png');
