@@ -23,6 +23,7 @@ const CANVAS_WIDTH = 540;
 let levelMusic;
 
 let projectiles = [];
+let enemies = []
 let player_x = CANVAS_HEIGHT / 2;
 let player_y = CANVAS_WIDTH / 2;
 let player_1;

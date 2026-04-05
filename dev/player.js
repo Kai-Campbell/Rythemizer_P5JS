@@ -12,8 +12,12 @@ class Player {
     this.Anispeed = Anispeed;
 
     this.player_ani = new Sprite(spritedata, spritesheet, Anispeed);
+
+    this.w = this.player_ani.width // these are needed for hit detections
+    this.h = this.player_ani.height // these are needed for hit detections
     
     this.speed = 4;
+    this.pos = createVector(x, y); // this is for tracking for the enemies and bosses
   }
   
   update() {
@@ -38,6 +42,8 @@ class Player {
     
     this.x += mvmt.x;
     this.y += mvmt.y;
+
+    this.pos.set(this.x, this.y)
   }
   
   draw() {

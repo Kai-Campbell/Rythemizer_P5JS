@@ -5,10 +5,14 @@ class Sprite {
         this.spritedata = spritedata;
         this.spritesheet = spritesheet;
         let frames = spritedata.frames;
+        this.width; // width variable used for collision detection
+        this.height; // height variable used for collision detection
         for (let i = 0; i < frames.length; i++) {
             let pos = frames[i].position;
             let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h)
             this.animation.push(img);
+            this.width = pos.w
+            this.height = pos.h
         }
         this.speed = speed;
         this.len = this.animation.length;
