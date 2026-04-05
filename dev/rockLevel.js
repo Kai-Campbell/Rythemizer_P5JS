@@ -24,7 +24,7 @@ function spawnBaddies(count) {
 }
 
 function rockDraw() {
-  image(metal_back, 0, 0, CANVAS_HEIGHT, CANVAS_WIDTH);
+  image(metal_back, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   player_1.update();
   player_1.draw();
   for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards

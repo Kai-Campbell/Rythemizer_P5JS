@@ -14,9 +14,9 @@
 // 4 = trans
 let levelRender = 'menu'; 
 
-// Screen size
-const CANVAS_HEIGHT = 960;
-const CANVAS_WIDTH = 540;
+// Set Screen size
+const CANVAS_HEIGHT = 750;
+const CANVAS_WIDTH = 1000;
 
 // p5 sound object for playing in-game music
 // See: https://p5js.org/reference/p5.sound/
@@ -65,7 +65,7 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(CANVAS_HEIGHT, CANVAS_WIDTH);
+    createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     noSmooth();
     playLevelMusic();
 }

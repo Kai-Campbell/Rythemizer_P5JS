@@ -1,51 +1,78 @@
+// Menu variables for sizing
+const MENU_WIDTH = 650;
+const MENU_HEIGHT = 700;
+const CENTER_OF_MENU = (CANVAS_WIDTH / 2) - 10;
+const MENU_Y = (MENU_HEIGHT / 10);
+const FIRST_BUT = MENU_Y + 250;
+
+// Button size and gap variables
+const BUTTON_W = 240
+const BUTTON_H = 60
+const BUTTON_GAP = 75;
+
 function menuDraw() {
   background(220);
-  image(menuLargeBg, 0, 0, CANVAS_HEIGHT, CANVAS_WIDTH);
-  image(menuBacking, 160, -90, 650, 700);
+  // Draw background image
+  image(menuLargeBg, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  // Draw main menu relative to screen rsolution
+  image(menuBacking, (CANVAS_WIDTH / 2) - (MENU_WIDTH / 2), MENU_Y, MENU_WIDTH, MENU_HEIGHT);
   
-  // Pulsing logo
+  // Change image placement to center
+  imageMode(CENTER);
+  pulsingLogo();
+  startButton(CENTER_OF_MENU, FIRST_BUT, BUTTON_W, BUTTON_H);
+  levelButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP, BUTTON_W, BUTTON_H);
+  tutorialButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 2, BUTTON_W, BUTTON_H);
+  settingsButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 3, BUTTON_W, BUTTON_H);
+  // Change back to not break other image renders
+  imageMode(CORNER);
+}
+
+let currentMode = 0;
+let modeClicked = false;
+
+/**
+ * Displays the pulsing RYTHEMIZER logo.
+ */
+function pulsingLogo() {
   let scale = 1 + 0.1 * sin(frameCount * 0.02);
   let scaleFactor = 400 / menuLogoGlow.width;
   let baseWidth = menuLogoGlow.width * scaleFactor;
   let baseHeight = menuLogoGlow.height * scaleFactor;
   let centerX = 10 + baseWidth / 2;
   let centerY = 10 + baseHeight / 2;
-  let x = centerX - (baseWidth * scale / 2);
-  let y = centerY - (baseHeight * scale / 2);
+  // let x = centerX - (baseWidth * scale / 2);
+  // let y = centerY - (baseHeight * scale / 2);
+  let x = CENTER_OF_MENU;
+  let y = MENU_Y + 10;
   image(menuLogoGlow, x, y, baseWidth * scale, baseHeight * scale);
-
-  startButton();
-  levelButton();
-  tutorialButton();
-  settingsButton();
 }
 
-let currentMode = 0;
-let modeClicked = false;
-
-function startButton() {
-  image(menuStartButton[0], 360, 130, 240, 60);
+/**
+ * Start button - Begins the game
+ */
+function startButton(x, y, w, h) {
+  image(menuStartButton[0], x, y, w, h);
   
-  if (mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 130 && mouseY <= 190) {
-    image(menuStartButton[1], 360, 130, 240, 60);
+  if (isHovering(x, y, w, h)) {
+    image(menuStartButton[1], x, y, w, h);
 
     if (mouseIsPressed) {
       switchLevel('rock');
     }
   }
 }
-  
-function levelButton() {
+ 
+/**
+ * Level Button - Changes difficulty / mode
+ */
+function levelButton(x, y, w, h) {
   const modeButtons = [menuStoryButton, menuArcadeButton, menuChaoButton];
 
-  image(modeButtons[currentMode][0], 360, 210, 240, 60);
+  image(modeButtons[currentMode][0], x, y, w, h);
 
-  const hovering = mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 210 && mouseY <= 270;
-
-  if (hovering) {
-    image(modeButtons[currentMode][1], 360, 210, 240, 60);
+  if (isHovering(x, y, w, h)) {
+    image(modeButtons[currentMode][1], x, y, w, h);
 
     if (mouseIsPressed && !modeClicked) {
       modeClicked = true;
@@ -58,20 +85,39 @@ function levelButton() {
   }
 }
 
-function tutorialButton() {
-  image(menuHowToButton[0], 360, 340 - 50, 240, 60);
+/**
+ * Tutorial button
+ */
+function tutorialButton(x, y, w, h) {
+  image(menuHowToButton[0], x, y, w, h);
   
-  if (mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 340 - 50 && mouseY <= 400 - 50) {
-    image(menuHowToButton[1], 360, 340 - 50, 240, 60);
+  if (isHovering(x, y, w, h)) {
+    image(menuHowToButton[1], x, y, w, h);
   }
 }
   
-function settingsButton() {
-  image(menuSettingsButton[0], 360, 420 - 50, 240, 60);
+/**
+ * Settings button
+ */
+function settingsButton(x, y, w, h) {
+  image(menuSettingsButton[0], x, y, w, h);
   
-  if (mouseX >= 360 && mouseX <= 600 &&
-     mouseY >= 420 - 50 && mouseY <= 480 - 50) {
-    image(menuSettingsButton[1], 360, 420 - 50, 240, 60);
+  if (isHovering(x, y, w, h)) {
+    image(menuSettingsButton[1], x, y, w, h);
   }
+}
+
+
+/*
+======================================
+---------- Helper functions ----------
+======================================
+*/
+
+/**
+ * Returns true when mouse is detected within the bounds
+ */
+function isHovering(x, y, w, h) {
+  return mouseX >= x - w/2 && mouseX <= x + w/2 &&
+          mouseY >= y - h/2 && mouseY <= y + h/2;
 }
