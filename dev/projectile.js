@@ -7,12 +7,14 @@ class Projectile {
     this.w = 20
     this.h = 20 // I'm gonna be honest I think this isn't needed but I'm leaving it here in case because I forgot, just in case DO NOT REMOVE IT I WILL CHECK IT LATER
     this.r = 10
+    this.frameCounter = 0; // Counter for sprite animation
   }
 
     // update position of projectile every frame
     update() {
         // Stop projectile from moving when game is paused
         if (!paused) {
+            this.frameCounter++; // Increment counter for sprite animation
             this.pos.add(this.vel);
         }
     }
@@ -22,7 +24,16 @@ class Projectile {
             fill(255);
             noStroke();
             ellipse(this.pos.x, this.pos.y, 20, 20);
-            image(bullet, this.pos.x, this.pos.y, 50, 25, 90)
+            
+            let angle = atan2(this.vel.y, this.vel.x);
+            let spriteIndex = Math.floor(millis() / 100) % 2;
+            let sourceX = spriteIndex * 90;
+            
+            push();
+            translate(this.pos.x, this.pos.y);
+            rotate(angle);
+            image(bullet, 0, 0, 30, 20, sourceX, 0, 90, 55);
+            pop();
         }
     }
 
