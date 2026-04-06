@@ -1,10 +1,3 @@
-/**
- * Gamepad input via the browser Gamepad API (standard layout).
- * Polled every frame from main draw() — no external libraries.
- *
- * Player 0: move = left stick + D-pad; shoot = A (button 0), aim = right stick or mouse fallback.
- */
-
 var gamepadInput = {
   leftStick: { x: 0, y: 0 },
   rightStick: { x: 0, y: 0 },
@@ -42,7 +35,7 @@ function gamepadButtonPressed(gp, index) {
 }
 
 /**
- * Refresh sticks + D-pad from the first connected pad; handle A-button fire on rising edge.
+ * Refresh sticks + D-pad from the first connected pad; handle right-trigger fire on rising edge.
  * Call once per frame (e.g. start of draw).
  */
 function updateGamepads() {
@@ -73,7 +66,7 @@ function updateGamepads() {
   gamepadInput.dpad.left = gamepadButtonPressed(gp, 14);
   gamepadInput.dpad.right = gamepadButtonPressed(gp, 15);
 
-  const fireNow = gamepadButtonPressed(gp, 0);
+  const fireNow = gamepadButtonPressed(gp, 7);
   if (fireNow && !gamepadState._fireHeld) {
     gamepadTryFireProjectile();
   }
