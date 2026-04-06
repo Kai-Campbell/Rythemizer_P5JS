@@ -26,7 +26,10 @@ class Enemy {
     
         direction.setMag(this.moveSpeed); // change this to make the guy move faster
         
-        this.pos.add(direction);
+        // Stop enemy from moving when game is paused
+        if (!paused) {
+            this.pos.add(direction);
+        }
     }
 
     draw() {

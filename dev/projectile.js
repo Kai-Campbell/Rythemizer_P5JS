@@ -9,8 +9,12 @@ class Projectile {
     this.r = 10
   }
 
+    // update position of projectile every frame
     update() {
-        this.pos.add(this.vel);
+        // Stop projectile from moving when game is paused
+        if (!paused) {
+            this.pos.add(this.vel);
+        }
     }
 
     display() {

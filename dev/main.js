@@ -14,6 +14,9 @@
 // 4 = trans
 let levelRender = 'menu'; 
 
+// Variable to detect if the game is paused
+let paused = false;
+
 // Set Screen size
 const CANVAS_HEIGHT = 750;
 const CANVAS_WIDTH = 1000;
@@ -84,6 +87,10 @@ function draw() {
         default:
             break;
     }
+    // If the game is paused, draw pause menu overtop the game
+    if (levelRender != 'menu' && paused) {
+        pauseMenuDraw();
+    }
 }
 
 
@@ -111,6 +118,10 @@ function keyPressed() {
     pressedKeys[key] = true;
     if (key === 'c') { // added for testing
         switchLevel('edm');
+    }
+    if (key == 'Escape' && levelRender != 'menu') {
+        // Toggle pausing variable
+       paused = !paused; 
     }
 }
 

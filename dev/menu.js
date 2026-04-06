@@ -10,11 +10,32 @@ const BUTTON_W = 240
 const BUTTON_H = 60
 const BUTTON_GAP = 75;
 
+/**
+ * Main menu that welcomes the player to the game
+ */
 function menuDraw() {
-  background(220);
   // Draw background image
   image(menuLargeBg, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  // Draw main menu relative to screen rsolution
+  // Draw main menu relative to screen resolution
+  image(menuBacking, (CANVAS_WIDTH / 2) - (MENU_WIDTH / 2), MENU_Y, MENU_WIDTH, MENU_HEIGHT);
+  
+  // Change image placement to center
+  imageMode(CENTER);
+  pulsingLogo();
+  startButton(CENTER_OF_MENU, FIRST_BUT, BUTTON_W, BUTTON_H);
+  levelButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP, BUTTON_W, BUTTON_H);
+  tutorialButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 2, BUTTON_W, BUTTON_H);
+  settingsButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 3, BUTTON_W, BUTTON_H);
+  // Change back to not break other image renders
+  imageMode(CORNER);
+}
+
+/**
+ * Pause menu 
+ * Appears when the escape key (and eventually start button on controller)
+ */
+function pauseMenuDraw() {
+  // Draw main menu relative to screen resolution
   image(menuBacking, (CANVAS_WIDTH / 2) - (MENU_WIDTH / 2), MENU_Y, MENU_WIDTH, MENU_HEIGHT);
   
   // Change image placement to center

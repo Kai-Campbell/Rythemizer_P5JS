@@ -23,17 +23,20 @@ class Player {
   update() {
     let mvmt = createVector(0, 0);
     
-    if(pressedKeys.a) {
-      mvmt.x -= 1;
-    }
-    if(pressedKeys.d) {
-      mvmt.x += 1;
-    }
-    if(pressedKeys.w) {
-      mvmt.y -= 1;
-    }
-    if(pressedKeys.s) {
-      mvmt.y += 1;
+    // Player movement
+    if (!paused) { // Disables player from moving when pause menu is open
+      if(pressedKeys.a) {
+        mvmt.x -= 1;
+      }
+      if(pressedKeys.d) {
+        mvmt.x += 1;
+      }
+      if(pressedKeys.w) {
+        mvmt.y -= 1;
+      }
+      if(pressedKeys.s) {
+        mvmt.y += 1;
+      }
     }
     
     if (mvmt.mag() > 0) {
