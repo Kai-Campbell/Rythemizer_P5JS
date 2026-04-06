@@ -25,7 +25,7 @@ const CANVAS_WIDTH = 1000;
 // See: https://p5js.org/reference/p5.sound/
 let levelMusic;
 
-// sp26_cs345_team10/Assets loaded in preload()
+// Assets loaded in preload()
 var menuBacking, menuMusic, menuLargeBg, menuStartButton;
 var menuSettingsButton, menuHowToButton, menuStoryButton, menuArcadeButton, menuChaoButton, menuLogoGlow;
 var metal_back, rockMusic;
@@ -40,31 +40,31 @@ let enemies = [];
 ======================================
 */
 
-// Pre-load ALL game sp26_cs345_team10/Assets
+// Pre-load ALL game assets
 function preload() {
     // Main menu
-    menuBacking = loadImage('sp26_cs345_team10/Assets/menu_lava.png');
-    menuMusic = loadSound('sp26_cs345_team10/Assets/Music/Fire_Ah_PlaceHolder.mp3'); // change file path when we have the actual menu music
-    menuLargeBg = loadImage('sp26_cs345_team10/Assets/menu_background.png');
-    menuStartButton = [loadImage('sp26_cs345_team10/Assets/Buttons/start.png'), loadImage('sp26_cs345_team10/Assets/Buttons/start_select.png')];
-    menuSettingsButton = [loadImage('sp26_cs345_team10/Assets/Buttons/settings.png'), loadImage('sp26_cs345_team10/Assets/Buttons/settings_select.png')];
-    menuHowToButton = [loadImage('sp26_cs345_team10/Assets/Buttons/how_to_play.png'), loadImage('sp26_cs345_team10/Assets/Buttons/how_to_play_select.png')];
-    menuStoryButton = [loadImage('sp26_cs345_team10/Assets/Buttons/story.png'), loadImage('sp26_cs345_team10/Assets/Buttons/story_select.png')];
-    menuArcadeButton = [loadImage('sp26_cs345_team10/Assets/Buttons/arcade.png'), loadImage('sp26_cs345_team10/Assets/Buttons/arcade_select.png')];
-    menuChaoButton = [loadImage('sp26_cs345_team10/Assets/Buttons/chao.png'), loadImage('sp26_cs345_team10/Assets/Buttons/chao_select.png')];
-    menuLogoGlow = loadImage('sp26_cs345_team10/Assets/logo_glow.png');
+    menuBacking = loadImage('Assets/menu_lava.png');
+    menuMusic = loadSound('Assets/Music/Fire_Ah_PlaceHolder.mp3'); // change file path when we have the actual menu music
+    menuLargeBg = loadImage('Assets/menu_background.png');
+    menuStartButton = [loadImage('Assets/Buttons/start.png'), loadImage('Assets/Buttons/start_select.png')];
+    menuSettingsButton = [loadImage('Assets/Buttons/settings.png'), loadImage('Assets/Buttons/settings_select.png')];
+    menuHowToButton = [loadImage('Assets/Buttons/how_to_play.png'), loadImage('Assets/Buttons/how_to_play_select.png')];
+    menuStoryButton = [loadImage('Assets/Buttons/story.png'), loadImage('Assets/Buttons/story_select.png')];
+    menuArcadeButton = [loadImage('Assets/Buttons/arcade.png'), loadImage('Assets/Buttons/arcade_select.png')];
+    menuChaoButton = [loadImage('Assets/Buttons/chao.png'), loadImage('Assets/Buttons/chao_select.png')];
+    menuLogoGlow = loadImage('Assets/logo_glow.png');
 
     // Metal level
-    metal_back = loadImage('sp26_cs345_team10/Assets/test_level_lava.png');
-    rockMusic = loadSound('sp26_cs345_team10/Assets/Music/Terrible_Placeholder_Music.mp3');
+    metal_back = loadImage('Assets/test_level_lava.png');
+    rockMusic = loadSound('Assets/Music/Terrible_Placeholder_Music.mp3');
 
     // EDM level
-    edm_back = loadImage('sp26_cs345_team10/Assets/test_level_edm.png');
+    edm_back = loadImage('Assets/test_level_edm.png');
 
     // Player 
-    spritesheet = loadImage('sp26_cs345_team10/Assets/red_guy_sheet.png');
-    spriteData = loadJSON('sp26_cs345_team10/Assets/redguy.json')
-    bullet = loadImage('sp26_cs345_team10/Assets/bullet.png')
+    spritesheet = loadImage('Assets/red_guy_sheet.png');
+    spriteData = loadJSON('Assets/redguy.json')
+    bullet = loadImage('Assets/bullet.png')
 }
 
 function setup() {
