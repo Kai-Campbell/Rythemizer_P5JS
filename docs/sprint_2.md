@@ -1,0 +1,3 @@
+
+# Sprint 2 goals
+Our goal for this sprint is to dive deeper into menus and the player. This will be achieved by implementing movement input, shooting input, a main menu and in game pause screen menu. The input will include both KBM (keyboard/mouse) and controller. We will finish our button assets to help complete both the title screen menu, and in game pause menu. The in game menu will be a "pause" menu, effectively pausing all current gameplay. We will continue to use our Discord server as our means of communication between each other, which has been great for us so far.
