@@ -2,6 +2,7 @@ let projectiles = [];
 let player_x = 200;
 let player_y = 200;
 let player_1;
+var wave_length = 3
 
 
 function rockSetup() {
@@ -47,8 +48,11 @@ function rockDraw() {
       enemies[i].update(player_1);
     }
 
-    if (enemies.length === 0) { // infinite enemies mode
+    if (enemies.length === 0 && wave_length != 0) { // infinite enemies mode
       spawnBaddies(8);
+      wave_length--;
+    } else {
+      console.log("load boss")
     }
   }
 
