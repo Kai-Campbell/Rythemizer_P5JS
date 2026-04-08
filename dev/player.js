@@ -25,16 +25,16 @@ class Player {
     
     // Player movement
     if (!paused) { // Disables player from moving when pause menu is open
-      if(pressedKeys.a) {
+      if(pressedKeys.a || pressedKeys.A || pressedKeys.ArrowLeft) {
         mvmt.x -= 1;
       }
-      if(pressedKeys.d) {
+      if(pressedKeys.d || pressedKeys.D || pressedKeys.ArrowRight) {
         mvmt.x += 1;
       }
-      if(pressedKeys.w) {
+      if(pressedKeys.w || pressedKeys.W || pressedKeys.ArrowUp) {
         mvmt.y -= 1;
       }
-      if(pressedKeys.s) {
+      if(pressedKeys.s || pressedKeys.S || pressedKeys.ArrowDown) {
         mvmt.y += 1;
       }
 
