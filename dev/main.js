@@ -18,8 +18,8 @@ let levelRender = 'menu';
 let paused = false;
 
 // Set Screen size
-const CANVAS_HEIGHT = 1500 / 2.5;
-const CANVAS_WIDTH = 2000 / 2.5;
+const CANVAS_HEIGHT = 1500 / 2;
+const CANVAS_WIDTH = 2000 / 2;
 
 // p5 sound object for playing in-game music
 // See: https://p5js.org/reference/p5.sound/
@@ -29,7 +29,7 @@ let levelMusic;
 var menuBacking, menuMusic, menuLargeBg, menuStartButton;
 var menuSettingsButton, menuHowToButton, menuStoryButton, menuArcadeButton, menuChaoButton, menuLogoGlow;
 var metal_back, rockMusic;
-var edm_back, edmMusic;
+var edm_back;
 var spritesheet, spriteData, bullet;
 var runnerSheet, runnerData
 
@@ -61,7 +61,6 @@ function preload() {
 
     // EDM level
     edm_back = loadImage('../Assets/Levels/test_level_edm.png');
-    edmMusic = loadSound('../Assets/Music/ContraAhSng.mp3');
 
     // Player 
     spritesheet = loadImage('../Assets/Player/red_guy_sheet.png');
@@ -161,7 +160,7 @@ function playLevelMusic() {
             levelMusic = rockMusic;
             break;
         default:
-            levelMusic = edmMusic;
+            levelMusic = menuMusic;
             break;
     }
     levelMusic.play();
