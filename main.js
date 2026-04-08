@@ -43,28 +43,28 @@ let enemies = [];
 // Pre-load ALL game assets
 function preload() {
     // Main menu
-    menuBacking = loadImage('Assets/menu_lava.png');
+    menuBacking = loadImage('Assets/GUI/menu_lava.png');
     menuMusic = loadSound('Assets/Music/Fire_Ah_PlaceHolder.mp3'); // change file path when we have the actual menu music
-    menuLargeBg = loadImage('Assets/menu_background.png');
+    menuLargeBg = loadImage('Assets/GUI/menu_background.png');
     menuStartButton = [loadImage('Assets/Buttons/start.png'), loadImage('Assets/Buttons/start_select.png')];
     menuSettingsButton = [loadImage('Assets/Buttons/settings.png'), loadImage('Assets/Buttons/settings_select.png')];
     menuHowToButton = [loadImage('Assets/Buttons/how_to_play.png'), loadImage('Assets/Buttons/how_to_play_select.png')];
     menuStoryButton = [loadImage('Assets/Buttons/story.png'), loadImage('Assets/Buttons/story_select.png')];
     menuArcadeButton = [loadImage('Assets/Buttons/arcade.png'), loadImage('Assets/Buttons/arcade_select.png')];
     menuChaoButton = [loadImage('Assets/Buttons/chao.png'), loadImage('Assets/Buttons/chao_select.png')];
-    menuLogoGlow = loadImage('Assets/logo_glow.png');
+    menuLogoGlow = loadImage('Assets/GUI/logo_glow.png');
 
     // Metal level
-    metal_back = loadImage('Assets/Test_Level_Lava.png');
+    metal_back = loadImage('Assets/Levels/Test_Level_Lava.png');
     rockMusic = loadSound('Assets/Music/Terrible_Placeholder_Music.mp3');
 
     // EDM level
-    edm_back = loadImage('Assets/test_level_edm.png');
+    edm_back = loadImage('Assets/Levels/test_level_edm.png');
 
     // Player 
-    spritesheet = loadImage('Assets/red_guy_sheet.png');
-    spriteData = loadJSON('Assets/redguy.json')
-    bullet = loadImage('Assets/bullet.png')
+    spritesheet = loadImage('Assets/Player/red_guy_sheet.png');
+    spriteData = loadJSON('Assets/Player/redguy.json')
+    bullet = loadImage('Assets/Projectiles/bullet.png')
 }
 
 function setup() {
