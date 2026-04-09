@@ -26,16 +26,24 @@ class Player {
     // Player movement
     if (!paused) { // Disables player from moving when pause menu is open
       if(pressedKeys.a || pressedKeys.A || pressedKeys.ArrowLeft) {
-        mvmt.x -= 1;
+        if (this.x > 0) {
+          mvmt.x -= 1;
+        }
       }
       if(pressedKeys.d || pressedKeys.D || pressedKeys.ArrowRight) {
-        mvmt.x += 1;
+        if (this.x < CANVAS_WIDTH - this.w) {
+          mvmt.x += 1;
+        }
       }
       if(pressedKeys.w || pressedKeys.W || pressedKeys.ArrowUp) {
-        mvmt.y -= 1;
+        if (this.y > 0) {
+          mvmt.y -= 1;
+        }
       }
       if(pressedKeys.s || pressedKeys.S || pressedKeys.ArrowDown) {
-        mvmt.y += 1;
+        if (this.y < CANVAS_HEIGHT - this.h) {
+          mvmt.y += 1;
+        }
       }
 
       if (typeof gamepadInput !== "undefined") {
@@ -58,6 +66,9 @@ class Player {
     
     this.x += mvmt.x;
     this.y += mvmt.y;
+
+    this.x = constrain(this.x, 0, CANVAS_WIDTH - this.w);
+    this.y = constrain(this.y, 0, CANVAS_HEIGHT - this.h);
 
     this.pos.set(this.x, this.y)
   }

@@ -38,6 +38,10 @@ var fireballSheet, fireballData; // Fireball projectiles
 
 let enemies = [];
 
+/** Shared fire rate for mouse and gamepad (ms between shots). */
+const PLAYER_FIRE_INTERVAL_MS = 150;
+let lastPlayerFireAt = 0;
+
 /*
 ======================================
 ---------- p5.js core functions ------
@@ -94,6 +98,9 @@ function setup() {
 function draw() {
     if (!paused && typeof updateGamepads === "function") {
         updateGamepads();
+    }
+    if (!paused) {
+        handleHeldFire();
     }
     switch (levelRender) {
         case 'menu':
@@ -165,9 +172,30 @@ function mousePressed() {
     if (paused) {
         return;
     }
-    if (levelRender != "menu") {
-        projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
+    tryFireMouseProjectile();
+}
+
+function handleHeldFire() {
+    if (mouseIsPressed) {
+        tryFireMouseProjectile();
     }
+}
+
+function tryFireMouseProjectile() {
+    if (levelRender === "menu") {
+        return;
+    }
+    if (typeof player_1 === "undefined" || !player_1 || typeof projectiles === "undefined") {
+        return;
+    }
+
+    const now = millis();
+    if (now - lastPlayerFireAt < PLAYER_FIRE_INTERVAL_MS) {
+        return;
+    }
+
+    projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
+    lastPlayerFireAt = now;
 }
 
 /**

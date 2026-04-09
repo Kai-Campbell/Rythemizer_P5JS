@@ -7,7 +7,7 @@ var gamepadInput = {
 var gamepadState = {
   deadzone: 0.18,
   aimDeadzone: 0.22,
-  _fireHeld: false,
+  lastFireAt: 0,
 };
 
 function gamepadApplyDeadzone(value, deadzone) {
@@ -35,7 +35,7 @@ function gamepadButtonPressed(gp, index) {
 }
 
 /**
- * Refresh sticks + D-pad from the first connected pad; handle right-trigger fire on rising edge.
+ * Refresh sticks + D-pad from the first connected pad; handle held right-trigger fire.
  * Call once per frame (e.g. start of draw).
  */
 function updateGamepads() {
@@ -52,7 +52,6 @@ function updateGamepads() {
     gamepadInput.dpad.down = false;
     gamepadInput.dpad.left = false;
     gamepadInput.dpad.right = false;
-    gamepadState._fireHeld = false;
     return;
   }
 
@@ -67,17 +66,19 @@ function updateGamepads() {
   gamepadInput.dpad.right = gamepadButtonPressed(gp, 15);
 
   const fireNow = gamepadButtonPressed(gp, 7);
-  if (fireNow && !gamepadState._fireHeld) {
+  if (fireNow) {
     gamepadTryFireProjectile();
   }
-  gamepadState._fireHeld = fireNow;
 }
 
 function gamepadTryFireProjectile() {
   if (typeof paused !== "undefined" && paused) {
     return;
   }
-  if (typeof levelRender === "undefined" || (levelRender !== "rock" && levelRender !== "edm")) {
+  if (
+    typeof levelRender === "undefined" ||
+    (levelRender !== "rock" && levelRender !== "edm" && levelRender !== "lofi")
+  ) {
     return;
   }
   if (typeof player_1 === "undefined" || !player_1) {
@@ -96,5 +97,13 @@ function gamepadTryFireProjectile() {
     ty = player_1.y + ry * 400;
   }
 
+  const now = millis();
+  const fireInterval =
+    typeof PLAYER_FIRE_INTERVAL_MS !== "undefined" ? PLAYER_FIRE_INTERVAL_MS : 200;
+  if (now - gamepadState.lastFireAt < fireInterval) {
+    return;
+  }
+
   projectiles.push(new Projectile(player_1.x, player_1.y, tx, ty, "player"));
+  gamepadState.lastFireAt = now;
 }
