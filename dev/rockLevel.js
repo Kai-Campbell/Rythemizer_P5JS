@@ -39,7 +39,13 @@ function rockDraw() {
           projectiles.splice(i, 1);
           break; // leaves loop because enemy gone
         }
+
+        if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter") {
+          player_1.health--;
+          console.log(player_1.health);
+        }
       }
+
 
       if (projectiles[i] && projectiles[i].isOffScreen()) { // first check is added because you need to check if the bullet is still there
         projectiles.splice(i, 1);

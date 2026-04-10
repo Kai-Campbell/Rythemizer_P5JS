@@ -10,6 +10,8 @@ class Player {
     this.spritedata = spritedata;
     this.spritesheet = spritesheet;
     this.Anispeed = Anispeed;
+    this.r = 40 // if the scale is changed, change this
+    this.health = 5
 
     this.player_ani = new Sprite(spritedata, spritesheet, Anispeed);
 
@@ -17,7 +19,7 @@ class Player {
     this.h = this.player_ani.height // these are needed for hit detections
     
     this.speed = 4;
-    this.pos = createVector(x, y); // this is for tracking for the enemies and bosses
+    this.pos = createVector(x, y); // this is for tracking for the enemies and bosses and moving
   }
   
   update() {
@@ -77,6 +79,20 @@ class Player {
     this.player_ani.show(this.x - 20, this.y - 20); // temporary fix probably should change properly
     this.player_ani.animate();
   }
+/*
+  drawGun() {
+    let angle = atan2(mouseY - this.pos.y, mouseX - this.pos.x);
+    let aimingLeft = abs(angle) > HALF_PI;
+
+    noStroke();
+    fill(90, 140, 230);
+    translate(this.pos.x, this.pos.y);
+    rotate(angle);
+    if (aimingLeft) scale(1, -1);
+    fill(160, 160, 170);
+    rect(RADIUS - 4, -4, 28, 9, 2);
+  }
+*/
 }
 
 

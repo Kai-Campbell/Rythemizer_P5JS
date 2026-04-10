@@ -1,5 +1,5 @@
 class Boss {
-    constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed) {
+    constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed) {
         this.x = x;
         this.y = y;
         this.target_x = target_x;
@@ -8,7 +8,8 @@ class Boss {
         this.spritesheet = spritesheet;
         this.Anispeed = Anispeed;
         this.hit = false;
-        this.r = 30 // this r is scaleable in comparisson to the enemy class for big bosses
+        this.r = r // this r is scaleable in comparisson to the enemy class for big bosses
+        this.moveSpeed = moveSpeed;
 
         this.Enemy_ani = new Sprite(spritedata, spritesheet, Anispeed);
 
