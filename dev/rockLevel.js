@@ -43,6 +43,7 @@ function rockDraw() {
         if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter") {
           player_1.health--;
           console.log(player_1.health);
+          break;
         }
       }
 

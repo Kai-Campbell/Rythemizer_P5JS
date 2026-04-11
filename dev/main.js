@@ -213,8 +213,10 @@ function playLevelMusic() {
             break;
         case 'edm':
             levelMusic = edmMusic;
+            break;
         case 'lofi':
             levelMusic = lofiMusic;
+            break;
         default:
             levelMusic = menuMusic;
             break;

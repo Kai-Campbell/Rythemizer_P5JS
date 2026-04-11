@@ -35,8 +35,8 @@ function gamepadButtonPressed(gp, index) {
 }
 
 /**
- * Refresh sticks + D-pad from the first connected pad; handle held right-trigger fire.
- * Call once per frame (e.g. start of draw).
+ * Refresh sticks + D-pad from the first connected pad; fire while right trigger is held
+ * or while the right stick is actively aiming. Call once per frame (e.g. start of draw).
  */
 function updateGamepads() {
   const gp = gamepadFirstConnected();
@@ -65,7 +65,7 @@ function updateGamepads() {
   gamepadInput.dpad.left = gamepadButtonPressed(gp, 14);
   gamepadInput.dpad.right = gamepadButtonPressed(gp, 15);
 
-  const fireNow = gamepadButtonPressed(gp, 7);
+  const fireNow = gamepadButtonPressed(gp, 7) || Math.hypot(gamepadInput.rightStick.x, gamepadInput.rightStick.y) > 0;
   if (fireNow) {
     gamepadTryFireProjectile();
   }
