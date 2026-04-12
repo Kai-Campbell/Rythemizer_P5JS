@@ -11,7 +11,7 @@ class Player {
     this.spritesheet = spritesheet;
     this.Anispeed = Anispeed;
     this.r = 40 // if the scale is changed, change this
-    this.health = 5
+    this.health = 5; 
     this.can_hit = true;
     this.is_visible = true;
 

@@ -10,6 +10,9 @@ const BUTTON_W = 240
 const BUTTON_H = 60
 const BUTTON_GAP = 75;
 
+// Tutorial button click flag
+let tutorialClicked = false;
+
 /**
  * Main menu that welcomes the player to the game
  */
@@ -113,6 +116,16 @@ function tutorialButton(x, y, w, h) {
   
   if (isHovering(x, y, w, h)) {
     image(menuHowToButton[1], x, y, w, h);
+    
+    if (mouseIsPressed && !tutorialClicked) {
+      tutorialClicked = true;
+      showTutorial = true;
+      tutorialIndex = 0;
+    }
+  }
+  
+  if (!mouseIsPressed) {
+    tutorialClicked = false;
   }
 }
   
