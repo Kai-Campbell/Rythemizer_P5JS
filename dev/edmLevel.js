@@ -1,4 +1,6 @@
 function edmSetup() {
+  gameOver = false;
+  gameOverMusicPlaying = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
   for (let x = enemies.length - 1; x >= 0; x--) { // this will reset the enemies on screen
@@ -41,6 +43,17 @@ function edmDraw() {
 
     for (let i = enemies.length - 1; i >= 0; i--) {
       enemies[i].update(player_1);
+      
+      // Check for grunt contact damage
+      let distance = dist(enemies[i].pos.x, enemies[i].pos.y, player_1.pos.x, player_1.pos.y);
+      if (distance < enemies[i].r + player_1.r && player_1.can_hit == true) {
+        player_1.health--;
+        player_1.invincible();
+        console.log(player_1.health);
+        if (player_1.health <= 0) {
+          gameOver = true;
+        }
+      }
     }
 
     if (enemies.length === 0) { // infinite enemies mode
@@ -55,4 +68,7 @@ function edmDraw() {
   for (let i = enemies.length - 1; i >= 0; i--) {
     enemies[i].draw();
   }
+  
+  // Display health bar
+  displayHealthBar(player_1);
 }
