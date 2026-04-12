@@ -1,5 +1,5 @@
 class Boss {
-    constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed) {
+    constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health) {
         this.x = x;
         this.y = y;
         this.target_x = target_x;
@@ -10,6 +10,7 @@ class Boss {
         this.hit = false;
         this.r = r // this r is scaleable in comparisson to the enemy class for big bosses
         this.moveSpeed = moveSpeed;
+        this.health = health;
 
         this.Enemy_ani = new Sprite(spritedata, spritesheet, Anispeed);
 
@@ -19,5 +20,13 @@ class Boss {
         this.pos = createVector(x, y);
         this.vel = createVector(target_x - x, target_y - y);
         this.vel.setMag(3); // Speed
+    }
+}
+
+class rockBoss extends Boss {
+    constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health) {
+        super(x, y, target_x, target_y, spritedata, spritesheet, Anispeed, moveSpeed, health)
+
+        
     }
 }

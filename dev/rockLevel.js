@@ -40,8 +40,9 @@ function rockDraw() {
           break; // leaves loop because enemy gone
         }
 
-        if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter") {
+        if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter" && player_1.can_hit == true) { // this detects hits on the player
           player_1.health--;
+          player_1.invincible();
           console.log(player_1.health);
           break;
         }
