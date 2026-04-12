@@ -23,7 +23,6 @@ class Enemy {
         this.pos = createVector(x, y);
         this.vel = createVector(target_x - x, target_y - y);
         this.vel.setMag(moveSpeed); // Speed
-
   }
 
     draw() {

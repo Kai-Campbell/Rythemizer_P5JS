@@ -1,5 +1,5 @@
 let player;
-
+const delay = ms => new Promise(res => setTimeout(res, ms));
 let spriteImages = [];
 let pressedKeys = {};
 
@@ -12,6 +12,8 @@ class Player {
     this.Anispeed = Anispeed;
     this.r = 40 // if the scale is changed, change this
     this.health = 5
+    this.can_hit = true;
+    this.is_visible = true;
 
     this.player_ani = new Sprite(spritedata, spritesheet, Anispeed);
 
@@ -76,8 +78,34 @@ class Player {
   }
   
   draw() {
-    this.player_ani.show(this.x - 20, this.y - 20); // temporary fix probably should change properly
-    this.player_ani.animate();
+    if (this.is_visible === true) {
+      this.player_ani.show(this.x - 20, this.y - 20); // temporary fix probably should change properly
+      this.player_ani.animate();
+      // these draw the gun.
+      let angle = atan2(mouseY - this.pos.y, mouseX - this.pos.x);
+      push();
+      translate(this.pos.x, this.pos.y);
+      rotate(angle);
+      image(shotgunSprite, 0, 0, 50, 28); 
+      pop();
+    }
+  }
+
+  async blink() { // this makes the character blink when invincible
+    for (let i = 0; i < 15; i++) {
+      this.is_visible = false;
+      await delay(100);
+      this.is_visible = true;
+      await delay(100);
+    }
+  }
+
+  async invincible() {
+    this.can_hit = false;
+    this.blink();
+    console.log("cant hit me!");
+    await delay(3000); // this is 3 seconds delay, change this and the for loop above to show change in blinking.
+    this.can_hit = true;
   }
 /*
   drawGun() {

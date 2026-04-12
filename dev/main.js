@@ -35,6 +35,7 @@ var spritesheet, spriteData, bullet, bulletData;
 var runnerSheet, runnerData; // Edm grunt
 var big_bassSheet, big_bassData; // Edm Bomber
 var fireballSheet, fireballData; // Fireball projectiles
+var shotgunSprite
 
 let enemies = [];
 
@@ -87,6 +88,9 @@ function preload() {
     big_bassData = loadJSON('../Assets/Enemies/big_bass.json');
     fireballSheet = loadImage('../Assets/Projectiles/fireball.png')
     fireballData = loadJSON('../Assets/Projectiles/fireball.json')
+
+    // Guns
+    shotgunSprite = loadImage('../Assets/Weapons/shotgun.png')
 }
 
 function setup() {
