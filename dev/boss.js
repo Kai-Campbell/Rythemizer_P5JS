@@ -47,7 +47,7 @@ class rockBoss extends Boss {
     draw() {
         if (this.is_visible === true) {
             fill(0, 0, 0);
-            circle(this.pos.x, this.pos.y, this.r * 2);
+            circle(this.pos.x, this.pos.y, this.r * 2); // this is for showing the hitbox in testing.
             this.Boss_anim.show(this.pos.x - this.r, this.pos.y - this.r);
             this.Boss_anim.animate();
         }
