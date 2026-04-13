@@ -46,6 +46,7 @@ var spritesheet, spriteData, bullet, bulletData;
 var runnerSheet, runnerData; // Edm grunt
 var big_bassSheet, big_bassData; // Edm Bomber
 var fireballSheet, fireballData; // Fireball projectiles
+var dragonSpriteSheet, dragonJSON // Dragon Boss 
 var shotgunSprite
 var healthBarSheet, healthBarData; // Health bar display
 var gameOverImage; // Game over screen image
@@ -53,6 +54,7 @@ var gameOverMusic; // Game over music
 var tutorialMusic; // Tutorial background music
 
 let enemies = [];
+let boss = [];
 
 /** Shared fire rate for mouse and gamepad (ms between shots). */
 const PLAYER_FIRE_INTERVAL_MS = 150;
@@ -81,6 +83,8 @@ function preload() {
     // Metal level
     metal_back = loadImage('../Assets/Levels/Test_Level_Lava.png');
     rockMusic = loadSound('../Assets/Music/Terrible_Placeholder_Music.mp3');
+    dragonJSON = loadJSON('../Assets/Bosses/guitar_dragon_boss.json');
+    dragonSpriteSheet = loadImage('../Assets/Bosses/guitar_dragon_boss.png');
 
     // EDM level
     edm_back = loadImage('../Assets/Levels/test_level_edm.png');

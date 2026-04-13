@@ -1,5 +1,5 @@
 let player;
-const delay = ms => new Promise(res => setTimeout(res, ms)); // this helps with the delay functions DO NOT REMOVE
+const delay = ms => new Promise(res => setTimeout(res, ms)); // this helps with the delay functions DO NOT REMOVE also this is declare globally so dont add to other classes
 let spriteImages = [];
 let pressedKeys = {};
 
@@ -92,7 +92,7 @@ class Player {
   }
 
   async blink() { // this makes the character blink when invincible
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 15; i++) { // until 15 because of the 2 delays and 3 seconds of i frames
       this.is_visible = false;
       await delay(100);
       this.is_visible = true;

@@ -33,6 +33,7 @@ var edm_back;
 var spritesheet, spriteData, bullet;
 
 let enemies = [];
+let boss = [];
 
 /*
 ======================================
