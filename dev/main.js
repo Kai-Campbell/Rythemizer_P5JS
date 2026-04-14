@@ -45,8 +45,12 @@ var lofi_back, lofiMusic;
 var spritesheet, spriteData, bullet, bulletData;
 var runnerSheet, runnerData; // Edm grunt
 var big_bassSheet, big_bassData; // Edm Bomber
+var amp_smallSheet // amp enemy
+var disc_throwerData, disc_throwerSheet // disc enemy
 var fireballSheet, fireballData; // Fireball projectiles
 var dragonSpriteSheet, dragonJSON // Dragon Boss 
+var rave_knightJSON, rave_knightSheet // Rave Boss
+var bard_JSON, bard_spriteSheet // Bard boss
 var shotgunSprite
 var healthBarSheet, healthBarData; // Health bar display
 var gameOverImage; // Game over screen image
@@ -89,22 +93,36 @@ function preload() {
     // EDM level
     edm_back = loadImage('../Assets/Levels/test_level_edm.png');
     edmMusic = loadSound('../Assets/Music/ContraAhSng.mp3');
+    rave_knightJSON = loadJSON('../Assets/Bosses/rave_knight.json');
+    rave_knightSheet = loadImage('../Assets/Bosses/rave_knight.png');
 
     // Lofi level
-    lofi_back = loadImage('../Assets/Levels/test_level_lofi.png')
+    lofi_back = loadImage('../Assets/Levels/test_level_lofi.png');
     lofiMusic = loadSound('../Assets/Music/PoopMusic.mp3');
+    bard_JSON = loadJSON('../Assets/Bosses/vibe_bard.json');
+    bard_spriteSheet = loadImage('../Assets/Bosses/vibe_bard.png');
 
     // Player 
     spritesheet = loadImage('../Assets/Player/red_guy_sheet.png');
-    spriteData = loadJSON('../Assets/Player/redguy.json')
-    bullet = loadImage('../Assets/Projectiles/bullet.png')
-    bulletData = loadJSON('../Assets/Projectiles/bullet.json')
+    spriteData = loadJSON('../Assets/Player/redguy.json');
+    bullet = loadImage('../Assets/Projectiles/bullet.png');
+    bulletData = loadJSON('../Assets/Projectiles/bullet.json');
 
-    // Enemey
+    // Enemeys //
+    // Runner
     runnerSheet = loadImage('../Assets/Enemies/vinyl_runner.png');
     runnerData = loadJSON('../Assets/Enemies/vinyl_runner.json');
+    // Big Bass
     big_bassSheet = loadImage('../Assets/Enemies/big_bass.png');
     big_bassData = loadJSON('../Assets/Enemies/big_bass.json');
+    // Disc Thrower
+    disc_throwerSheet = loadImage('../Assets/Enemies/disc_thrower.png');
+    disc_throwerData = loadJSON('../Assets/Enemies/disc_thrower.json');
+    // Small Amp
+    amp_smallSheet = loadImage('../Assets/Enemies/small_amp.png');
+
+
+    // Fireball Projectile
     fireballSheet = loadImage('../Assets/Projectiles/fireball.png')
     fireballData = loadJSON('../Assets/Projectiles/fireball.json')
 

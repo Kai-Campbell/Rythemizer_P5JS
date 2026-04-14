@@ -2,7 +2,7 @@ let projectiles = [];
 let player_x = 200;
 let player_y = 200;
 let player_1;
-var wave_length = 3
+var wave_length = 3;
 var boss_spawned = false;
 
 
