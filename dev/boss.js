@@ -81,7 +81,9 @@ class rockBoss extends Boss {
                 await delay(100);
             }
             await delay(2000); // 2 second delay;
-
+            if (this.is_dead) { // this is necessary after each call to stop the shooting if the enemy dies while shooting
+                return;
+            }
             // shoots bottom to top
             let top = 150;
             for (let i = CANVAS_HEIGHT; i >= top; i -= 50) {
@@ -89,7 +91,9 @@ class rockBoss extends Boss {
                 await delay(100);
             }
             await delay(2000)
-
+            if (this.is_dead) {
+                return;
+            }
             // shoots middle area
             let center_top = (CANVAS_HEIGHT / 2) - 150;
             let center_bottom = (CANVAS_HEIGHT / 2) + 250;
@@ -98,7 +102,9 @@ class rockBoss extends Boss {
                 await delay(50);
             }
             await delay(2000);
-            
+            if (this.is_dead) {
+                return;
+            }
             // shoots from the low center to the middle
             let middle_bottom = (CANVAS_HEIGHT * 2);
             let middle = CANVAS_HEIGHT / 2;
@@ -107,7 +113,9 @@ class rockBoss extends Boss {
                 await delay(50);
             }
             await delay(2000);
-            
+            if (this.is_dead) {
+                return;
+            }
             // shoots from the top center to the middle
             let top_middle = 0 - CANVAS_HEIGHT;
             for (let i = top_middle; i <= middle; i += 50) {
