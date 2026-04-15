@@ -81,8 +81,17 @@ class Player {
     if (this.is_visible === true) {
       this.player_ani.show(this.x - 20, this.y - 20); // temporary fix probably should change properly
       this.player_ani.animate();
-      // these draw the gun.
-      let angle = atan2(mouseY - this.pos.y, mouseX - this.pos.x);
+      // Aim gun with the right stick when available, otherwise use the mouse.
+      let aimX = mouseX - this.pos.x;
+      let aimY = mouseY - this.pos.y;
+      if (typeof gamepadInput !== "undefined") {
+        const rs = gamepadInput.rightStick;
+        if (Math.hypot(rs.x, rs.y) > 0.2) {
+          aimX = rs.x;
+          aimY = rs.y;
+        }
+      }
+      let angle = atan2(aimY, aimX);
       push();
       translate(this.pos.x, this.pos.y);
       rotate(angle);
