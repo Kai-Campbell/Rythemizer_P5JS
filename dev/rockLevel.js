@@ -40,11 +40,22 @@ function spawnBoss() {
 
 function rockDraw() {
   image(metal_back, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+  /**
+   * Logic in this if statement plays when the game is not paused.
+   * Should be things like updating movement, checking for collision, ext.
+   */
   if (!paused) {
+    // Updates player position
     player_1.update();
+
+    /**
+     * Collision checking for all projectiles types
+     */
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
       projectiles[i].update();
 
+      // Check for collisions of projectiles 
       for (let j = enemies.length - 1; j >= 0; j--) {
         if (projectiles[i].getPlayType() == 'player' && projectiles[i].checkHit(enemies[j])) {
           enemies.splice(j, 1);
@@ -63,7 +74,10 @@ function rockDraw() {
         }
       }
 
-      if (boss_spawned != false) {
+      // Checks for collisions for player and boss projectiles
+      if (boss_spawned) {
+
+        // Checks to see if player hit boss
         for (let b = boss.length - 1; b >= 0; b--) {
           if (projectiles[i].getPlayType() === 'player' && projectiles[i].checkHit(boss[b])) {
             if (boss[b].can_hit === true) {
@@ -79,6 +93,7 @@ function rockDraw() {
             break; // leaves loop because enemy gone
           }
 
+          // Checks to see if boss hit player 
           if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter" && player_1.can_hit == true) { // this detects hits on the player
             player_1.health--;
             player_1.invincible();
@@ -92,16 +107,19 @@ function rockDraw() {
       }
       
 
-
+      // Remove bullet once it's off-screen
       if (projectiles[i] && projectiles[i].isOffScreen()) { // first check is added because you need to check if the bullet is still there
         projectiles.splice(i, 1);
       }
     }
 
+    /**
+     * Checks for collision of any enemy type and the player. Detracts health if a collision occurs.
+     * Collision occurs if the enemies radius (r) is within the player's radius (r). 
+     */
     for (let i = enemies.length - 1; i >= 0; i--) {
       enemies[i].update(player_1);
       
-      // Check for grunt contact damage
       let distance = dist(enemies[i].pos.x, enemies[i].pos.y, player_1.pos.x, player_1.pos.y);
       if (distance < enemies[i].r + player_1.r && player_1.can_hit == true) {
         player_1.health--;
@@ -113,7 +131,10 @@ function rockDraw() {
       }
     }
 
-    if (boss_spawned != false) {
+    /**
+     * Same collision check as above, now with the bosses' radius 
+     */
+    if (boss_spawned) {
         for (let b = boss.length - 1; b >= 0; b--) {
           boss[b].update(player_1);
 
@@ -129,6 +150,7 @@ function rockDraw() {
         }
       }
 
+    // Wave logic
     if (enemies.length === 0) {
       if (wave_length != 0) {
         spawnRockBaddies(8);
@@ -140,6 +162,9 @@ function rockDraw() {
     } 
   }
 
+  /**
+   * Render all sprites.
+   */
   player_1.draw();
   for (let i = projectiles.length - 1; i >= 0; i--) {
     projectiles[i].display();
@@ -149,7 +174,7 @@ function rockDraw() {
   }
   for (let i = 0; i < boss.length; i++) {
     boss[i].draw();
-}
+  }
   
   // Display health bar
   displayHealthBar(player_1);
