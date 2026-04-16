@@ -134,7 +134,7 @@ function preload() {
     healthBarData = loadJSON('../Assets/GUI/health_bar.json');
     
     // Game Over
-    gameOverImage = loadImage('../Assets/game_over_placeholder.png');
+    gameOverImage = loadImage('../Assets/GUI/death_screen.png');
     gameOverMusic = loadSound('../Assets/Music/29_Ghosts_IV.mp3');
     
     // Tutorial images
