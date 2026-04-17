@@ -33,7 +33,10 @@ function spawnBoss() {
   if (boss_spawned === true) {
     return;
   } else {
-    boss.push(new rockBoss(CANVAS_WIDTH - 200, 400, player_1.x, player_1.y, 200, dragonJSON, dragonSpriteSheet, 0.1, 0.3, 30, 10))
+    let startX = CANVAS_WIDTH + 500; 
+    let targetX = CANVAS_WIDTH - 200;
+    boss.push(new rockBoss(startX, CANVAS_HEIGHT - 450, targetX, player_1.y, 200, dragonJSON, dragonSpriteSheet, 0.1, 0.3, 30, 10))
+    boss_spawned = true;
   }
 }
 
@@ -79,7 +82,7 @@ function rockDraw() {
 
         // Checks to see if player hit boss
         for (let b = boss.length - 1; b >= 0; b--) {
-          if (projectiles[i].getPlayType() === 'player' && projectiles[i].checkHit(boss[b])) {
+          if (projectiles[i].getPlayType() === 'player' && projectiles[i].checkHit(boss[b]) && boss[b].entered_scene == true) {
             if (boss[b].can_hit === true) {
               boss[b].health--;
               boss[b].invincible();
@@ -163,7 +166,7 @@ function rockDraw() {
         wave_length--;
       } else {
         spawnBoss();
-        boss_spawned = true;
+        //boss_spawned = true;
       }
     } 
   }
@@ -179,7 +182,13 @@ function rockDraw() {
     enemies[i].draw();
   }
   for (let i = 0; i < boss.length; i++) {
-    boss[i].draw();
+    if (boss[i].entered_scene === false) {
+      boss[i].enterScene();
+      boss[i].draw();
+    } else {
+      boss[i].draw();
+    }
+    
   }
   
   // Display health bar

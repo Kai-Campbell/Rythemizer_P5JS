@@ -86,6 +86,7 @@ class Player {
   
   draw() {
     if (this.is_visible === true) {
+      //circle(this.pos.x, this.pos.y, this.r) // here for testing if needed.
       this.player_ani.show(this.x - 20, this.y - 20, this.facingLeft);
       this.player_ani.animate();
       // Aim gun with the right stick when available, otherwise use the mouse.

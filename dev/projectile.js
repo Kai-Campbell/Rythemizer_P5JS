@@ -61,7 +61,7 @@ class Projectile {
             rotate(angle);
             image(
                 fireballSheet,      // Actual sprite sheet file 
-                0, 0,               // dx, dy: Coordinates to draw image onto canvas 
+                0 - 10, 0 - 10,     // dx, dy: Coordinates to draw image onto canvas (10 to center sprite)
                 20, 28,             // dWidth, dHeight: How large it draws onto the canvas
                 frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
                 frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet

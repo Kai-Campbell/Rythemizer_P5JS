@@ -16,6 +16,7 @@ class Boss {
         this.is_visible = true;
         this.is_shooting = false; // this is so the boss doesn't shoot like 1000 bullets every frame
         this.is_dead = false; // this is so the boss' projectiles stop shooting when dead
+        this.entered_scene = false; // this is so the boss can enter the scene
 
         this.Boss_anim = new BossSprite(spritedata, spritesheet, Anispeed, r * 2, r * 2);
 
@@ -37,8 +38,17 @@ class rockBoss extends Boss {
     }
 
     update(player) {
-        if (!paused) {
+        if (!paused && this.entered_scene) {
             this.shootPattern(player); // this will start the shooting cycle. the way this works is jank if need be ask me - Kai
+        }
+    }
+
+    enterScene() { // THIS IS VERY IMPORTANT. THESE VALUES NEED TO BE CHANGED BASED ON WHERE THE BOSS IS ENTERING OR SUPPOSED TO BE. CHANGE THE Y OR X VARIABLES NEEDED.
+        if (this.pos.x > this.target_x) {
+            this.pos.x -= 5;
+        } else {
+            this.pos.x = this.target_x;
+            this.entered_scene = true;
         }
     }
 
@@ -47,7 +57,9 @@ class rockBoss extends Boss {
             fill(0, 0, 0);
             circle(this.pos.x, this.pos.y, this.r * 2); // this is for showing the hitbox in testing.
             this.Boss_anim.show(this.pos.x - this.r, this.pos.y - this.r);
-            this.Boss_anim.animate();
+            if (this.entered_scene) {
+                this.Boss_anim.animate();
+            }
         }
     }
 
