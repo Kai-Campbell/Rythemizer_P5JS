@@ -1,4 +1,4 @@
-function edmSetup() {
+function lofiSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
@@ -21,8 +21,8 @@ function spawnBaddies(count) {
   }
 }
 
-function edmDraw() {
-  image(edm_back, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+function lofiDraw() {
+  image(lofi_back, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   if (!paused) {
     player_1.update();
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
@@ -72,6 +72,5 @@ function edmDraw() {
     enemies[i].draw();
   }
   
-  // Display health bar
   displayHealthBar(player_1);
 }

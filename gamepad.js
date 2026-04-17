@@ -1,10 +1,3 @@
-/**
- * Gamepad input via the browser Gamepad API (standard layout).
- * Polled every frame from main draw() — no external libraries.
- *
- * Player 0: move = left stick + D-pad; shoot = A (button 0), aim = right stick or mouse fallback.
- */
-
 var gamepadInput = {
   leftStick: { x: 0, y: 0 },
   rightStick: { x: 0, y: 0 },
@@ -14,7 +7,7 @@ var gamepadInput = {
 var gamepadState = {
   deadzone: 0.18,
   aimDeadzone: 0.22,
-  _fireHeld: false,
+  lastFireAt: 0,
 };
 
 function gamepadApplyDeadzone(value, deadzone) {
@@ -42,8 +35,8 @@ function gamepadButtonPressed(gp, index) {
 }
 
 /**
- * Refresh sticks + D-pad from the first connected pad; handle A-button fire on rising edge.
- * Call once per frame (e.g. start of draw).
+ * Refresh sticks + D-pad from the first connected pad; fire while right trigger is held
+ * or while the right stick is actively aiming. Call once per frame (e.g. start of draw).
  */
 function updateGamepads() {
   const gp = gamepadFirstConnected();
@@ -59,7 +52,6 @@ function updateGamepads() {
     gamepadInput.dpad.down = false;
     gamepadInput.dpad.left = false;
     gamepadInput.dpad.right = false;
-    gamepadState._fireHeld = false;
     return;
   }
 
@@ -73,18 +65,20 @@ function updateGamepads() {
   gamepadInput.dpad.left = gamepadButtonPressed(gp, 14);
   gamepadInput.dpad.right = gamepadButtonPressed(gp, 15);
 
-  const fireNow = gamepadButtonPressed(gp, 0);
-  if (fireNow && !gamepadState._fireHeld) {
+  const fireNow = gamepadButtonPressed(gp, 7) || Math.hypot(gamepadInput.rightStick.x, gamepadInput.rightStick.y) > 0;
+  if (fireNow) {
     gamepadTryFireProjectile();
   }
-  gamepadState._fireHeld = fireNow;
 }
 
 function gamepadTryFireProjectile() {
   if (typeof paused !== "undefined" && paused) {
     return;
   }
-  if (typeof levelRender === "undefined" || (levelRender !== "rock" && levelRender !== "edm")) {
+  if (
+    typeof levelRender === "undefined" ||
+    (levelRender !== "rock" && levelRender !== "edm" && levelRender !== "lofi")
+  ) {
     return;
   }
   if (typeof player_1 === "undefined" || !player_1) {
@@ -103,5 +97,13 @@ function gamepadTryFireProjectile() {
     ty = player_1.y + ry * 400;
   }
 
+  const now = millis();
+  const fireInterval =
+    typeof PLAYER_FIRE_INTERVAL_MS !== "undefined" ? PLAYER_FIRE_INTERVAL_MS : 200;
+  if (now - gamepadState.lastFireAt < fireInterval) {
+    return;
+  }
+
   projectiles.push(new Projectile(player_1.x, player_1.y, tx, ty, "player"));
+  gamepadState.lastFireAt = now;
 }
