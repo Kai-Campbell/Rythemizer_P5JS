@@ -45,9 +45,10 @@ var lofi_back, lofiMusic;
 var spritesheet, spriteData, bullet, bulletData;
 var runnerSheet, runnerData; // Edm grunt
 var big_bassSheet, big_bassData; // Edm Bomber
-var amp_smallSheet // amp enemy
+var amp_smallSheet, amp_smallData // amp enemy
 var disc_throwerData, disc_throwerSheet // disc enemy
 var fireballSheet, fireballData; // Fireball projectiles
+var eleExplodeSprite, eleExplodeData; // Elemental explosion
 var dragonSpriteSheet, dragonJSON // Dragon Boss 
 var rave_knightJSON, rave_knightSheet // Rave Boss
 var bard_JSON, bard_spriteSheet // Bard boss
@@ -108,7 +109,7 @@ function preload() {
     bullet = loadImage('../Assets/Projectiles/bullet.png');
     bulletData = loadJSON('../Assets/Projectiles/bullet.json');
 
-    // Enemeys //
+    // ------ Enemies ------ 
     // Runner
     runnerSheet = loadImage('../Assets/Enemies/vinyl_runner.png');
     runnerData = loadJSON('../Assets/Enemies/vinyl_runner.json');
@@ -120,11 +121,16 @@ function preload() {
     disc_throwerData = loadJSON('../Assets/Enemies/disc_thrower.json');
     // Small Amp
     amp_smallSheet = loadImage('../Assets/Enemies/small_amp.png');
-
+    amp_smallData = loadJSON('../Assets/Enemies/small_amp.json');
+    // ---------------------
 
     // Fireball Projectile
     fireballSheet = loadImage('../Assets/Projectiles/fireball.png')
     fireballData = loadJSON('../Assets/Projectiles/fireball.json')
+
+    // Elemental explosion
+    eleExplodeSprite = loadImage('../Assets/element_explosion.png');
+    eleExplodeData = loadJSON('../Assets/element_explosion.json');    
 
     // Guns
     shotgunSprite = loadImage('../Assets/Weapons/shotgun.png')
@@ -537,4 +543,11 @@ function drawExitX(x, y, size) {
     line(x + size/3, y - size/3, x - size/3, y + size/3);
     
     pop();
+}
+
+// Source - https://stackoverflow.com/a/39914235
+// Posted by Dan Dascalescu, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-04-15, License - CC BY-SA 4.0
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

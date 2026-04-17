@@ -26,6 +26,7 @@ function spawnRockBaddies(count) {
     }
     enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, 3, 30));
     enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, 1.5, 120, 100));
+    enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
   }
 }
 
@@ -58,7 +59,12 @@ function rockDraw() {
       // Check for collisions of projectiles 
       for (let j = enemies.length - 1; j >= 0; j--) {
         if (projectiles[i].getPlayType() == 'player' && projectiles[i].checkHit(enemies[j])) {
-          enemies.splice(j, 1);
+          // If a bomber gets hit, it explodes
+          if (enemies[j] instanceof Bomber) {
+            enemies[j].explode();
+          } else {
+            enemies.splice(j, 1);
+          }
           projectiles.splice(i, 1);
           break; // leaves loop because enemy gone
         }
@@ -125,9 +131,12 @@ function rockDraw() {
         if (enemies[i] instanceof Grunt) {
           enemies[i].knockback();
         }
-        
         if (player_1.can_hit == true) {
-          player_1.health--;
+          // Bombers explode and disappear after the animation plays
+        if (enemies[i] instanceof Bomber) {
+          enemies[i].explode(i);
+        }
+        player_1.health--;
           player_1.invincible();
           console.log(player_1.health); // this is for testing to make sure health is going down correctly
           if (player_1.health <= 0) {

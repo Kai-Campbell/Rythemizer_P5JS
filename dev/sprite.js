@@ -107,6 +107,7 @@ class EnemySprite extends Sprite {
 
         this.width = width;
         this.height = height;
+        // center is a boolean which renders the sprite relative to the center of the cords
     }
 
     show(x, y, facingLeft = false) {

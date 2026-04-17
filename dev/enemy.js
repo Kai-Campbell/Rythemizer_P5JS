@@ -32,7 +32,11 @@ class Enemy {
             circle(this.pos.x, this.pos.y, 30); // this is currently for testing but works to show collisions
             this.hit = false;
         } else {
-            this.Enemy_ani.show(this.pos.x - 20, this.pos.y - 20, this.facingLeft);
+            // Dynamic sprite centering
+            let drawX = this.pos.x - (this.Enemy_ani.width / 2)
+            let drawY = this.pos.y - (this.Enemy_ani.height / 2)
+            // console.log("x: ", drawX, "y: ", drawY);
+            this.Enemy_ani.show(drawX, drawY, this.facingLeft);
             this.Enemy_ani.animate();
         }
     }
@@ -203,3 +207,44 @@ class Shooter extends Enemy {
     }
 }
 
+/**
+ * Bomber class
+ * Attempts to walk up to the player and explodes when within range.
+ */
+class Bomber extends Enemy {
+    // Constructor
+    constructor(x, y, target_x, target_y, spritedata, spritesheet, Anispeed, moveSpeed) {
+        super(x, y, target_x, target_y, spritedata, spritesheet, Anispeed, moveSpeed);
+
+        this.Enemy_ani = new EnemySprite(spritedata, spritesheet, Anispeed, 55, 70);
+        this.exploded = false;
+    }
+
+    // Update bomber to follow player each frame
+    update(obj) {
+        let direction = createVector(obj.pos.x - this.pos.x, obj.pos.y - this.pos.y);
+    
+        direction.setMag(this.moveSpeed); // change this to make the guy move faster
+        
+        // Stop enemy from moving when game is paused or when exploded
+        if (!(paused || this.exploded)) {
+            this.pos.add(direction);
+        }
+    }
+
+    async explode() {
+        if (!this.exploded) {
+            this.exploded = true;
+            this.r = 75;
+            this.Enemy_ani = new EnemySprite(eleExplodeData, eleExplodeSprite, 0.1, 150, 150);
+            // Wait a bit before removing the enemy
+            // Found the timing to play the spritesheet once through trial and error
+            await sleep(700);
+
+            // An AI told me this was a thing in JS, neat! 
+            let currentIndex = enemies.indexOf(this);
+
+            enemies.splice(currentIndex, 1);
+        }
+    }
+}
