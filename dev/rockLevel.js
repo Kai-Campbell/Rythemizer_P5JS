@@ -2,8 +2,8 @@ let projectiles = [];
 let player_x = 200;
 let player_y = 200;
 let player_1;
-var wave_length = 3;
-var boss_spawned = false;
+var rock_wave_length = 5;
+var rock_boss_spawned = false;
 
 
 function rockSetup() {
@@ -31,13 +31,13 @@ function spawnRockBaddies(count) {
 }
 
 function spawnBoss() {
-  if (boss_spawned === true) {
+  if (rock_boss_spawned === true) {
     return;
   } else {
     let startX = CANVAS_WIDTH + 500; 
     let targetX = CANVAS_WIDTH - 200;
     boss.push(new rockBoss(startX, CANVAS_HEIGHT - 450, targetX, player_1.y, 200, dragonJSON, dragonSpriteSheet, 0.1, 0.3, 30, 10))
-    boss_spawned = true;
+    rock_boss_spawned = true;
   }
 }
 
@@ -84,7 +84,7 @@ function rockDraw() {
       }
 
       // Checks for collisions for player and boss projectiles
-      if (boss_spawned) {
+      if (rock_boss_spawned) {
 
         // Checks to see if player hit boss
         for (let b = boss.length - 1; b >= 0; b--) {
@@ -152,7 +152,7 @@ function rockDraw() {
     /**
      * Same collision check as above, now with the bosses' radius 
      */
-    if (boss_spawned) {
+    if (rock_boss_spawned) {
         for (let b = boss.length - 1; b >= 0; b--) {
           boss[b].update(player_1);
 
@@ -170,9 +170,11 @@ function rockDraw() {
 
     // Wave logic
     if (enemies.length === 0) {
-      if (wave_length != 0) {
+      if (rock_wave_length != 0) {
         spawnRockBaddies(8);
-        wave_length--;
+        rock_wave_length--;
+        console.log("this is the wave");
+        console.log(rock_wave_length);
       } else {
         spawnBoss();
         //boss_spawned = true;
