@@ -216,6 +216,7 @@ function draw() {
             break;
         case 'lofi':
             lofiDraw();
+            break;
         default:
             break;
     }
