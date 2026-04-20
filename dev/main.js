@@ -93,7 +93,7 @@ function preload() {
 
     // EDM level
     edm_back = loadImage('../Assets/Levels/test_level_edm.png');
-    edmMusic = loadSound('../Assets/Music/ContraAhSng.mp3');
+    edmMusic = loadSound('../Assets/Music/ThatsSoRAVEn.mp3');
     rave_knightJSON = loadJSON('../Assets/Bosses/rave_knight.json');
     rave_knightSheet = loadImage('../Assets/Bosses/rave_knight.png');
 
@@ -216,6 +216,7 @@ function draw() {
             break;
         case 'lofi':
             lofiDraw();
+            break;
         default:
             break;
     }

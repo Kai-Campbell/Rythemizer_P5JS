@@ -147,6 +147,17 @@ class EDMBoss extends rockBoss {
         //this.wanderAngle = random(TWO_PI);
         //this.shooting = Math.floor(Math.random() * shootSpeed);
     }
+
+    draw() {
+        if (this.is_visible === true) {
+            fill(0, 0, 0);
+            circle(this.pos.x, this.pos.y, this.r * 2); // this is for showing the hitbox in testing.
+            this.Boss_anim.showOther(this.pos.x - this.r, this.pos.y - this.r);
+            if (this.entered_scene) {
+                this.Boss_anim.animate();
+            }
+        }
+    }
 }
 
 class LofiBoss extends rockBoss {
@@ -155,5 +166,16 @@ class LofiBoss extends rockBoss {
 
         //this.wanderAngle = random(TWO_PI);
         //this.shooting = Math.floor(Math.random() * shootSpeed);
+    }
+
+    draw() {
+        if (this.is_visible === true) {
+            fill(0, 0, 0);
+            circle(this.pos.x, this.pos.y, this.r * 2); // this is for showing the hitbox in testing.
+            this.Boss_anim.showOther(this.pos.x - this.r, this.pos.y - this.r);
+            if (this.entered_scene) {
+                this.Boss_anim.animate();
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-var lofi_wave_length = 1;
+var lofi_wave_length = 0;
 var lofi_boss_spawned = false;
 
 function lofiSetup() {
@@ -25,7 +25,7 @@ function spawnLofiBaddies(count) {
   }
 }
 
-function spawnBoss() {
+function spawnBossLofi() {
   if (lofi_boss_spawned === true) {
     return;
   } else {
@@ -161,7 +161,7 @@ function lofiDraw() {
         console.log("this is the wave");
         console.log(lofi_wave_length);
       } else {
-        spawnBoss();
+        spawnBossLofi();
       }
     } 
   }

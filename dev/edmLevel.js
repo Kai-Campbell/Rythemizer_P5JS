@@ -1,4 +1,4 @@
-var edm_wave_length = 3;
+var edm_wave_length = 0;
 var edm_boss_spawned = false;
 
 function edmSetup() {
@@ -25,7 +25,7 @@ function spawnEdmBaddies(count) {
   }
 }
 
-function spawnBoss() {
+function spawnBossEDM() {
   if (edm_boss_spawned === true) {
     return;
   } else {
@@ -161,7 +161,7 @@ function edmDraw() {
         console.log("this is the wave");
         console.log(edm_wave_length);
       } else {
-        spawnBoss();
+        spawnBossEDM();
         //boss_spawned = true;
       }
     } 
