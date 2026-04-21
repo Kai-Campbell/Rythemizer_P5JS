@@ -31,7 +31,7 @@ function spawnBossLofi() {
   } else {
     let startX = CANVAS_WIDTH + 500; 
     let targetX = CANVAS_WIDTH - 200;
-    boss.push(new EDMBoss(startX, CANVAS_HEIGHT - 450, targetX, player_1.y, 200, bard_JSON, bard_spriteSheet, 0.1, 0.3, 30, 10))
+    boss.push(new EDMBoss(startX, CANVAS_HEIGHT - 400, targetX, player_1.y, 200, bard_JSON, bard_spriteSheet, 0.1, 0.3, 30, 10))
     lofi_boss_spawned = true;
   }
 }

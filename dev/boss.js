@@ -33,8 +33,6 @@ class rockBoss extends Boss {
     constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed) {
         super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed)
 
-        //this.wanderAngle = random(TWO_PI);
-        //this.shooting = Math.floor(Math.random() * shootSpeed);
     }
 
     update(player) {
@@ -142,10 +140,8 @@ class rockBoss extends Boss {
 
 class EDMBoss extends rockBoss {
     constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed) {
-        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed)
+        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, 20, shootSpeed)
 
-        //this.wanderAngle = random(TWO_PI);
-        //this.shooting = Math.floor(Math.random() * shootSpeed);
     }
 
     draw() {
@@ -162,10 +158,7 @@ class EDMBoss extends rockBoss {
 
 class LofiBoss extends rockBoss {
     constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed) {
-        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed)
-
-        //this.wanderAngle = random(TWO_PI);
-        //this.shooting = Math.floor(Math.random() * shootSpeed);
+        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, 15, shootSpeed) // for some reason his health isn't changing lol
     }
 
     draw() {

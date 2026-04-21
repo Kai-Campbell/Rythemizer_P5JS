@@ -31,7 +31,7 @@ function spawnBossEDM() {
   } else {
     let startX = CANVAS_WIDTH + 500; 
     let targetX = CANVAS_WIDTH - 200;
-    boss.push(new EDMBoss(startX, CANVAS_HEIGHT - 450, targetX, player_1.y, 200, rave_knightJSON, rave_knightSheet, 0.1, 0.3, 30, 10))
+    boss.push(new EDMBoss(startX, CANVAS_HEIGHT - 400, targetX, player_1.y, 200, rave_knightJSON, rave_knightSheet, 0.1, 0.3, 30, 10))
     edm_boss_spawned = true;
   }
 }
