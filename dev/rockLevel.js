@@ -2,7 +2,7 @@ let projectiles = [];
 let player_x = 200;
 let player_y = 200;
 let player_1;
-var wave_length = 0;
+var wave_length = 1;
 var boss_spawned = false;
 
 
@@ -11,8 +11,9 @@ function rockSetup() {
   gameOverMusicPlaying = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
-  enemies = []
+  enemies = [];
   boss = [];
+  items = [];
 }
 
 function spawnRockBaddies(count) {
@@ -66,6 +67,10 @@ function rockDraw() {
           if (enemies[j] instanceof Bomber) {
             enemies[j].explode();
           } else {
+            let rand = random(10); // around 10 percent chance of spawning
+            if (rand <= 1.5) {
+              items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+            }
             enemies.splice(j, 1);
           }
           projectiles.splice(i, 1);
@@ -149,6 +154,21 @@ function rockDraw() {
       }
     }
 
+    for (let i = items.length - 1; i >= 0; i--) { // this controls collisions for the items, currently works with just health items
+      let distance = dist(items[i].pos.x, items[i].pos.y, player_1.pos.x, player_1.pos.y);
+      if (distance < items[i].r + player_1.r) {
+        if (items[i] instanceof HealthItem) {
+          player_1.increaseHealth();
+          healthIndex++;
+          items.splice(i, 1);
+        }
+      }
+
+      if (items[i] && items[i].despawn) { // if item is still there, then despawn it
+        items.splice(i, 1);
+      }
+    }
+
     /**
      * Same collision check as above, now with the bosses' radius 
      */
@@ -197,7 +217,10 @@ function rockDraw() {
     } else {
       boss[i].draw();
     }
-    
+  }
+  for (let i = items.length - 1; i >= 0; i--) {
+    items[i].draw();
+    items[i].timer();
   }
   
   // Display health bar

@@ -60,6 +60,7 @@ var tutorialMusic; // Tutorial background music
 
 let enemies = [];
 let boss = [];
+let items = [];
 
 /** Shared fire rate for mouse and gamepad (ms between shots). */
 const PLAYER_FIRE_INTERVAL_MS = 150;
@@ -145,6 +146,9 @@ function preload() {
     // Game Over
     gameOverImage = loadImage('../Assets/GUI/death_screen.png');
     gameOverMusic = loadSound('../Assets/Music/29_Ghosts_IV.mp3');
+
+    // Items
+    healthBox = loadImage('../Assets/Items/health_box.png');
     
     // Tutorial images
     tutorialImages[0] = loadImage('../Assets/tutorial_1_placeholder.png');
@@ -356,12 +360,13 @@ function fpsCounter() {
 /**
  * Displays the health bar in the bottom left of the screen
  */
+let healthIndex;
 function displayHealthBar(player) {
     if (typeof player === "undefined" || !player || typeof healthBarData === "undefined") {
         return;
     }
     
-    let healthIndex = Math.max(0, Math.min(5, 5 - player.health));
+    healthIndex = Math.max(0, Math.min(5, 5 - player.health));
 
     let frame = healthBarData.frames[healthIndex].position;
     

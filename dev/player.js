@@ -124,20 +124,14 @@ class Player {
     await delay(3000); // this is 3 seconds delay, change this and the for loop above to show change in blinking.
     this.can_hit = true;
   }
-/*
-  drawGun() {
-    let angle = atan2(mouseY - this.pos.y, mouseX - this.pos.x);
-    let aimingLeft = abs(angle) > HALF_PI;
 
-    noStroke();
-    fill(90, 140, 230);
-    translate(this.pos.x, this.pos.y);
-    rotate(angle);
-    if (aimingLeft) scale(1, -1);
-    fill(160, 160, 170);
-    rect(RADIUS - 4, -4, 28, 9, 2);
+  increaseHealth() { // this is so the players health doesn't go above 5 after health items were added
+    if (this.health >= 5) {
+      return;
+    } else {
+      this.health++;
+    }
   }
-*/
 }
 
 
