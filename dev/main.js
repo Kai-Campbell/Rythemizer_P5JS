@@ -131,7 +131,11 @@ function preload() {
 
     // Elemental explosion
     eleExplodeSprite = loadImage('../Assets/element_explosion.png');
-    eleExplodeData = loadJSON('../Assets/element_explosion.json');    
+    eleExplodeData = loadJSON('../Assets/element_explosion.json'); 
+    
+    //Fire explosion
+    fireExplodeSprite = loadImage('../Assets/fire_explosion.png');
+    fireExplodeData = loadJSON('../Assets/fire_explosion.json');
 
     // Guns
     pistolSprite = loadImage('../Assets/Weapons/pistol.png')

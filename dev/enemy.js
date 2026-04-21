@@ -236,7 +236,7 @@ class Bomber extends Enemy {
         if (!this.exploded) {
             this.exploded = true;
             this.r = 75;
-            this.Enemy_ani = new EnemySprite(eleExplodeData, eleExplodeSprite, 0.1, 150, 150);
+            this.Enemy_ani = new EnemySprite(fireExplodeData, fireExplodeSprite, 0.1, 150, 150);
             // Wait a bit before removing the enemy
             // Found the timing to play the spritesheet once through trial and error
             await sleep(700);
