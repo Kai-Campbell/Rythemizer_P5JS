@@ -15,7 +15,7 @@ class Player {
     this.can_hit = true;
     this.is_visible = true;
 
-    this.is_entering = false; // true
+    this.is_entering = true; // true
     this.is_exiting = false;
 
     this.player_ani = new Sprite(spritedata, spritesheet, Anispeed);
@@ -32,7 +32,7 @@ class Player {
     let mvmt = createVector(0, 0);
     
     // Player movement
-    if (!paused) { // Disables player from moving when pause menu is open
+    if (!paused && !this.is_entering && !this.is_exiting) { // Disables player from moving when pause menu is open
       if(pressedKeys.a || pressedKeys.A || pressedKeys.ArrowLeft) {
         if (this.x > 0) {
           mvmt.x -= 1;
@@ -80,17 +80,18 @@ class Player {
     
     this.x += mvmt.x;
     this.y += mvmt.y;
-
-    this.x = constrain(this.x, 0, CANVAS_WIDTH - this.w);
-    this.y = constrain(this.y, 0, CANVAS_HEIGHT - this.h);
-
+    if (!this.is_entering && !this.is_exiting) {
+      this.x = constrain(this.x, 0, CANVAS_WIDTH - this.w);
+      this.y = constrain(this.y, 0, CANVAS_HEIGHT - this.h);
+    }
+    
     this.pos.set(this.x, this.y)
   }
   
   draw() {
     if (this.is_visible === true) {
       //circle(this.pos.x, this.pos.y, this.r) // here for testing if needed.
-      this.player_ani.show(this.x - 20, this.y - 20, this.facingLeft);
+      this.player_ani.show(this.pos.x - 20, this.pos.y - 20, this.facingLeft);
       this.player_ani.animate();
       // Aim gun with the right stick when available, otherwise use the mouse.
       let aimX = mouseX - this.pos.x;
@@ -139,16 +140,24 @@ class Player {
   }
 
   leaveScene(newLevel) { // TODO
-    this.pos.y -= 5;
-    if (this.pos.y <= -150) {
+    if (!this.is_exiting) {
+      return;
+    }
+    this.y -= 5
+    this.pos.y = this.y;
+    if (this.y <= -150) {
+      this.is_exiting = false;
       switchLevel(newLevel);
     }
-    this.is_exiting = false;
   }
 
   enterScene() { // TODO
-    this.pos.y += 5;
-    if (this.pos.y >= 300) {
+    if (!this.is_entering) {
+      return;
+    }
+    this.y += 5
+    this.pos.y = this.y;
+    if (this.y >= 300) {
       this.is_entering = false;
     }
   }

@@ -1,4 +1,4 @@
-var lofi_wave_length = 1;
+var lofi_wave_length = 2;
 var lofi_boss_spawned = false;
 
 function lofiSetup() {
@@ -39,7 +39,11 @@ function spawnBossLofi() {
 
 function lofiDraw() {
   image(lofi_back, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  if (!paused) {
+
+  player_1.enterScene();
+  player_1.leaveScene('edm');
+
+  if (!paused && !player_1.is_entering) {
     player_1.update();
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
       projectiles[i].update();
@@ -148,8 +152,8 @@ function lofiDraw() {
           items.splice(i, 1);
         }
         if (items[i] instanceof ExitItem) {
+          player_1.is_exiting = true;
           items.splice(i, 1);
-          switchLevel('edm');
         }
       }
 

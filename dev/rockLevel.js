@@ -1,8 +1,8 @@
 let projectiles = [];
 let player_x = 200;
-let player_y = 200;
+let player_y = -300;
 let player_1;
-const story_wave_length = 1;
+const story_wave_length = 2;
 var wave_length = story_wave_length;
 var boss_spawned = false;
 var arcade_wave = 0;
@@ -55,7 +55,11 @@ function rockDraw() {
    * Logic in this if statement plays when the game is not paused.
    * Should be things like updating movement, checking for collision, ext.
    */
-  if (!paused) {
+
+  player_1.enterScene(); // these two functions handle level transitions
+  player_1.leaveScene('edm'); // this one will be changed when end screen level is done
+
+  if (!paused && !player_1.is_entering) {
     // Updates player position
     player_1.update();
 
@@ -114,7 +118,7 @@ function rockDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
-              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y));
+              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
@@ -176,8 +180,8 @@ function rockDraw() {
           items.splice(i, 1);
         }
         if (items[i] instanceof ExitItem) {
+          player_1.is_exiting = true; // starts the leave animation
           items.splice(i, 1);
-          switchLevel('edm');
         }
       }
 

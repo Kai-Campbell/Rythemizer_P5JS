@@ -1,4 +1,4 @@
-var edm_wave_length = 0;
+var edm_wave_length = 3;
 var edm_boss_spawned = false;
 
 function edmSetup() {
@@ -39,7 +39,11 @@ function spawnBossEDM() {
 
 function edmDraw() {
   image(edm_back, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  if (!paused) {
+
+  player_1.enterScene();
+  player_1.leaveScene('rock')
+
+  if (!paused && !player_1.is_entering) {
     player_1.update();
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
       projectiles[i].update();
@@ -148,8 +152,8 @@ function edmDraw() {
           items.splice(i, 1);
         }
         if (items[i] instanceof ExitItem) {
+          player_1.is_exiting = true;
           items.splice(i, 1);
-          switchLevel('rock');
         }
       }
 
