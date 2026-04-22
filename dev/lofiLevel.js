@@ -51,11 +51,11 @@ function lofiDraw() {
           if (enemies[j] instanceof Bomber) {
             enemies[j].explode();
           } else {
-            enemies.splice(j, 1);
             let rand = random(5); // around 10 percent chance of spawning
             if (rand <= 1.5) {
               items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
             }
+            enemies.splice(j, 1);
           }
           projectiles.splice(i, 1);
           break; // leaves loop because enemy gone
