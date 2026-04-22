@@ -59,6 +59,7 @@ function edmDraw() {
             if (rand <= 1.5) {
               items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
             }
+            playSFX("enemyGone");
             enemies.splice(j, 1);
           }
           projectiles.splice(i, 1);
@@ -83,6 +84,9 @@ function edmDraw() {
         for (let b = boss.length - 1; b >= 0; b--) {
           if (projectiles[i].getPlayType() === 'player' && projectiles[i].checkHit(boss[b]) && boss[b].entered_scene == true) {
             if (boss[b].can_hit === true) {
+              // play Boss hurt SFX
+              playSFX("bossHurt");
+
               boss[b].health--;
               boss[b].invincible();
             }
