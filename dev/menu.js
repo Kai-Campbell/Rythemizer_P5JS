@@ -85,6 +85,13 @@ function startButton(x, y, w, h) {
 
     if (mouseIsPressed) {
       playSFX("click");
+      if (currentMode === 1) {
+        game_mode = 'arcade';
+      } else if (currentMode === 2) {
+        game_mode = 'chaos';
+      } else {
+        game_mode = 'story';
+      }
       switchLevel('rock');
     }
   }

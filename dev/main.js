@@ -13,6 +13,7 @@
 // 3 = rock
 // 4 = trans
 let levelRender = 'menu'; 
+let game_mode = 'story';
 
 // Variable to detect if the game is paused
 let paused = false;
