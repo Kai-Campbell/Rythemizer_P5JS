@@ -71,6 +71,9 @@ function rockDraw() {
             if (rand <= 1.5) {
               items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
             }
+            // Play SFX for when enemy dies
+            playSFX("enemyGone");
+            // Thanos snap enemy from the enemy array
             enemies.splice(j, 1);
           }
           projectiles.splice(i, 1);
@@ -95,6 +98,9 @@ function rockDraw() {
         for (let b = boss.length - 1; b >= 0; b--) {
           if (projectiles[i].getPlayType() === 'player' && projectiles[i].checkHit(boss[b]) && boss[b].entered_scene == true) {
             if (boss[b].can_hit === true) {
+              // play Boss hurt SFX
+              playSFX("bossHurt");
+              // Decrement health and begin invulnerability period
               boss[b].health--;
               boss[b].invincible();
             }

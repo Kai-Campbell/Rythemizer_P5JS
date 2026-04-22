@@ -35,6 +35,9 @@ const CANVAS_WIDTH = 2000 / 2;
 // p5 sound object for playing in-game music
 // See: https://p5js.org/reference/p5.sound/
 let levelMusic;
+// Game Sound Volumes
+let sfx_volume = 0.3;
+let music_volume = 0.3;
 
 // Assets loaded in preload()
 var menuBacking, menuMusic, menuLargeBg, menuStartButton;
@@ -57,6 +60,12 @@ var healthBarSheet, healthBarData; // Health bar display
 var gameOverImage; // Game over screen image
 var gameOverMusic; // Game over music
 var tutorialMusic; // Tutorial background music
+var explosionNormal; // Explosion SFX
+var healthSFX; // Health SFX
+var shockedSFX; // Shocked SFX - currently for enemy damage
+var waveClearSFX; // waveClear SFX - currently for boss damage
+var selectSFX; // Select SFX - currently used in menus
+var toggleSFX; // Toggle SFX - Currently used in menus
 
 let enemies = [];
 let boss = [];
@@ -161,6 +170,14 @@ function preload() {
     
     // Tutorial music
     tutorialMusic = loadSound('../Assets/Music/The_Four_(five)_Of_Us_Are_dying.mp3');
+
+    // --------------SFX---------------
+    explosionNormal = loadSound('../Assets/SFX/sfx_explosionNormal.ogg');
+    healthSFX = loadSound('../Assets/SFX/sfx_health.ogg');
+    shockedSFX = loadSound('../Assets/SFX/sfx_shocked.ogg'); 
+    waveClearSFX = loadSound('../Assets/SFX/sfx_waveclear.ogg');
+    selectSFX = loadSound('../Assets/SFX/sfx_select.ogg');
+    toggleSFX = loadSound('../Assets/SFX/sfx_toggle.ogg');
 }
 
 function setup() {
@@ -332,8 +349,8 @@ function playLevelMusic() {
             levelMusic = menuMusic;
             break;
     }
+    levelMusic.setVolume(music_volume); // change the volume between 0.0 and 1.0 if needed
     levelMusic.play();
-    levelMusic.setVolume(0.3); // change the volume between 0.0 and 1.0 if needed
     userStartAudio();
 }
 
