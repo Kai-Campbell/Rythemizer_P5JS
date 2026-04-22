@@ -2,13 +2,18 @@ let projectiles = [];
 let player_x = 200;
 let player_y = 200;
 let player_1;
-var wave_length = 1;
+const story_wave_length = 1;
+var wave_length = story_wave_length;
 var boss_spawned = false;
+var arcade_wave = 0;
 
 
 function rockSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
+  wave_length = story_wave_length;
+  boss_spawned = false;
+  arcade_wave = 0;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
   enemies = [];
@@ -72,6 +77,9 @@ function rockDraw() {
             if (rand <= 1.5) {
               items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
             }
+            // Play SFX for when enemy dies
+            playSFX("enemyGone");
+            // Thanos snap enemy from the enemy array
             enemies.splice(j, 1);
           }
           projectiles.splice(i, 1);
@@ -96,6 +104,9 @@ function rockDraw() {
         for (let b = boss.length - 1; b >= 0; b--) {
           if (projectiles[i].getPlayType() === 'player' && projectiles[i].checkHit(boss[b]) && boss[b].entered_scene == true) {
             if (boss[b].can_hit === true) {
+              // play Boss hurt SFX
+              playSFX("bossHurt");
+              // Decrement health and begin invulnerability period
               boss[b].health--;
               boss[b].invincible();
             }
@@ -195,13 +206,16 @@ function rockDraw() {
       }
 
     // Wave logic
-    if (enemies.length === 0) {
-      if (wave_length != 0) {
+    if (enemies.length === 0 && boss.length === 0) {
+      if (game_mode === 'arcade') {
+        arcade_wave++;
+        let wave_difficulty = min(3, 1 + floor((arcade_wave - 1) / 3));
+        spawnRockBaddies(wave_difficulty);
+      } else if (wave_length !== 0) {
         spawnRockBaddies(8);
         wave_length--;
       } else {
         spawnBoss();
-        //boss_spawned = true;
       }
     } 
   }

@@ -13,6 +13,9 @@ const BUTTON_GAP = 75;
 // Tutorial button click flag
 let tutorialClicked = false;
 
+// Keeps track of the button that currently hover, useful for SFX
+let currentHoveredID = null;
+
 /**
  * Main menu that welcomes the player to the game
  */
@@ -77,10 +80,18 @@ function pulsingLogo() {
 function startButton(x, y, w, h) {
   image(menuStartButton[0], x, y, w, h);
   
-  if (isHovering(x, y, w, h)) {
+  if (isHovering("strt", x, y, w, h)) {
     image(menuStartButton[1], x, y, w, h);
 
     if (mouseIsPressed) {
+      playSFX("click");
+      if (currentMode === 1) {
+        game_mode = 'arcade';
+      } else if (currentMode === 2) {
+        game_mode = 'chaos';
+      } else {
+        game_mode = 'story';
+      }
       switchLevel('rock');
     }
   }
@@ -94,10 +105,11 @@ function levelButton(x, y, w, h) {
 
   image(modeButtons[currentMode][0], x, y, w, h);
 
-  if (isHovering(x, y, w, h)) {
+  if (isHovering("lvl", x, y, w, h)) {
     image(modeButtons[currentMode][1], x, y, w, h);
 
     if (mouseIsPressed && !modeClicked) {
+      playSFX("click");
       modeClicked = true;
       currentMode = (currentMode + 1) % 3;
     }
@@ -114,10 +126,11 @@ function levelButton(x, y, w, h) {
 function tutorialButton(x, y, w, h) {
   image(menuHowToButton[0], x, y, w, h);
   
-  if (isHovering(x, y, w, h)) {
+  if (isHovering("tut", x, y, w, h)) {
     image(menuHowToButton[1], x, y, w, h);
     
     if (mouseIsPressed && !tutorialClicked) {
+      playSFX("click");
       tutorialClicked = true;
       showTutorial = true;
       tutorialIndex = 0;
@@ -135,7 +148,7 @@ function tutorialButton(x, y, w, h) {
 function settingsButton(x, y, w, h) {
   image(menuSettingsButton[0], x, y, w, h);
   
-  if (isHovering(x, y, w, h)) {
+  if (isHovering("set", x, y, w, h)) {
     image(menuSettingsButton[1], x, y, w, h);
   }
 }
@@ -149,8 +162,24 @@ function settingsButton(x, y, w, h) {
 
 /**
  * Returns true when mouse is detected within the bounds
+ * Update: now plays a sound when the user hovers
+ * @param id This serves as a unique identifier to help track when the cursor
+ * leaves the bounds of the button (for SFX playing) 
  */
-function isHovering(x, y, w, h) {
-  return mouseX >= x - w/2 && mouseX <= x + w/2 &&
-          mouseY >= y - h/2 && mouseY <= y + h/2;
+function isHovering(id, x, y, w, h) {
+  var isHovering = (mouseX >= x - w/2 && mouseX <= x + w/2 &&
+          mouseY >= y - h/2 && mouseY <= y + h/2); 
+
+
+  // if it's hovering, let's play a sound (FX)! and keep track that we are now hovering a particular button
+  if (isHovering) {
+    if (currentHoveredID != id) {
+      playSFX("hover");
+      currentHoveredID = id;
+    }
+  } else if (currentHoveredID === id) {
+    // If we've left a particular button, reset currently hovered to null
+    currentHoveredID = null;
+  }
+  return isHovering;
 }
