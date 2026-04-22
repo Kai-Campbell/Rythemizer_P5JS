@@ -1,4 +1,4 @@
-var lofi_wave_length = 0;
+var lofi_wave_length = 1;
 var lofi_boss_spawned = false;
 
 function lofiSetup() {
@@ -8,6 +8,7 @@ function lofiSetup() {
   projectiles = [];
   boss = [];
   enemies = [];
+  items = [];
 }
 
 function spawnLofiBaddies(count) {
@@ -31,7 +32,7 @@ function spawnBossLofi() {
   } else {
     let startX = CANVAS_WIDTH + 500; 
     let targetX = CANVAS_WIDTH - 200;
-    boss.push(new EDMBoss(startX, CANVAS_HEIGHT - 400, targetX, player_1.y, 200, bard_JSON, bard_spriteSheet, 0.1, 0.3, 30, 10))
+    boss.push(new LofiBoss(startX, CANVAS_HEIGHT - 400, targetX, player_1.y, 200, bard_JSON, bard_spriteSheet, 0.1, 0.3, 30, 10))
     lofi_boss_spawned = true;
   }
 }
@@ -51,6 +52,10 @@ function lofiDraw() {
             enemies[j].explode();
           } else {
             enemies.splice(j, 1);
+            let rand = random(5); // around 10 percent chance of spawning
+            if (rand <= 1.5) {
+              items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+            }
           }
           projectiles.splice(i, 1);
           break; // leaves loop because enemy gone
@@ -81,6 +86,7 @@ function lofiDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
+              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y));
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
@@ -133,6 +139,25 @@ function lofiDraw() {
       }
     }
 
+    for (let i = items.length - 1; i >= 0; i--) { // this controls collisions for the items, currently works with just health items
+      let distance = dist(items[i].pos.x, items[i].pos.y, player_1.pos.x, player_1.pos.y);
+      if (distance < items[i].r + player_1.r) {
+        if (items[i] instanceof HealthItem) {
+          player_1.increaseHealth();
+          healthIndex++;
+          items.splice(i, 1);
+        }
+        if (items[i] instanceof ExitItem) {
+          items.splice(i, 1);
+          switchLevel('edm');
+        }
+      }
+
+      if (items[i] && items[i].despawn) { // if item is still there, then despawn it
+        items.splice(i, 1);
+      }
+    }
+
     /**
      * Same collision check as above, now with the bosses' radius 
      */
@@ -180,6 +205,10 @@ function lofiDraw() {
     } else {
       boss[i].draw();
     }
+  }
+  for (let i = items.length - 1; i >= 0; i--) {
+    items[i].draw();
+    items[i].timer();
   }
   
   displayHealthBar(player_1);

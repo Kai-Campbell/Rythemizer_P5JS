@@ -15,6 +15,9 @@ class Player {
     this.can_hit = true;
     this.is_visible = true;
 
+    this.is_entering = false; // true
+    this.is_exiting = false;
+
     this.player_ani = new Sprite(spritedata, spritesheet, Anispeed);
 
     this.w = this.player_ani.width // these are needed for hit detections
@@ -130,6 +133,21 @@ class Player {
       return;
     } else {
       this.health++;
+    }
+  }
+
+  leaveScene(newLevel) { // TODO
+    this.pos.y -= 5;
+    if (this.pos.y <= -150) {
+      switchLevel(newLevel);
+    }
+    this.is_exiting = false;
+  }
+
+  enterScene() { // TODO
+    this.pos.y += 5;
+    if (this.pos.y >= 300) {
+      this.is_entering = false;
     }
   }
 }

@@ -16,9 +16,9 @@ class Item {
     }
 
     async timer() {
-        await delay(5000);
+        await delay(5000); // 5 seconds
         this.blink();
-        await delay(3000);
+        await delay(3000); // 3 seconds of blinking
         this.despawn = true;
     }
 
@@ -41,5 +41,21 @@ class Item {
 class HealthItem extends Item {
     constructor(image, x, y) {
         super(image, x, y)
+    }
+}
+
+class PowerUp extends Item {
+    constructor(image, x, y) {
+        super(image, x, y)
+    }
+}
+
+class ExitItem extends Item {
+    constructor(image, x, y) {
+        super(image, x, y)
+    }
+
+    async timer() { // this function will make it so the level transition doesn't despawn
+        return;
     }
 }

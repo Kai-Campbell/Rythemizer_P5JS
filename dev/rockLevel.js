@@ -67,7 +67,8 @@ function rockDraw() {
           if (enemies[j] instanceof Bomber) {
             enemies[j].explode();
           } else {
-            let rand = random(10); // around 10 percent chance of spawning
+            let rand = random(15); // around 10 percent chance of spawning
+            console.log(rand)
             if (rand <= 1.5) {
               items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
             }
@@ -102,6 +103,7 @@ function rockDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
+              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y));
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
@@ -161,6 +163,10 @@ function rockDraw() {
           player_1.increaseHealth();
           healthIndex++;
           items.splice(i, 1);
+        }
+        if (items[i] instanceof ExitItem) {
+          items.splice(i, 1);
+          switchLevel('edm');
         }
       }
 

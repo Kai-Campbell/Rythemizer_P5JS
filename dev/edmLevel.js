@@ -8,6 +8,7 @@ function edmSetup() {
   projectiles = [];
   boss = [];
   enemies = [];
+  items = [];
 }
 
 function spawnEdmBaddies(count) {
@@ -51,6 +52,10 @@ function edmDraw() {
             enemies[j].explode();
           } else {
             enemies.splice(j, 1);
+            let rand = random(10); // around 10 percent chance of spawning
+            if (rand <= 1.5) {
+              items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+            }
           }
           projectiles.splice(i, 1);
           break; // leaves loop because enemy gone
@@ -81,6 +86,7 @@ function edmDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
+              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y));
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
@@ -133,6 +139,25 @@ function edmDraw() {
       }
     }
 
+    for (let i = items.length - 1; i >= 0; i--) { // this controls collisions for the items, currently works with just health items
+      let distance = dist(items[i].pos.x, items[i].pos.y, player_1.pos.x, player_1.pos.y);
+      if (distance < items[i].r + player_1.r) {
+        if (items[i] instanceof HealthItem) {
+          player_1.increaseHealth();
+          healthIndex++;
+          items.splice(i, 1);
+        }
+        if (items[i] instanceof ExitItem) {
+          items.splice(i, 1);
+          switchLevel('rock');
+        }
+      }
+
+      if (items[i] && items[i].despawn) { // if item is still there, then despawn it
+        items.splice(i, 1);
+      }
+    }
+
     /**
      * Same collision check as above, now with the bosses' radius 
      */
@@ -181,7 +206,10 @@ function edmDraw() {
     } else {
       boss[i].draw();
     }
-    
+  }
+  for (let i = items.length - 1; i >= 0; i--) {
+    items[i].draw();
+    items[i].timer();
   }
   
   // Display health bar

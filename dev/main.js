@@ -57,6 +57,7 @@ var healthBarSheet, healthBarData; // Health bar display
 var gameOverImage; // Game over screen image
 var gameOverMusic; // Game over music
 var tutorialMusic; // Tutorial background music
+var exitItem, healthBox;
 
 let enemies = [];
 let boss = [];
@@ -153,6 +154,7 @@ function preload() {
 
     // Items
     healthBox = loadImage('../Assets/Items/health_box.png');
+    exitItem = loadImage('../Assets/Items/shield_box.png');
     
     // Tutorial images
     tutorialImages[0] = loadImage('../Assets/tutorial_1_placeholder.png');
