@@ -126,6 +126,8 @@ class Player {
   }
 
   increaseHealth() { // this is so the players health doesn't go above 5 after health items were added
+    // play health SFX
+    playSFX("healthUp");
     if (this.health >= 5) {
       return;
     } else {
