@@ -2,6 +2,7 @@ let player;
 const delay = ms => new Promise(res => setTimeout(res, ms)); // this helps with the delay functions DO NOT REMOVE also this is declare globally so dont add to other classes
 let spriteImages = [];
 let pressedKeys = {};
+let weapon = 0;
 
 class Player {
   constructor(x, y, spritedata, spritesheet, Anispeed) {
@@ -107,7 +108,18 @@ class Player {
       push();
       translate(this.pos.x, this.pos.y);
       rotate(angle);
-      image(pistolSprite, 0, 0, 50, 28); 
+      if (weapon == 0) {
+        image(pistolSprite, 0, 0, 50, 28);
+      }
+      if (weapon == 1) {
+        image(shotgunSprite, 0, 0, 50, 28);
+      }
+      if (weapon == 2) {
+        image(laserSprite, 0, 0, 50, 28);
+      }
+      if (weapon == 3) {
+        image(discThrowerSprite, 0, 0, 50, 28);
+      }
       pop();
     }
   }
@@ -137,6 +149,18 @@ class Player {
     } else {
       this.health++;
     }
+  }
+
+  async shieldImmunity() {
+    this.can_hit = false;
+    console.log("cant hit me!");
+    // shield animation here
+    await delay(8000); // this is 3 seconds delay, change this and the for loop above to show change in blinking.
+    this.can_hit = true;
+  }
+
+  shotgunSwitch() {
+    weapon = 1;
   }
 
   leaveScene(newLevel) { // TODO

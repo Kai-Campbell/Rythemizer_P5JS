@@ -115,8 +115,16 @@ function preload() {
     // Player 
     spritesheet = loadImage('../Assets/Player/red_guy_sheet.png');
     spriteData = loadJSON('../Assets/Player/redguy.json');
+
+    // Player Bullets
     bullet = loadImage('../Assets/Projectiles/bullet.png');
     bulletData = loadJSON('../Assets/Projectiles/bullet.json');
+    vinylGreen = loadImage('../Assets/Projectiles/vinyl_green_sheet');
+    vinylGreenData = loadJSON('../Assets/Projectiles/vinyl_green.json');
+    vinylPink = loadImage('../Assets/Projectiles/vinyl_pink_sheet');
+    vinylPinkData = loadJSON('../Assets/Projectiles/vinyl_pink.json');
+    vinylBlue = loadImage('../Assets/Projectiles/vinyl_blue_sheet');
+    vinylBlueData = loadJSON('../Assets/Projectiles/vinyl_blue.json');
 
     // ------ Enemies ------ 
     // Runner
@@ -161,6 +169,10 @@ function preload() {
 
     // Items
     healthBox = loadImage('../Assets/Items/health_box.png');
+    shieldBox = loadImage('../Assets/Items/shield_box.png');
+    shotgunBox = loadImage('../Assets/Items/shotgun_box.png');
+    laserBox = loadImage('../Assets/Items/laser_box.png');
+    vinylBox = loadImage('../Assets/Items/disc_shooter_box.png');
     exitItem = loadImage('../Assets/Items/shield_box.png');
     
     // Tutorial images

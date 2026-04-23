@@ -30,19 +30,69 @@ class Projectile {
             let spriteIndex = Math.floor(millis() / 100) % 2;
 
             // Get the frame position from json
-            let frame = bulletData.frames[spriteIndex].position;
+            if (weapon == 0) {
+                let frame = bulletData.frames[spriteIndex].position;
 
-            push();
-            translate(this.pos.x, this.pos.y);
-            rotate(angle);
-            image(
-                bullet,             // Actual sprite sheet file 
-                -10, -10,               // dx, dy: Coordinates to draw image onto canvas 
-                30, 20,             // dWidth, dHeight: How large it draws onto the canvas
-                frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
-                frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
-            );
-            pop();
+                push();
+                translate(this.pos.x, this.pos.y);
+                rotate(angle);
+                image(
+                    bullet,             // Actual sprite sheet file 
+                    -10, -10,               // dx, dy: Coordinates to draw image onto canvas 
+                    30, 20,             // dWidth, dHeight: How large it draws onto the canvas
+                    frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
+                    frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
+                );
+                pop();
+            }
+
+            if (weapon == 1) {
+                let frame = bulletData.frames[spriteIndex].position;
+
+                push();
+                translate(this.pos.x, this.pos.y);
+                rotate(angle);
+                image(
+                    bullet,             // Actual sprite sheet file 
+                    -10, -10,               // dx, dy: Coordinates to draw image onto canvas 
+                    30, 20,             // dWidth, dHeight: How large it draws onto the canvas
+                    frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
+                    frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
+                );
+                pop();
+            }
+
+            if (weapon == 2) {
+                let frame = laserPinkData.frames[spriteIndex].position;
+
+                push();
+                translate(this.pos.x, this.pos.y);
+                rotate(angle);
+                image(
+                    laserPink,             // Actual sprite sheet file 
+                    -10, -10,               // dx, dy: Coordinates to draw image onto canvas 
+                    30, 20,             // dWidth, dHeight: How large it draws onto the canvas
+                    frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
+                    frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
+                );
+                pop();
+            }
+
+            if (weapon == 3) {
+                let frame = vinylGreenData.frames[spriteIndex].position;
+
+                push();
+                translate(this.pos.x, this.pos.y);
+                rotate(angle);
+                image(
+                    vinylGreen,             // Actual sprite sheet file 
+                    -10, -10,               // dx, dy: Coordinates to draw image onto canvas 
+                    30, 20,             // dWidth, dHeight: How large it draws onto the canvas
+                    frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
+                    frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
+                );
+                pop();
+            }
         }
         // Rock shooter projectiles, uses fireball sprite
         if (this.playType == "rockShooter") {

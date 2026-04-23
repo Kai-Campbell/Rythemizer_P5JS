@@ -182,6 +182,15 @@ function rockDraw() {
           healthIndex++;
           items.splice(i, 1);
         }
+        if (items[i] instanceof PowerUp) {
+          if (items[i].getImage() == shieldBox) {
+            player_1.shieldImmunity();
+            items.splice(i, 1);
+          }
+          if (items[i].getImage() == shotgunBox) {
+            player_1.shotgunSwitch();
+          }
+        }
         if (items[i] instanceof ExitItem) {
           player_1.is_exiting = true; // starts the leave animation
           items.splice(i, 1);

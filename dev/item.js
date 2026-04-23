@@ -48,6 +48,10 @@ class PowerUp extends Item {
     constructor(image, x, y) {
         super(image, x, y)
     }
+
+    getImage() {
+        return this.image;
+    }
 }
 
 class ExitItem extends Item {
