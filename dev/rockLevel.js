@@ -81,6 +81,8 @@ function rockDraw() {
             console.log(rand)
             if (rand <= 1.5) {
               items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+            } else if (rand > 14) {
+              items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
             }
             // Play SFX for when enemy dies
             playSFX("enemyGone");
@@ -189,6 +191,7 @@ function rockDraw() {
           }
           if (items[i].getImage() == shotgunBox) {
             weapon = 1;
+            items.splice(i, 1);
           }
         }
         if (items[i] instanceof ExitItem) {
