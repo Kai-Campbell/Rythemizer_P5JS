@@ -58,7 +58,7 @@ function rockDraw() {
    */
 
   player_1.enterScene(); // these two functions handle level transitions
-  player_1.leaveScene('edm'); // this one will be changed when end screen level is done
+  player_1.leaveScene('end'); // this one will be changed when end screen level is done
 
   if (!paused && !player_1.is_entering) {
     // Updates player position
