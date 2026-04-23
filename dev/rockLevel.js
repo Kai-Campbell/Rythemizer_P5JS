@@ -121,12 +121,6 @@ function rockDraw() {
               boss[b].is_dead = true;
               if (game_mode == 'arcade') {
                 items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
-              } else {
-                if (end_entered == 0) {
-                  image(endScene, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                } else if (end_entered == 1) {
-                  image(endScenePlayer, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                }
               }
               boss.splice(b, 1);
             }
