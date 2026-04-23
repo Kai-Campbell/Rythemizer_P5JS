@@ -121,11 +121,11 @@ function preload() {
     bulletData = loadJSON('../Assets/Projectiles/bullet.json');
     laserPink = loadImage('../Assets/Projectiles/laser_pink.png');
     laserPinkData = loadJSON('../Assets/Projectiles/laser_pink.json');
-    vinylGreen = loadImage('../Assets/Projectiles/vinyl_green_sheet');
+    vinylGreen = loadImage('../Assets/Projectiles/vinyl_green_sheet.png');
     vinylGreenData = loadJSON('../Assets/Projectiles/vinyl_green.json');
-    vinylPink = loadImage('../Assets/Projectiles/vinyl_pink_sheet');
+    vinylPink = loadImage('../Assets/Projectiles/vinyl_pink_sheet.png');
     vinylPinkData = loadJSON('../Assets/Projectiles/vinyl_pink.json');
-    vinylBlue = loadImage('../Assets/Projectiles/vinyl_blue_sheet');
+    vinylBlue = loadImage('../Assets/Projectiles/vinyl_blue_sheet.png');
     vinylBlueData = loadJSON('../Assets/Projectiles/vinyl_blue.json');
 
     // ------ Enemies ------ 
