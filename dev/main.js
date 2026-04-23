@@ -29,6 +29,9 @@ let tutorialClickFlag = false;
 let tutorialMusicPlaying = false;
 var tutorialImages = []; // Array to hold tutorial images
 
+// End screen variables
+let endMusicPlaying = false;
+
 // Set Screen size
 const CANVAS_HEIGHT = 1500 / 2;
 const CANVAS_WIDTH = 2000 / 2;
@@ -165,6 +168,10 @@ function preload() {
     tutorialImages[1] = loadImage('../Assets/tutorial_2_placeholder.png');
     tutorialImages[2] = loadImage('../Assets/tutorial_3_placeholder.png');
     
+    // End screen gifs
+    endScene = loadImage('../Assets/GUI/end_scene.gif');
+    endScenePlayer = loadImage('../Assets/GUI/end_scene_player.gif');
+
     // Tutorial music
     tutorialMusic = loadSound('../Assets/Music/The_Four_(five)_Of_Us_Are_dying.mp3');
 
