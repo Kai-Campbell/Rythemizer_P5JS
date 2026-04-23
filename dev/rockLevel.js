@@ -188,7 +188,7 @@ function rockDraw() {
             items.splice(i, 1);
           }
           if (items[i].getImage() == shotgunBox) {
-            player_1.shotgunSwitch();
+            weapon = 1;
           }
         }
         if (items[i] instanceof ExitItem) {

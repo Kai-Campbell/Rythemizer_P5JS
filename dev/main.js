@@ -119,6 +119,8 @@ function preload() {
     // Player Bullets
     bullet = loadImage('../Assets/Projectiles/bullet.png');
     bulletData = loadJSON('../Assets/Projectiles/bullet.json');
+    laserPink = loadImage('../Assets/Projectiles/laser_pink.png');
+    laserPinkData = loadJSON('../Assets/Projectiles/laser_pink.json');
     vinylGreen = loadImage('../Assets/Projectiles/vinyl_green_sheet');
     vinylGreenData = loadJSON('../Assets/Projectiles/vinyl_green.json');
     vinylPink = loadImage('../Assets/Projectiles/vinyl_pink_sheet');

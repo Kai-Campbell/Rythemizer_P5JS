@@ -159,10 +159,6 @@ class Player {
     this.can_hit = true;
   }
 
-  shotgunSwitch() {
-    weapon = 1;
-  }
-
   leaveScene(newLevel) { // TODO
     if (!this.is_exiting) {
       return;
