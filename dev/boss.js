@@ -70,7 +70,7 @@ class rockBoss extends Boss {
     }
 
     async blink() { // this makes the boss blink when invincible
-        for (let i = 0; i < 5; i++) { // until 5 because of the 2 delays and 1 second of i frames
+        for (let i = 0; i < 2; i++) { // until 5 because of the 2 delays and 1 second of i frames
             this.is_visible = false;
             await delay(100);
             this.is_visible = true;
