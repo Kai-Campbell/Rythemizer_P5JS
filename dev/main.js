@@ -178,9 +178,9 @@ function preload() {
     exitItem = loadImage('../Assets/Items/shield_box.png');
     
     // Tutorial images
-    tutorialImages[0] = loadImage('../Assets/tutorial_1_placeholder.png');
-    tutorialImages[1] = loadImage('../Assets/tutorial_2_placeholder.png');
-    tutorialImages[2] = loadImage('../Assets/tutorial_3_placeholder.png');
+    tutorialImages[0] = loadImage('../Assets/GUI/tutorial_1.png');
+    tutorialImages[1] = loadImage('../Assets/GUI/tutorial_2.png');
+    tutorialImages[2] = loadImage('../Assets/GUI/tutorial_3.png');
     
     // End screen gifs
     endScene = loadImage('../Assets/GUI/end_scene.gif');
