@@ -92,7 +92,7 @@ function startButton(x, y, w, h) {
       } else {
         game_mode = 'story';
       }
-      switchLevel('rock');
+      switchLevel('lofi'); // should start on lofi
     }
   }
 }
