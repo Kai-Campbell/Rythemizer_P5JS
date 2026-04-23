@@ -81,7 +81,7 @@ let lastPlayerFireAt = 0;
 function preload() {
     // Main menu
     menuBacking = loadImage('../Assets/GUI/menu_lava.png');
-    menuMusic = loadSound('../Assets/Music/Fire_Ah_PlaceHolder.mp3'); // change file path when we have the actual menu music
+    menuMusic = loadSound('../Assets/Music/RythemizerThemeExtended.mp3'); // change file path when we have the actual menu music
     menuLargeBg = loadImage('../Assets/GUI/menu_background.png');
     menuStartButton = [loadImage('../Assets/Buttons/start.png'), loadImage('../Assets/Buttons/start_select.png')];
     menuSettingsButton = [loadImage('../Assets/Buttons/settings.png'), loadImage('../Assets/Buttons/settings_select.png')];
@@ -93,7 +93,7 @@ function preload() {
 
     // Metal level
     metal_back = loadImage('../Assets/Levels/Test_Level_Lava.png');
-    rockMusic = loadSound('../Assets/Music/RockLevelMusic.mp3');
+    rockMusic = loadSound('../Assets/Music/Organica - Master of None.mp3');
     dragonJSON = loadJSON('../Assets/Bosses/guitar_dragon_boss.json');
     dragonSpriteSheet = loadImage('../Assets/Bosses/guitar_dragon_boss.png');
 
