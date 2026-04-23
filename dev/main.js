@@ -375,6 +375,9 @@ function playLevelMusic() {
         case 'lofi':
             levelMusic = lofiMusic;
             break;
+        case 'end':
+            levelMusic = endMusicPlaying;
+            break;
         default:
             levelMusic = menuMusic;
             break;
