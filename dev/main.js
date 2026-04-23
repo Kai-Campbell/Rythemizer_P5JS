@@ -188,6 +188,7 @@ function preload() {
     tutorialImages[2] = loadImage('../Assets/tutorial_3_placeholder.png');
     
     // End screen gifs
+    playerWalking = loadImage('../Assets/GUI/player_walking.gif');
     endScene = loadImage('../Assets/GUI/end_scene.gif');
     endScenePlayer = loadImage('../Assets/GUI/end_scene_player.gif');
 

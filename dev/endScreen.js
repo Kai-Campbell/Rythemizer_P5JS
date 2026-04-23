@@ -1,12 +1,22 @@
+let gifX, gifY;
+let walkingDone = false;
+
 function endScreenSetup() {
-  player_1 = new Player((CANVAS_WIDTH / 2) + 30, -300, spriteData, spritesheet, 0.1);
+  gifX = -80;                          
+  gifY = (CANVAS_HEIGHT / 2) + 80;    
+  walkingDone = false;
 }
 
 function endScreenDraw() {
-  image(endScene, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  player_1.enterEndScene(600);
-  player_1.justShow(80, 80);
-  if (!player_1.is_entering) {
+  if (!walkingDone) {
+    image(endScene, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    if (gifX < CANVAS_WIDTH / 2) {
+      gifX += 4;
+    } else {
+      walkingDone = true;
+    }
+    image(playerWalking, gifX, gifY, 80, 80); 
+  } else {
     image(endScenePlayer, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   }
 }
