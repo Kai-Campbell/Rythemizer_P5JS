@@ -64,6 +64,7 @@ var healthBarSheet, healthBarData; // Health bar display
 var gameOverImage; // Game over screen image
 var gameOverMusic; // Game over music
 var tutorialMusic; // Tutorial background music
+var endScene, endScenePlayer;
 var exitItem, healthBox;
 
 let enemies = [];
@@ -127,6 +128,10 @@ function preload() {
     vinylPinkData = loadJSON('../Assets/Projectiles/vinyl_pink.json');
     vinylBlue = loadImage('../Assets/Projectiles/vinyl_blue_sheet.png');
     vinylBlueData = loadJSON('../Assets/Projectiles/vinyl_blue.json');
+
+    // End Screen
+    endScene = loadImage('../Assets/GUI/end_scene-faster.gif');
+    endScenePlayer = loadImage('../Assets/GUI/end_scene_player-faster.gif');
 
     // ------ Enemies ------ 
     // Runner
@@ -260,6 +265,9 @@ function draw() {
         case 'lofi':
             lofiDraw();
             break;
+        case 'end':
+            endScreenDraw();
+            break
         default:
             break;
     }
@@ -290,8 +298,11 @@ function switchLevel(levelName) {
     if (levelName === 'edm') { // edm level
         edmSetup();
     }
-    if (levelName === 'lofi') {
+    if (levelName === 'lofi') { // lofi level
         lofiSetup();
+    }
+    if (levelName === 'end') { // end screen 
+        endScreenSetup();
     }
     playLevelMusic();
 }
@@ -299,7 +310,7 @@ function switchLevel(levelName) {
 function keyPressed() {
     pressedKeys[key] = true;
     if (key === 'c') { // added for testing
-        switchLevel('edm');
+        switchLevel('end');
     }
     if (key === 'v') { // added for testing
         switchLevel('lofi');

@@ -159,7 +159,7 @@ class Player {
     this.can_hit = true;
   }
 
-  leaveScene(newLevel) { // TODO
+  leaveScene(newLevel) {
     if (!this.is_exiting) {
       return;
     }
@@ -171,13 +171,31 @@ class Player {
     }
   }
 
-  enterScene() { // TODO
+  enterScene() {
     if (!this.is_entering) {
       return;
     }
     this.y += 5
     this.pos.y = this.y;
     if (this.y >= 300) {
+      this.is_entering = false;
+    }
+  }
+
+
+  // these 2 functions are specifically for the ending scene
+
+  justShow(sizeW, sizeH) {
+    this.player_ani.showAdjustable(this.pos.x - 20, this.pos.y - 20, this.facingLeft, sizeW, sizeH);
+  }
+
+  enterEndScene(stop_pos) {
+    if (!this.is_entering) {
+      return;
+    }
+    this.y += 5
+    this.pos.y = this.y;
+    if (this.y >= stop_pos) {
       this.is_entering = false;
     }
   }

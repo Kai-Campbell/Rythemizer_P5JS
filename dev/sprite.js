@@ -68,6 +68,15 @@ class Sprite {
         scale(-1, -1);
         image(this.animation[index], x, y, 40, 40);
     }
+
+    showAdjustable(x, y, facingLeft = false, sizeX, sizeY) { // this is specifically for the final end screen
+        let index = floor(this.index) % this.len;
+        push();
+        translate(x + 20, y + 20);
+        scale(-1, 1);
+        image(this.animation[index], -20, -20, sizeX, sizeY);
+        pop();
+    }
 }
 
 class BossSprite extends Sprite {
