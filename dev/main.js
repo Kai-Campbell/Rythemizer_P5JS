@@ -220,7 +220,7 @@ function draw() {
             }
             if (tutorialMusic !== undefined) {
                 tutorialMusic.loop();
-                tutorialMusic.setVolume(0.3);
+                tutorialMusic.setVolume(music_volume);
             }
         }
         displayTutorial();
@@ -234,10 +234,10 @@ function draw() {
             }
             if (levelRender === 'menu' && menuMusic !== undefined) {
                 menuMusic.play();
-                menuMusic.setVolume(0.3);
+                menuMusic.setVolume(music_volume);
             } else if (levelMusic !== undefined && levelRender !== 'menu') {
                 levelMusic.play();
-                levelMusic.setVolume(0.3);
+                levelMusic.setVolume(music_volume);
             }
         }
     }
@@ -310,6 +310,10 @@ function switchLevel(levelName) {
 
 function keyPressed() {
     pressedKeys[key] = true;
+    if (typeof showSettings !== "undefined" && showSettings && key === "Escape") {
+        showSettings = false;
+        return;
+    }
     if (key === 'c') { // added for testing
         switchLevel('end');
     }
@@ -388,6 +392,24 @@ function playLevelMusic() {
 }
 
 /**
+ * Applies global music_volume to every loaded music track so menu / tutorial / game over stay in sync.
+ */
+function applyMusicVolume() {
+    if (typeof menuMusic !== "undefined" && menuMusic) {
+        menuMusic.setVolume(music_volume);
+    }
+    if (typeof levelMusic !== "undefined" && levelMusic) {
+        levelMusic.setVolume(music_volume);
+    }
+    if (typeof tutorialMusic !== "undefined" && tutorialMusic) {
+        tutorialMusic.setVolume(music_volume);
+    }
+    if (typeof gameOverMusic !== "undefined" && gameOverMusic) {
+        gameOverMusic.setVolume(music_volume);
+    }
+}
+
+/**
  * LLM-Generated FPS Counter
  * Tracks the number of frames drawn every second
  * https://p5js.org/reference/p5/frameRate/
@@ -453,7 +475,7 @@ function displayGameOver() {
         }
         if (gameOverMusic !== undefined) {
             gameOverMusic.loop();
-            gameOverMusic.setVolume(0.3);
+            gameOverMusic.setVolume(music_volume);
         }
     }
     
