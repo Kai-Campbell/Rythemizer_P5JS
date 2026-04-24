@@ -12,6 +12,7 @@
 // 2 = edm
 // 3 = rock
 // 4 = trans
+// 5 = tutorial
 let levelRender = 'menu'; 
 let game_mode = 'story';
 
@@ -23,11 +24,13 @@ let gameOver = false;
 let gameOverMusicPlaying = false;
 
 // Tutorial variables
-let showTutorial = false;
 let tutorialIndex = 0;
 let tutorialClickFlag = false;
 let tutorialMusicPlaying = false;
 var tutorialImages = []; // Array to hold tutorial images
+
+// End screen variables
+let endMusicPlaying = false;
 
 // Set Screen size
 const CANVAS_HEIGHT = 1500 / 2;
@@ -36,6 +39,9 @@ const CANVAS_WIDTH = 2000 / 2;
 // p5 sound object for playing in-game music
 // See: https://p5js.org/reference/p5.sound/
 let levelMusic;
+// Game Sound Volumes
+let sfx_volume = 0.3;
+let music_volume = 0.3;
 
 // Assets loaded in preload()
 var menuBacking, menuMusic, menuLargeBg, menuStartButton;
@@ -58,9 +64,12 @@ var healthBarSheet, healthBarData; // Health bar display
 var gameOverImage; // Game over screen image
 var gameOverMusic; // Game over music
 var tutorialMusic; // Tutorial background music
+var endScene, endScenePlayer;
+var exitItem, healthBox;
 
 let enemies = [];
 let boss = [];
+let items = [];
 
 /** Shared fire rate for mouse and gamepad (ms between shots). */
 const PLAYER_FIRE_INTERVAL_MS = 150;
@@ -75,82 +84,124 @@ let lastPlayerFireAt = 0;
 // Pre-load ALL game assets
 function preload() {
     // Main menu
-    menuBacking = loadImage('../Assets/GUI/menu_lava.png');
-    menuMusic = loadSound('../Assets/Music/Fire_Ah_PlaceHolder.mp3'); // change file path when we have the actual menu music
-    menuLargeBg = loadImage('../Assets/GUI/menu_background.png');
-    menuStartButton = [loadImage('../Assets/Buttons/start.png'), loadImage('../Assets/Buttons/start_select.png')];
-    menuSettingsButton = [loadImage('../Assets/Buttons/settings.png'), loadImage('../Assets/Buttons/settings_select.png')];
-    menuHowToButton = [loadImage('../Assets/Buttons/how_to_play.png'), loadImage('../Assets/Buttons/how_to_play_select.png')];
-    menuStoryButton = [loadImage('../Assets/Buttons/story.png'), loadImage('../Assets/Buttons/story_select.png')];
-    menuArcadeButton = [loadImage('../Assets/Buttons/arcade.png'), loadImage('../Assets/Buttons/arcade_select.png')];
-    menuChaoButton = [loadImage('../Assets/Buttons/chao.png'), loadImage('../Assets/Buttons/chao_select.png')];
-    menuLogoGlow = loadImage('../Assets/GUI/logo_glow.png');
+    menuBacking = loadImage('Assets/GUI/menu_lava.png');
+    menuMusic = loadSound('Assets/Music/RythemizerThemeExtended.mp3'); // change file path when we have the actual menu music
+    menuLargeBg = loadImage('Assets/GUI/menu_background.png');
+    menuStartButton = [loadImage('Assets/Buttons/start.png'), loadImage('Assets/Buttons/start_select.png')];
+    menuSettingsButton = [loadImage('Assets/Buttons/settings.png'), loadImage('Assets/Buttons/settings_select.png')];
+    menuHowToButton = [loadImage('Assets/Buttons/how_to_play.png'), loadImage('Assets/Buttons/how_to_play_select.png')];
+    menuStoryButton = [loadImage('Assets/Buttons/story.png'), loadImage('Assets/Buttons/story_select.png')];
+    menuArcadeButton = [loadImage('Assets/Buttons/arcade.png'), loadImage('Assets/Buttons/arcade_select.png')];
+    menuChaoButton = [loadImage('Assets/Buttons/chao.png'), loadImage('Assets/Buttons/chao_select.png')];
+    menuLogoGlow = loadImage('Assets/GUI/logo_glow.png');
 
     // Metal level
-    metal_back = loadImage('../Assets/Levels/Test_Level_Lava.png');
-    rockMusic = loadSound('../Assets/Music/RockLevelMusic.mp3');
-    dragonJSON = loadJSON('../Assets/Bosses/guitar_dragon_boss.json');
-    dragonSpriteSheet = loadImage('../Assets/Bosses/guitar_dragon_boss.png');
+    metal_back = loadImage('Assets/Levels/Test_Level_Lava.png');
+    rockMusic = loadSound('Assets/Music/Organica - Master of None.mp3');
+    dragonJSON = loadJSON('Assets/Bosses/guitar_dragon_boss.json');
+    dragonSpriteSheet = loadImage('Assets/Bosses/guitar_dragon_boss.png');
 
     // EDM level
-    edm_back = loadImage('../Assets/Levels/test_level_edm.png');
-    edmMusic = loadSound('../Assets/Music/ContraAhSng.mp3');
-    rave_knightJSON = loadJSON('../Assets/Bosses/rave_knight.json');
-    rave_knightSheet = loadImage('../Assets/Bosses/rave_knight.png');
+    edm_back = loadImage('Assets/Levels/test_level_edm.png');
+    edmMusic = loadSound('Assets/Music/ThatsSoRAVEn.mp3');
+    rave_knightJSON = loadJSON('Assets/Bosses/rave_knight.json');
+    rave_knightSheet = loadImage('Assets/Bosses/rave_knight.png');
 
     // Lofi level
-    lofi_back = loadImage('../Assets/Levels/test_level_lofi.png');
-    lofiMusic = loadSound('../Assets/Music/PoopMusic.mp3');
-    bard_JSON = loadJSON('../Assets/Bosses/vibe_bard.json');
-    bard_spriteSheet = loadImage('../Assets/Bosses/vibe_bard.png');
+    lofi_back = loadImage('Assets/Levels/test_level_lofi.png');
+    lofiMusic = loadSound('Assets/Music/PoopMusic.mp3');
+    bard_JSON = loadJSON('Assets/Bosses/vibe_bard.json');
+    bard_spriteSheet = loadImage('Assets/Bosses/vibe_bard.png');
 
     // Player 
-    spritesheet = loadImage('../Assets/Player/red_guy_sheet.png');
-    spriteData = loadJSON('../Assets/Player/redguy.json');
-    bullet = loadImage('../Assets/Projectiles/bullet.png');
-    bulletData = loadJSON('../Assets/Projectiles/bullet.json');
+    spritesheet = loadImage('Assets/Player/red_guy_sheet.png');
+    spriteData = loadJSON('Assets/Player/redguy.json');
+
+    // Player Bullets
+    bullet = loadImage('Assets/Projectiles/bullet.png');
+    bulletData = loadJSON('Assets/Projectiles/bullet.json');
+    laserPink = loadImage('Assets/Projectiles/laser_pink.png');
+    laserPinkData = loadJSON('Assets/Projectiles/laser_pink.json');
+    vinylGreen = loadImage('Assets/Projectiles/vinyl_green_sheet.png');
+    vinylGreenData = loadJSON('Assets/Projectiles/vinyl_green.json');
+    vinylPink = loadImage('Assets/Projectiles/vinyl_pink_sheet.png');
+    vinylPinkData = loadJSON('Assets/Projectiles/vinyl_pink.json');
+    vinylBlue = loadImage('Assets/Projectiles/vinyl_blue_sheet.png');
+    vinylBlueData = loadJSON('Assets/Projectiles/vinyl_blue.json');
+
+    // End Screen
+    endScene = loadImage('Assets/GUI/end_scene-faster.gif');
+    endScenePlayer = loadImage('Assets/GUI/end_scene_player-faster.gif');
 
     // ------ Enemies ------ 
     // Runner
-    runnerSheet = loadImage('../Assets/Enemies/vinyl_runner.png');
-    runnerData = loadJSON('../Assets/Enemies/vinyl_runner.json');
+    runnerSheet = loadImage('Assets/Enemies/vinyl_runner.png');
+    runnerData = loadJSON('Assets/Enemies/vinyl_runner.json');
     // Big Bass
-    big_bassSheet = loadImage('../Assets/Enemies/big_bass.png');
-    big_bassData = loadJSON('../Assets/Enemies/big_bass.json');
+    big_bassSheet = loadImage('Assets/Enemies/big_bass.png');
+    big_bassData = loadJSON('Assets/Enemies/big_bass.json');
     // Disc Thrower
-    disc_throwerSheet = loadImage('../Assets/Enemies/disc_thrower.png');
-    disc_throwerData = loadJSON('../Assets/Enemies/disc_thrower.json');
+    disc_throwerSheet = loadImage('Assets/Enemies/disc_thrower.png');
+    disc_throwerData = loadJSON('Assets/Enemies/disc_thrower.json');
     // Small Amp
-    amp_smallSheet = loadImage('../Assets/Enemies/small_amp.png');
-    amp_smallData = loadJSON('../Assets/Enemies/small_amp.json');
+    amp_smallSheet = loadImage('Assets/Enemies/small_amp.png');
+    amp_smallData = loadJSON('Assets/Enemies/small_amp.json');
     // ---------------------
 
     // Fireball Projectile
-    fireballSheet = loadImage('../Assets/Projectiles/fireball.png')
-    fireballData = loadJSON('../Assets/Projectiles/fireball.json')
+    fireballSheet = loadImage('Assets/Projectiles/fireball.png')
+    fireballData = loadJSON('Assets/Projectiles/fireball.json')
 
     // Elemental explosion
-    eleExplodeSprite = loadImage('../Assets/element_explosion.png');
-    eleExplodeData = loadJSON('../Assets/element_explosion.json');    
+    eleExplodeSprite = loadImage('Assets/element_explosion.png');
+    eleExplodeData = loadJSON('Assets/element_explosion.json'); 
+    
+    //Fire explosion
+    fireExplodeSprite = loadImage('Assets/fire_explosion.png');
+    fireExplodeData = loadJSON('Assets/fire_explosion.json');
 
     // Guns
-    shotgunSprite = loadImage('../Assets/Weapons/shotgun.png')
+    pistolSprite = loadImage('Assets/Weapons/pistol.png')
+    laserSprite = loadImage('Assets/Weapons/beat_laser.png')
+    discThrowerSprite = loadImage('Assets/Weapons/disc_thrower.png')
+    shotgunSprite = loadImage('Assets/Weapons/shotgun.png')
     
     // Health Bar
-    healthBarSheet = loadImage('../Assets/GUI/health_bar.png');
-    healthBarData = loadJSON('../Assets/GUI/health_bar.json');
+    healthBarSheet = loadImage('Assets/GUI/health_bar.png');
+    healthBarData = loadJSON('Assets/GUI/health_bar.json');
     
     // Game Over
-    gameOverImage = loadImage('../Assets/GUI/death_screen.png');
-    gameOverMusic = loadSound('../Assets/Music/29_Ghosts_IV.mp3');
+    gameOverImage = loadImage('Assets/GUI/death_screen.png');
+    gameOverMusic = loadSound('Assets/Music/29_Ghosts_IV.mp3');
+
+    // Items
+    healthBox = loadImage('Assets/Items/health_box.png');
+    shieldBox = loadImage('Assets/Items/shield_box.png');
+    shotgunBox = loadImage('Assets/Items/shotgun_box.png');
+    laserBox = loadImage('Assets/Items/laser_box.png');
+    vinylBox = loadImage('Assets/Items/disc_shooter_box.png');
+    exitItem = loadImage('Assets/Items/shield_box.png');
     
     // Tutorial images
-    tutorialImages[0] = loadImage('../Assets/tutorial_1_placeholder.png');
-    tutorialImages[1] = loadImage('../Assets/tutorial_2_placeholder.png');
-    tutorialImages[2] = loadImage('../Assets/tutorial_3_placeholder.png');
+    tutorialImages[0] = loadImage('Assets/GUI/tutorial_1.png');
+    tutorialImages[1] = loadImage('Assets/GUI/tutorial_2.png');
+    tutorialImages[2] = loadImage('Assets/GUI/tutorial_3.png');
     
+    // End screen gifs
+    playerWalking = loadImage('Assets/GUI/player_walking.gif');
+    endScene = loadImage('Assets/GUI/end_scene.gif');
+    endScenePlayer = loadImage('Assets/GUI/end_scene_player.gif');
+
     // Tutorial music
-    tutorialMusic = loadSound('../Assets/Music/The_Four_(five)_Of_Us_Are_dying.mp3');
+    tutorialMusic = loadSound('Assets/Music/The_Four_(five)_Of_Us_Are_dying.mp3');
+
+    // --------------SFX---------------
+    explosionNormal = loadSound('Assets/SFX/sfx_explosionNormal.ogg');
+    healthSFX = loadSound('Assets/SFX/sfx_health.ogg');
+    shockedSFX = loadSound('Assets/SFX/sfx_shocked.ogg'); 
+    waveClearSFX = loadSound('Assets/SFX/sfx_waveclear.ogg');
+    selectSFX = loadSound('Assets/SFX/sfx_select.ogg');
+    toggleSFX = loadSound('Assets/SFX/sfx_toggle.ogg');
 }
 
 function setup() {
@@ -160,37 +211,6 @@ function setup() {
 }
 
 function draw() {
-    if (showTutorial) {
-        // Handle music for tutorial entry
-        if (!tutorialMusicPlaying) {
-            tutorialMusicPlaying = true;
-            if (levelMusic !== undefined) {
-                levelMusic.stop();
-            }
-            if (tutorialMusic !== undefined) {
-                tutorialMusic.loop();
-                tutorialMusic.setVolume(0.3);
-            }
-        }
-        displayTutorial();
-        return;
-    } else {
-        // Handle music for tutorial exit
-        if (tutorialMusicPlaying) {
-            tutorialMusicPlaying = false;
-            if (tutorialMusic !== undefined) {
-                tutorialMusic.stop();
-            }
-            if (levelRender === 'menu' && menuMusic !== undefined) {
-                menuMusic.play();
-                menuMusic.setVolume(0.3);
-            } else if (levelMusic !== undefined && levelRender !== 'menu') {
-                levelMusic.play();
-                levelMusic.setVolume(0.3);
-            }
-        }
-    }
-    
     if (gameOver) {
         displayGameOver();
         return;
@@ -214,6 +234,13 @@ function draw() {
             break;
         case 'lofi':
             lofiDraw();
+            break;
+        case 'end':
+            endScreenDraw();
+            break
+        case 'tutorial':
+            displayTutorial();
+            break;
         default:
             break;
     }
@@ -244,16 +271,23 @@ function switchLevel(levelName) {
     if (levelName === 'edm') { // edm level
         edmSetup();
     }
-    if (levelName === 'lofi') {
+    if (levelName === 'lofi') { // lofi level
         lofiSetup();
+    }
+    if (levelName === 'end') { // end screen 
+        endScreenSetup();
     }
     playLevelMusic();
 }
 
 function keyPressed() {
     pressedKeys[key] = true;
+    if (typeof showSettings !== "undefined" && showSettings && key === "Escape") {
+        showSettings = false;
+        return;
+    }
     if (key === 'c') { // added for testing
-        switchLevel('edm');
+        switchLevel('end');
     }
     if (key === 'v') { // added for testing
         switchLevel('lofi');
@@ -317,13 +351,38 @@ function playLevelMusic() {
         case 'lofi':
             levelMusic = lofiMusic;
             break;
+        case 'end':
+            levelMusic = endMusicPlaying;
+            break;
+        case 'tutorial':
+            levelMusic = tutorialMusic;
+            break;
         default:
             levelMusic = menuMusic;
             break;
     }
+    levelMusic.setVolume(music_volume); // change the volume between 0.0 and 1.0 if needed
+    levelMusic.loop();
     levelMusic.play();
-    levelMusic.setVolume(0.3); // change the volume between 0.0 and 1.0 if needed
     userStartAudio();
+}
+
+/**
+ * Applies global music_volume to every loaded music track so menu / tutorial / game over stay in sync.
+ */
+function applyMusicVolume() {
+    if (typeof menuMusic !== "undefined" && menuMusic) {
+        menuMusic.setVolume(music_volume);
+    }
+    if (typeof levelMusic !== "undefined" && levelMusic) {
+        levelMusic.setVolume(music_volume);
+    }
+    if (typeof tutorialMusic !== "undefined" && tutorialMusic) {
+        tutorialMusic.setVolume(music_volume);
+    }
+    if (typeof gameOverMusic !== "undefined" && gameOverMusic) {
+        gameOverMusic.setVolume(music_volume);
+    }
 }
 
 /**
@@ -353,12 +412,13 @@ function fpsCounter() {
 /**
  * Displays the health bar in the bottom left of the screen
  */
+let healthIndex;
 function displayHealthBar(player) {
     if (typeof player === "undefined" || !player || typeof healthBarData === "undefined") {
         return;
     }
     
-    let healthIndex = Math.max(0, Math.min(5, 5 - player.health));
+    healthIndex = Math.max(0, Math.min(5, 5 - player.health));
 
     let frame = healthBarData.frames[healthIndex].position;
     
@@ -391,7 +451,7 @@ function displayGameOver() {
         }
         if (gameOverMusic !== undefined) {
             gameOverMusic.loop();
-            gameOverMusic.setVolume(0.3);
+            gameOverMusic.setVolume(music_volume);
         }
     }
     
@@ -402,9 +462,33 @@ function displayGameOver() {
         textSize(48);
         textAlign(CENTER, CENTER);
         text("GAME OVER", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+        drawArcadeWavesSurvivedOverlay();
         return;
     }
     image(gameOverImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    drawArcadeWavesSurvivedOverlay();
+}
+
+/**
+ * Arcade rock level: show how many waves were cleared before death.
+ */
+function drawArcadeWavesSurvivedOverlay() {
+    if (game_mode !== "arcade" || levelRender !== "rock") {
+        return;
+    }
+    if (typeof arcade_waves_survived === "undefined") {
+        return;
+    }
+    push();
+    textAlign(CENTER, CENTER);
+    textSize(28);
+    const x = CANVAS_WIDTH / 2;
+    const y = CANVAS_HEIGHT / 2 + 55;
+    fill(0, 0, 0, 200);
+    text(`Waves survived: ${arcade_waves_survived}`, x + 2, y + 2);
+    fill(255, 230, 120);
+    text(`Waves survived: ${arcade_waves_survived}`, x, y);
+    pop();
 }
 
 /**
@@ -452,7 +536,8 @@ function displayTutorial() {
         drawExitX(rightArrowX, buttonY, buttonSize);
         if (isHoveringButton(rightArrowX, buttonY, buttonSize) && mouseIsPressed && !tutorialClickFlag) {
             tutorialClickFlag = true;
-            showTutorial = false;
+            levelRender = "menu";
+            playLevelMusic();
         }
     }
     

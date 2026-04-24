@@ -2,6 +2,7 @@ let player;
 const delay = ms => new Promise(res => setTimeout(res, ms)); // this helps with the delay functions DO NOT REMOVE also this is declare globally so dont add to other classes
 let spriteImages = [];
 let pressedKeys = {};
+let weapon = 0;
 
 class Player {
   constructor(x, y, spritedata, spritesheet, Anispeed) {
@@ -14,6 +15,9 @@ class Player {
     this.health = 5; 
     this.can_hit = true;
     this.is_visible = true;
+
+    this.is_entering = true; // true
+    this.is_exiting = false;
 
     this.player_ani = new Sprite(spritedata, spritesheet, Anispeed);
 
@@ -29,7 +33,7 @@ class Player {
     let mvmt = createVector(0, 0);
     
     // Player movement
-    if (!paused) { // Disables player from moving when pause menu is open
+    if (!paused && !this.is_entering && !this.is_exiting) { // Disables player from moving when pause menu is open
       if(pressedKeys.a || pressedKeys.A || pressedKeys.ArrowLeft) {
         if (this.x > 0) {
           mvmt.x -= 1;
@@ -77,17 +81,18 @@ class Player {
     
     this.x += mvmt.x;
     this.y += mvmt.y;
-
-    this.x = constrain(this.x, 0, CANVAS_WIDTH - this.w);
-    this.y = constrain(this.y, 0, CANVAS_HEIGHT - this.h);
-
+    if (!this.is_entering && !this.is_exiting) {
+      this.x = constrain(this.x, 0, CANVAS_WIDTH - this.w);
+      this.y = constrain(this.y, 0, CANVAS_HEIGHT - this.h);
+    }
+    
     this.pos.set(this.x, this.y)
   }
   
   draw() {
     if (this.is_visible === true) {
       //circle(this.pos.x, this.pos.y, this.r) // here for testing if needed.
-      this.player_ani.show(this.x - 20, this.y - 20, this.facingLeft);
+      this.player_ani.show(this.pos.x - 20, this.pos.y - 20, this.facingLeft);
       this.player_ani.animate();
       // Aim gun with the right stick when available, otherwise use the mouse.
       let aimX = mouseX - this.pos.x;
@@ -103,7 +108,18 @@ class Player {
       push();
       translate(this.pos.x, this.pos.y);
       rotate(angle);
-      image(shotgunSprite, 0, 0, 50, 28); 
+      if (weapon == 0) {
+        image(pistolSprite, 0, 0, 50, 28);
+      }
+      if (weapon == 1) {
+        image(shotgunSprite, 0, 0, 50, 28);
+      }
+      if (weapon == 2) {
+        image(laserSprite, 0, 0, 50, 28);
+      }
+      if (weapon == 3) {
+        image(discThrowerSprite, 0, 0, 50, 28);
+      }
       pop();
     }
   }
@@ -124,20 +140,65 @@ class Player {
     await delay(3000); // this is 3 seconds delay, change this and the for loop above to show change in blinking.
     this.can_hit = true;
   }
-/*
-  drawGun() {
-    let angle = atan2(mouseY - this.pos.y, mouseX - this.pos.x);
-    let aimingLeft = abs(angle) > HALF_PI;
 
-    noStroke();
-    fill(90, 140, 230);
-    translate(this.pos.x, this.pos.y);
-    rotate(angle);
-    if (aimingLeft) scale(1, -1);
-    fill(160, 160, 170);
-    rect(RADIUS - 4, -4, 28, 9, 2);
+  increaseHealth() { // this is so the players health doesn't go above 5 after health items were added
+    // play health SFX
+    playSFX("healthUp");
+    if (this.health >= 5) {
+      return;
+    } else {
+      this.health++;
+    }
   }
-*/
+
+  async shieldImmunity() {
+    this.can_hit = false;
+    console.log("cant hit me!");
+    // shield animation here
+    await delay(8000); // this is 3 seconds delay, change this and the for loop above to show change in blinking.
+    this.can_hit = true;
+  }
+
+  leaveScene(newLevel) {
+    if (!this.is_exiting) {
+      return;
+    }
+    this.y -= 5
+    this.pos.y = this.y;
+    if (this.y <= -150) {
+      this.is_exiting = false;
+      switchLevel(newLevel);
+    }
+  }
+
+  enterScene() {
+    if (!this.is_entering) {
+      return;
+    }
+    this.y += 5
+    this.pos.y = this.y;
+    if (this.y >= 300) {
+      this.is_entering = false;
+    }
+  }
+
+
+  // these 2 functions are specifically for the ending scene
+
+  justShow(sizeW, sizeH) {
+    this.player_ani.showAdjustable(this.pos.x - 20, this.pos.y - 20, this.facingLeft, sizeW, sizeH);
+  }
+
+  enterEndScene(stop_pos) {
+    if (!this.is_entering) {
+      return;
+    }
+    this.y += 5
+    this.pos.y = this.y;
+    if (this.y >= stop_pos) {
+      this.is_entering = false;
+    }
+  }
 }
 
 
