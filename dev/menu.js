@@ -110,7 +110,11 @@ function startButton(x, y, w, h) {
       } else {
         game_mode = 'story';
       }
-      switchLevel('lofi'); // should start on lofi
+      if (game_mode === 'arcade') {
+        switchLevel('rock');
+      } else {
+        switchLevel('lofi'); // story / chaos currently start on lofi
+      }
     }
   }
 }
