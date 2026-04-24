@@ -68,6 +68,15 @@ class Sprite {
         scale(-1, -1);
         image(this.animation[index], x, y, 40, 40);
     }
+
+    showAdjustable(x, y, facingLeft = false, sizeX, sizeY) { // this is specifically for the final end screen
+        let index = floor(this.index) % this.len;
+        push();
+        translate(x + 20, y + 20);
+        scale(-1, 1);
+        image(this.animation[index], -20, -20, sizeX, sizeY);
+        pop();
+    }
 }
 
 class BossSprite extends Sprite {
@@ -98,6 +107,21 @@ class BossSprite extends Sprite {
 
     animate() {
         this.index += this.speed
+    }
+
+    showOther(x, y, facingLeft = false) {
+        let index = floor(this.index) % this.len;
+        let f = this.spritedata.frames[index].position; // Get current frame dimensions
+
+        if (facingLeft) {
+            push();
+            translate(x + f.w / 2, y + f.h / 2);
+            scale(-1, 1);
+            image(this.animation[index], -f.w / 2, -f.h / 2, f.w, f.h);
+            pop();
+        } else {
+            image(this.animation[index], x, y, f.w, f.h);
+        }
     }
 }
 

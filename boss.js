@@ -33,8 +33,6 @@ class rockBoss extends Boss {
     constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed) {
         super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed)
 
-        //this.wanderAngle = random(TWO_PI);
-        //this.shooting = Math.floor(Math.random() * shootSpeed);
     }
 
     update(player) {
@@ -72,7 +70,7 @@ class rockBoss extends Boss {
     }
 
     async blink() { // this makes the boss blink when invincible
-        for (let i = 0; i < 5; i++) { // until 5 because of the 2 delays and 1 second of i frames
+        for (let i = 0; i < 2; i++) { // until 5 because of the 2 delays and 1 second of i frames
             this.is_visible = false;
             await delay(100);
             this.is_visible = true;
@@ -142,18 +140,35 @@ class rockBoss extends Boss {
 
 class EDMBoss extends rockBoss {
     constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed) {
-        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed)
+        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, 20, shootSpeed)
 
-        //this.wanderAngle = random(TWO_PI);
-        //this.shooting = Math.floor(Math.random() * shootSpeed);
+    }
+
+    draw() {
+        if (this.is_visible === true) {
+            fill(0, 0, 0);
+            circle(this.pos.x, this.pos.y, this.r * 2); // this is for showing the hitbox in testing.
+            this.Boss_anim.showOther(this.pos.x - this.r, this.pos.y - this.r);
+            if (this.entered_scene) {
+                this.Boss_anim.animate();
+            }
+        }
     }
 }
 
 class LofiBoss extends rockBoss {
     constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed) {
-        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed)
+        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, 15, shootSpeed) // for some reason his health isn't changing lol
+    }
 
-        //this.wanderAngle = random(TWO_PI);
-        //this.shooting = Math.floor(Math.random() * shootSpeed);
+    draw() {
+        if (this.is_visible === true) {
+            fill(0, 0, 0);
+            circle(this.pos.x, this.pos.y, this.r * 2); // this is for showing the hitbox in testing.
+            this.Boss_anim.showOther(this.pos.x - this.r, this.pos.y - this.r);
+            if (this.entered_scene) {
+                this.Boss_anim.animate();
+            }
+        }
     }
 }

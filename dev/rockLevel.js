@@ -195,11 +195,11 @@ function rockDraw() {
         if (enemies[i] instanceof Grunt) {
           enemies[i].knockback();
         }
-        if (player_1.can_hit == true) {
-          // Bombers explode and disappear after the animation plays
+        // Bombers explode and disappear after the animation plays
         if (enemies[i] instanceof Bomber) {
           enemies[i].explode(i);
         }
+        if (player_1.can_hit == true) {
         player_1.health--;
           player_1.invincible();
           console.log(player_1.health); // this is for testing to make sure health is going down correctly

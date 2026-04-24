@@ -13,6 +13,19 @@ const BUTTON_GAP = 75;
 // Tutorial button click flag
 let tutorialClicked = false;
 
+// Settings overlay (uses globals sfx_volume and music_volume from main.js)
+let showSettings = false;
+let settingsUIMouseLock = false;
+
+// Keeps track of the button that currently hover, useful for SFX
+let currentHoveredID = null;
+
+const SETTINGS_SLIDER_W = 260;
+const SETTINGS_SLIDER_H = 22;
+const SETTINGS_ROW_SFX_Y = FIRST_BUT + 30;
+const SETTINGS_ROW_MUSIC_Y = FIRST_BUT + 95;
+const SETTINGS_BACK_Y = FIRST_BUT + 200;
+
 /**
  * Main menu that welcomes the player to the game
  */
@@ -25,10 +38,14 @@ function menuDraw() {
   // Change image placement to center
   imageMode(CENTER);
   pulsingLogo();
-  startButton(CENTER_OF_MENU, FIRST_BUT, BUTTON_W, BUTTON_H);
-  levelButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP, BUTTON_W, BUTTON_H);
-  tutorialButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 2, BUTTON_W, BUTTON_H);
-  settingsButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 3, BUTTON_W, BUTTON_H);
+  if (!showSettings) {
+    startButton(CENTER_OF_MENU, FIRST_BUT, BUTTON_W, BUTTON_H);
+    levelButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP, BUTTON_W, BUTTON_H);
+    tutorialButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 2, BUTTON_W, BUTTON_H);
+    settingsButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 3, BUTTON_W, BUTTON_H);
+  } else {
+    drawSettingsMenu();
+  }
   // Change back to not break other image renders
   imageMode(CORNER);
 }
@@ -44,9 +61,13 @@ function pauseMenuDraw() {
   // Change image placement to center
   imageMode(CENTER);
   pulsingLogo();
-  startButton(CENTER_OF_MENU, FIRST_BUT, BUTTON_W, BUTTON_H);
-  tutorialButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP, BUTTON_W, BUTTON_H);
-  settingsButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 2, BUTTON_W, BUTTON_H);
+  if (!showSettings) {
+    startButton(CENTER_OF_MENU, FIRST_BUT, BUTTON_W, BUTTON_H);
+    tutorialButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP, BUTTON_W, BUTTON_H);
+    settingsButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 2, BUTTON_W, BUTTON_H);
+  } else {
+    drawSettingsMenu();
+  }
   // Change back to not break other image renders
   imageMode(CORNER);
 }
@@ -77,10 +98,11 @@ function pulsingLogo() {
 function startButton(x, y, w, h) {
   image(menuStartButton[0], x, y, w, h);
   
-  if (isHovering(x, y, w, h)) {
+  if (isHovering("strt", x, y, w, h)) {
     image(menuStartButton[1], x, y, w, h);
 
     if (mouseIsPressed) {
+      playSFX("click");
       if (currentMode === 1) {
         game_mode = 'arcade';
       } else if (currentMode === 2) {
@@ -88,7 +110,7 @@ function startButton(x, y, w, h) {
       } else {
         game_mode = 'story';
       }
-      switchLevel('rock');
+      switchLevel('lofi'); // should start on lofi
     }
   }
 }
@@ -101,10 +123,11 @@ function levelButton(x, y, w, h) {
 
   image(modeButtons[currentMode][0], x, y, w, h);
 
-  if (isHovering(x, y, w, h)) {
+  if (isHovering("lvl", x, y, w, h)) {
     image(modeButtons[currentMode][1], x, y, w, h);
 
     if (mouseIsPressed && !modeClicked) {
+      playSFX("click");
       modeClicked = true;
       currentMode = (currentMode + 1) % 3;
     }
@@ -121,12 +144,14 @@ function levelButton(x, y, w, h) {
 function tutorialButton(x, y, w, h) {
   image(menuHowToButton[0], x, y, w, h);
   
-  if (isHovering(x, y, w, h)) {
+  if (isHovering("tut", x, y, w, h)) {
     image(menuHowToButton[1], x, y, w, h);
     
     if (mouseIsPressed && !tutorialClicked) {
+      playSFX("click");
       tutorialClicked = true;
-      showTutorial = true;
+      levelRender = "tutorial";
+      playLevelMusic();
       tutorialIndex = 0;
     }
   }
@@ -142,9 +167,139 @@ function tutorialButton(x, y, w, h) {
 function settingsButton(x, y, w, h) {
   image(menuSettingsButton[0], x, y, w, h);
   
-  if (isHovering(x, y, w, h)) {
+  if (isHovering("set", x, y, w, h)) {
     image(menuSettingsButton[1], x, y, w, h);
+
+    if (mouseIsPressed && !settingsUIMouseLock) {
+      playSFX("click");
+      settingsUIMouseLock = true;
+      showSettings = true;
+    }
   }
+
+  if (!mouseIsPressed) {
+    settingsUIMouseLock = false;
+  }
+}
+
+/**
+ * Settings panel: adjusts globals sfx_volume and music_volume (same names as soundFX.js / playLevelMusic).
+ */
+function drawSettingsMenu() {
+  const trackLeft = CENTER_OF_MENU - SETTINGS_SLIDER_W / 2;
+  const trackRight = CENTER_OF_MENU + SETTINGS_SLIDER_W / 2;
+
+  fill(0, 0, 0, 200);
+  noStroke();
+  rectMode(CENTER);
+  rect(CENTER_OF_MENU, MENU_Y + MENU_HEIGHT / 2 - 40, MENU_WIDTH - 80, 420, 12);
+  rectMode(CORNER);
+
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(28);
+  text("SETTINGS", CENTER_OF_MENU, MENU_Y + 120);
+  textSize(18);
+
+  updateAndDrawSfxVolumeSlider(SETTINGS_ROW_SFX_Y, trackLeft, trackRight);
+  updateAndDrawMusicVolumeSlider(SETTINGS_ROW_MUSIC_Y, trackLeft, trackRight);
+
+  drawSettingsBackButton(CENTER_OF_MENU, SETTINGS_BACK_Y);
+
+  if (!mouseIsPressed) {
+    settingsUIMouseLock = false;
+  }
+}
+
+function volumeSliderPointerOnTrack(rowCenterY, trackLeft, trackRight) {
+  const halfHit = SETTINGS_SLIDER_H + 8;
+  return (
+    mouseIsPressed &&
+    mouseY >= rowCenterY - halfHit &&
+    mouseY <= rowCenterY + halfHit &&
+    mouseX >= trackLeft &&
+    mouseX <= trackRight
+  );
+}
+
+function updateAndDrawSfxVolumeSlider(rowCenterY, trackLeft, trackRight) {
+  if (volumeSliderPointerOnTrack(rowCenterY, trackLeft, trackRight)) {
+    sfx_volume = constrain((mouseX - trackLeft) / SETTINGS_SLIDER_W, 0, 1);
+  }
+
+  fill(255);
+  text("SFX volume", CENTER_OF_MENU, rowCenterY - 28);
+
+  fill(60);
+  rectMode(CENTER);
+  rect(CENTER_OF_MENU, rowCenterY, SETTINGS_SLIDER_W, SETTINGS_SLIDER_H, 6);
+
+  fill(120, 200, 255);
+  rectMode(CORNER);
+  rect(trackLeft, rowCenterY - SETTINGS_SLIDER_H / 2, SETTINGS_SLIDER_W * sfx_volume, SETTINGS_SLIDER_H, 6);
+
+  fill(255);
+  textSize(14);
+  text(Math.round(sfx_volume * 100) + "%", trackRight + 36, rowCenterY);
+  textSize(18);
+}
+
+function updateAndDrawMusicVolumeSlider(rowCenterY, trackLeft, trackRight) {
+  if (volumeSliderPointerOnTrack(rowCenterY, trackLeft, trackRight)) {
+    music_volume = constrain((mouseX - trackLeft) / SETTINGS_SLIDER_W, 0, 1);
+    if (typeof applyMusicVolume === "function") {
+      applyMusicVolume();
+    }
+  }
+
+  fill(255);
+  text("Music volume", CENTER_OF_MENU, rowCenterY - 28);
+
+  fill(60);
+  rectMode(CENTER);
+  rect(CENTER_OF_MENU, rowCenterY, SETTINGS_SLIDER_W, SETTINGS_SLIDER_H, 6);
+
+  fill(180, 200, 255);
+  rectMode(CORNER);
+  rect(trackLeft, rowCenterY - SETTINGS_SLIDER_H / 2, SETTINGS_SLIDER_W * music_volume, SETTINGS_SLIDER_H, 6);
+
+  fill(255);
+  textSize(14);
+  text(Math.round(music_volume * 100) + "%", trackRight + 36, rowCenterY);
+  textSize(18);
+}
+
+function drawSettingsBackButton(x, y) {
+  const bw = 160;
+  const bh = 44;
+  const hovering =
+    mouseX >= x - bw / 2 &&
+    mouseX <= x + bw / 2 &&
+    mouseY >= y - bh / 2 &&
+    mouseY <= y + bh / 2;
+
+  rectMode(CENTER);
+  if (hovering) {
+    fill(120, 120, 170);
+  } else {
+    fill(80, 80, 120);
+  }
+  stroke(255);
+  strokeWeight(2);
+  rect(x, y, bw, bh, 8);
+
+  fill(255);
+  noStroke();
+  textSize(20);
+  text("Back", x, y);
+
+  if (hovering && mouseIsPressed && !settingsUIMouseLock) {
+    playSFX("click");
+    settingsUIMouseLock = true;
+    showSettings = false;
+  }
+
+  rectMode(CORNER);
 }
 
 
@@ -156,8 +311,24 @@ function settingsButton(x, y, w, h) {
 
 /**
  * Returns true when mouse is detected within the bounds
+ * Update: now plays a sound when the user hovers
+ * @param id This serves as a unique identifier to help track when the cursor
+ * leaves the bounds of the button (for SFX playing) 
  */
-function isHovering(x, y, w, h) {
-  return mouseX >= x - w/2 && mouseX <= x + w/2 &&
-          mouseY >= y - h/2 && mouseY <= y + h/2;
+function isHovering(id, x, y, w, h) {
+  var isHovering = (mouseX >= x - w/2 && mouseX <= x + w/2 &&
+          mouseY >= y - h/2 && mouseY <= y + h/2); 
+
+
+  // if it's hovering, let's play a sound (FX)! and keep track that we are now hovering a particular button
+  if (isHovering) {
+    if (currentHoveredID != id) {
+      playSFX("hover");
+      currentHoveredID = id;
+    }
+  } else if (currentHoveredID === id) {
+    // If we've left a particular button, reset currently hovered to null
+    currentHoveredID = null;
+  }
+  return isHovering;
 }

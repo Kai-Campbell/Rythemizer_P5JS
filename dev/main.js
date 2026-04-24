@@ -362,6 +362,7 @@ function playLevelMusic() {
             break;
     }
     levelMusic.setVolume(music_volume); // change the volume between 0.0 and 1.0 if needed
+    levelMusic.loop();
     levelMusic.play();
     userStartAudio();
 }

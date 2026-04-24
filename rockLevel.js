@@ -1,11 +1,12 @@
 let projectiles = [];
 let player_x = 200;
-let player_y = 200;
+let player_y = -300;
 let player_1;
-const story_wave_length = 3;
+const story_wave_length = 2;
 var wave_length = story_wave_length;
 var boss_spawned = false;
 var arcade_wave = 0;
+var end_entered = 0;
 
 
 function rockSetup() {
@@ -16,8 +17,9 @@ function rockSetup() {
   arcade_wave = 0;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
-  enemies = []
+  enemies = [];
   boss = [];
+  items = [];
 }
 
 function spawnRockBaddies(count) {
@@ -54,7 +56,11 @@ function rockDraw() {
    * Logic in this if statement plays when the game is not paused.
    * Should be things like updating movement, checking for collision, ext.
    */
-  if (!paused) {
+
+  player_1.enterScene(); // these two functions handle level transitions
+  player_1.leaveScene('end'); // this one will be changed when end screen level is done
+
+  if (!paused && !player_1.is_entering) {
     // Updates player position
     player_1.update();
 
@@ -71,6 +77,16 @@ function rockDraw() {
           if (enemies[j] instanceof Bomber) {
             enemies[j].explode();
           } else {
+            let rand = random(15); // around 10 percent chance of spawning
+            console.log(rand)
+            if (rand <= 1.5) {
+              items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+            } else if (rand > 14) {
+              items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
+            }
+            // Play SFX for when enemy dies
+            playSFX("enemyGone");
+            // Thanos snap enemy from the enemy array
             enemies.splice(j, 1);
           }
           projectiles.splice(i, 1);
@@ -95,6 +111,9 @@ function rockDraw() {
         for (let b = boss.length - 1; b >= 0; b--) {
           if (projectiles[i].getPlayType() === 'player' && projectiles[i].checkHit(boss[b]) && boss[b].entered_scene == true) {
             if (boss[b].can_hit === true) {
+              // play Boss hurt SFX
+              playSFX("bossHurt");
+              // Decrement health and begin invulnerability period
               boss[b].health--;
               boss[b].invincible();
             }
@@ -102,6 +121,9 @@ function rockDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
+              if (game_mode == 'arcade') {
+                items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
+              }
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
@@ -139,11 +161,11 @@ function rockDraw() {
         if (enemies[i] instanceof Grunt) {
           enemies[i].knockback();
         }
-        if (player_1.can_hit == true) {
-          // Bombers explode and disappear after the animation plays
+        // Bombers explode and disappear after the animation plays
         if (enemies[i] instanceof Bomber) {
           enemies[i].explode(i);
         }
+        if (player_1.can_hit == true) {
         player_1.health--;
           player_1.invincible();
           console.log(player_1.health); // this is for testing to make sure health is going down correctly
@@ -151,6 +173,35 @@ function rockDraw() {
             gameOver = true;
           }
         }
+      }
+    }
+
+    for (let i = items.length - 1; i >= 0; i--) { // this controls collisions for the items, currently works with just health items
+      let distance = dist(items[i].pos.x, items[i].pos.y, player_1.pos.x, player_1.pos.y);
+      if (distance < items[i].r + player_1.r) {
+        if (items[i] instanceof HealthItem) {
+          player_1.increaseHealth();
+          healthIndex++;
+          items.splice(i, 1);
+        }
+        if (items[i] instanceof PowerUp) {
+          if (items[i].getImage() == shieldBox) {
+            player_1.shieldImmunity();
+            items.splice(i, 1);
+          }
+          if (items[i].getImage() == shotgunBox) {
+            weapon = 1;
+            items.splice(i, 1);
+          }
+        }
+        if (items[i] instanceof ExitItem) {
+          player_1.is_exiting = true; // starts the leave animation
+          items.splice(i, 1);
+        }
+      }
+
+      if (items[i] && items[i].despawn) { // if item is still there, then despawn it
+        items.splice(i, 1);
       }
     }
 
@@ -205,7 +256,10 @@ function rockDraw() {
     } else {
       boss[i].draw();
     }
-    
+  }
+  for (let i = items.length - 1; i >= 0; i--) {
+    items[i].draw();
+    items[i].timer();
   }
   
   // Display health bar
