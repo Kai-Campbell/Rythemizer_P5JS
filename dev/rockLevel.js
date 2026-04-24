@@ -2,7 +2,7 @@ let projectiles = [];
 let player_x = 200;
 let player_y = -300;
 let player_1;
-const story_wave_length = 2;
+const story_wave_length = 0;
 var wave_length = story_wave_length;
 var boss_spawned = false;
 var arcade_wave = 0;
@@ -155,9 +155,7 @@ function rockDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
-              if (game_mode == 'arcade') {
-                items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
-              }
+              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
