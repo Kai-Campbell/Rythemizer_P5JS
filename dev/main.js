@@ -486,9 +486,33 @@ function displayGameOver() {
         textSize(48);
         textAlign(CENTER, CENTER);
         text("GAME OVER", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+        drawArcadeWavesSurvivedOverlay();
         return;
     }
     image(gameOverImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    drawArcadeWavesSurvivedOverlay();
+}
+
+/**
+ * Arcade rock level: show how many waves were cleared before death.
+ */
+function drawArcadeWavesSurvivedOverlay() {
+    if (game_mode !== "arcade" || levelRender !== "rock") {
+        return;
+    }
+    if (typeof arcade_waves_survived === "undefined") {
+        return;
+    }
+    push();
+    textAlign(CENTER, CENTER);
+    textSize(28);
+    const x = CANVAS_WIDTH / 2;
+    const y = CANVAS_HEIGHT / 2 + 55;
+    fill(0, 0, 0, 200);
+    text(`Waves survived: ${arcade_waves_survived}`, x + 2, y + 2);
+    fill(255, 230, 120);
+    text(`Waves survived: ${arcade_waves_survived}`, x, y);
+    pop();
 }
 
 /**
