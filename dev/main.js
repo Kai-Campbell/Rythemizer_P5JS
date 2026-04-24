@@ -12,6 +12,7 @@
 // 2 = edm
 // 3 = rock
 // 4 = trans
+// 5 = tutorial
 let levelRender = 'menu'; 
 let game_mode = 'story';
 
@@ -23,7 +24,6 @@ let gameOver = false;
 let gameOverMusicPlaying = false;
 
 // Tutorial variables
-let showTutorial = false;
 let tutorialIndex = 0;
 let tutorialClickFlag = false;
 let tutorialMusicPlaying = false;
@@ -211,37 +211,6 @@ function setup() {
 }
 
 function draw() {
-    if (showTutorial) {
-        // Handle music for tutorial entry
-        if (!tutorialMusicPlaying) {
-            tutorialMusicPlaying = true;
-            if (levelMusic !== undefined) {
-                levelMusic.stop();
-            }
-            if (tutorialMusic !== undefined) {
-                tutorialMusic.loop();
-                tutorialMusic.setVolume(music_volume);
-            }
-        }
-        displayTutorial();
-        return;
-    } else {
-        // Handle music for tutorial exit
-        if (tutorialMusicPlaying) {
-            tutorialMusicPlaying = false;
-            if (tutorialMusic !== undefined) {
-                tutorialMusic.stop();
-            }
-            if (levelRender === 'menu' && menuMusic !== undefined) {
-                menuMusic.play();
-                menuMusic.setVolume(music_volume);
-            } else if (levelMusic !== undefined && levelRender !== 'menu') {
-                levelMusic.play();
-                levelMusic.setVolume(music_volume);
-            }
-        }
-    }
-    
     if (gameOver) {
         displayGameOver();
         return;
@@ -269,6 +238,9 @@ function draw() {
         case 'end':
             endScreenDraw();
             break
+        case 'tutorial':
+            displayTutorial();
+            break;
         default:
             break;
     }
@@ -381,6 +353,9 @@ function playLevelMusic() {
             break;
         case 'end':
             levelMusic = endMusicPlaying;
+            break;
+        case 'tutorial':
+            levelMusic = tutorialMusic;
             break;
         default:
             levelMusic = menuMusic;
@@ -536,7 +511,8 @@ function displayTutorial() {
         drawExitX(rightArrowX, buttonY, buttonSize);
         if (isHoveringButton(rightArrowX, buttonY, buttonSize) && mouseIsPressed && !tutorialClickFlag) {
             tutorialClickFlag = true;
-            showTutorial = false;
+            levelRender = "menu";
+            playLevelMusic();
         }
     }
     
