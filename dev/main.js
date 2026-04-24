@@ -252,7 +252,7 @@ function draw() {
     }
 
     // FPS Counter 
-    fpsCounter();
+    //fpsCounter();
 }
 
 
