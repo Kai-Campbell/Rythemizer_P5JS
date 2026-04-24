@@ -6,6 +6,7 @@ const story_wave_length = 2;
 var wave_length = story_wave_length;
 var boss_spawned = false;
 var arcade_wave = 0;
+var arcade_waves_survived = 0;
 var end_entered = 0;
 
 
@@ -15,6 +16,7 @@ function rockSetup() {
   wave_length = story_wave_length;
   boss_spawned = false;
   arcade_wave = 0;
+  arcade_waves_survived = 0;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
   enemies = [];
@@ -22,7 +24,27 @@ function rockSetup() {
   items = [];
 }
 
-function spawnRockBaddies(count) {
+function spawnRockBaddies(count, waveConfig = null) {
+  let gruntSpeed = 3;
+  let shooterMoveSpeed = 1.5;
+  let shooterShootSpeed = 120;
+  let bomberSpeed = 1.5;
+
+  if (waveConfig !== null) {
+    if (waveConfig.gruntSpeed !== undefined) {
+      gruntSpeed = waveConfig.gruntSpeed;
+    }
+    if (waveConfig.shooterMoveSpeed !== undefined) {
+      shooterMoveSpeed = waveConfig.shooterMoveSpeed;
+    }
+    if (waveConfig.shooterShootSpeed !== undefined) {
+      shooterShootSpeed = waveConfig.shooterShootSpeed;
+    }
+    if (waveConfig.bomberSpeed !== undefined) {
+      bomberSpeed = waveConfig.bomberSpeed;
+    }
+  }
+
   for (let i = 0; i < count; i++) {
     let random_x = random(CANVAS_WIDTH); // spawns enemies at random positions near the top and sides
     let random_y;
@@ -31,10 +53,22 @@ function spawnRockBaddies(count) {
     } else {
       random_y = random(CANVAS_HEIGHT + 20, CANVAS_HEIGHT + 50); // this one they spawn at the bottom
     }
-    enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, 3, 30));
-    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, 1.5, 120, 100));
-    enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
+    enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, gruntSpeed, 30));
+    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, shooterMoveSpeed, shooterShootSpeed, 100));
+    enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, bomberSpeed, 120, 100));
   }
+}
+
+function getArcadeWaveConfig(waveNumber) {
+  // Starts easy and ramps continuously as wave number grows.
+  const waveTier = max(0, waveNumber - 1);
+  return {
+    squadCount: 1 + floor(waveTier / 2),
+    gruntSpeed: min(6.5, 2.6 + waveTier * 0.08),
+    shooterMoveSpeed: min(4.6, 1.2 + waveTier * 0.07),
+    shooterShootSpeed: max(36, 140 - waveTier * 3),
+    bomberSpeed: min(4.8, 1.2 + waveTier * 0.075),
+  };
 }
 
 function spawnBoss() {
@@ -121,9 +155,7 @@ function rockDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
-              if (game_mode == 'arcade') {
-                items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
-              }
+              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
@@ -224,12 +256,15 @@ function rockDraw() {
         }
       }
 
-    // Wave logic
-    if (enemies.length === 0 && boss.length === 0) {
+    // Wave logic (skip if player just died this frame — board can be empty)
+    if (!gameOver && enemies.length === 0 && boss.length === 0) {
       if (game_mode === 'arcade') {
+        if (arcade_wave > 0) {
+          arcade_waves_survived++;
+        }
         arcade_wave++;
-        let wave_difficulty = min(3, 1 + floor((arcade_wave - 1) / 3));
-        spawnRockBaddies(wave_difficulty);
+        const waveConfig = getArcadeWaveConfig(arcade_wave);
+        spawnRockBaddies(waveConfig.squadCount, waveConfig);
       } else if (wave_length !== 0) {
         spawnRockBaddies(8);
         wave_length--;
