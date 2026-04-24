@@ -92,7 +92,11 @@ function rockDraw() {
    */
 
   player_1.enterScene(); // these two functions handle level transitions
-  player_1.leaveScene('end'); // this one will be changed when end screen level is done
+  if (game_mode === 'story') {
+    player_1.leaveScene('end');
+  } else {
+    player_1.leaveScene('lofi');
+  }
 
   if (!paused && !player_1.is_entering) {
     // Updates player position

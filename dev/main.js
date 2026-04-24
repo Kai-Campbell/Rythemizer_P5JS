@@ -352,7 +352,7 @@ function playLevelMusic() {
             levelMusic = lofiMusic;
             break;
         case 'end':
-            levelMusic = edmMusic;
+            levelMusic = edmMusic; // change this to end level music when added
             break;
         case 'tutorial':
             levelMusic = tutorialMusic;
