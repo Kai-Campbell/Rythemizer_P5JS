@@ -290,7 +290,7 @@ function keyPressed() {
         switchLevel('end');
     }
     if (key === 'v') { // added for testing
-        switchLevel('lofi');
+        switchLevel('rock');
     }
     if (key == 'Escape' && levelRender != 'menu') {
         // Toggle pausing variable
