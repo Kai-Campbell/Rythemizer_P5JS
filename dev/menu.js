@@ -150,7 +150,8 @@ function tutorialButton(x, y, w, h) {
     if (mouseIsPressed && !tutorialClicked) {
       playSFX("click");
       tutorialClicked = true;
-      showTutorial = true;
+      levelRender = "tutorial";
+      playLevelMusic();
       tutorialIndex = 0;
     }
   }
