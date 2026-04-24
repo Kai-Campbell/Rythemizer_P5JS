@@ -180,7 +180,7 @@ function preload() {
     shotgunBox = loadImage('../Assets/Items/shotgun_box.png');
     laserBox = loadImage('../Assets/Items/laser_box.png');
     vinylBox = loadImage('../Assets/Items/disc_shooter_box.png');
-    exitItem = loadImage('../Assets/Items/shield_box.png');
+    exitItem = loadImage('../Assets/Items/end_story_item.png');
     
     // Tutorial images
     tutorialImages[0] = loadImage('../Assets/GUI/tutorial_1.png');
