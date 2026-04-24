@@ -155,9 +155,7 @@ function rockDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
-              if (game_mode == 'arcade') {
-                items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
-              }
+              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
