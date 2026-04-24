@@ -20,3 +20,24 @@ function endScreenDraw() {
     image(endScenePlayer, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   }
 }
+
+/**
+ * Settings button
+function mainMenuButton(x, y, w, h) {
+  image(returnMenuButton[0], x, y, w, h);
+  
+  if (isHovering("set", x, y, w, h)) {
+    image(returnMenuButton[1], x, y, w, h);
+
+    if (mouseIsPressed && !settingsUIMouseLock) {
+      playSFX("click");
+      settingsUIMouseLock = true;
+      showSettings = true;
+    }
+  }
+
+  if (!mouseIsPressed) {
+    settingsUIMouseLock = false;
+  }
+}
+  */

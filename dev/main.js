@@ -93,6 +93,8 @@ function preload() {
     menuStoryButton = [loadImage('../Assets/Buttons/story.png'), loadImage('../Assets/Buttons/story_select.png')];
     menuArcadeButton = [loadImage('../Assets/Buttons/arcade.png'), loadImage('../Assets/Buttons/arcade_select.png')];
     menuChaoButton = [loadImage('../Assets/Buttons/chao.png'), loadImage('../Assets/Buttons/chao_select.png')];
+    returnMenuButton = [loadImage('../Assets/Buttons/main_menu.png'), loadImage('../Assets/Buttons/main_menu_select.png')];
+    resumeButton = [loadImage('../Assets/Buttons/resume.png'), loadImage('../Assets/Buttons/resume_select.png')];
     menuLogoGlow = loadImage('../Assets/GUI/logo_glow.png');
 
     // Metal level
