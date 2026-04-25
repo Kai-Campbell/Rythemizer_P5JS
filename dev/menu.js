@@ -88,7 +88,7 @@ function pulsingLogo() {
   // let x = centerX - (baseWidth * scale / 2);
   // let y = centerY - (baseHeight * scale / 2);
   let x = CENTER_OF_MENU;
-  let y = MENU_Y + 10;
+  let y = MENU_Y + 60;
   image(menuLogoGlow, x, y, baseWidth * scale, baseHeight * scale);
 }
 
