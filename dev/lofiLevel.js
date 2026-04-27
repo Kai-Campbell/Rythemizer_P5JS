@@ -94,7 +94,7 @@ function lofiDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
-              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y));
+              items.push(new ExitItem(vinylBox, boss[b].pos.x, boss[b].pos.y));
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
@@ -157,6 +157,7 @@ function lofiDraw() {
         }
         if (items[i] instanceof ExitItem) {
           player_1.is_exiting = true;
+          weapon = 3;
           items.splice(i, 1);
         }
       }

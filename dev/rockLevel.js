@@ -235,8 +235,13 @@ function rockDraw() {
             items.splice(i, 1);
           }
         }
-        if (items[i] instanceof ExitItem) {
+        if (items[i] instanceof ExitItem && game_mode == 'story') {
           player_1.is_exiting = true; // starts the leave animation
+          items.splice(i, 1);
+        }
+        if (items[i] instanceof ExitItem && game_mode == 'arcade') {
+          player_1.is_exiting = true; // starts the leave animation
+          weapon = 1;
           items.splice(i, 1);
         }
       }
