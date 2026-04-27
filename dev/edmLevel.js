@@ -1,4 +1,4 @@
-var edm_wave_length = 3;
+var edm_wave_length = 0;
 var edm_boss_spawned = false;
 
 function edmSetup() {

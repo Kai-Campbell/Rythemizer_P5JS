@@ -31,6 +31,7 @@ var tutorialImages = []; // Array to hold tutorial images
 
 // End screen variables
 let endMusicPlaying = false;
+let endScreenMouseLock = false;
 
 // Set Screen size
 const CANVAS_HEIGHT = 1500 / 2;
@@ -214,6 +215,10 @@ function setup() {
 
 function draw() {
     if (gameOver) {
+        boss_spawned = false;
+        edm_boss_spawned = false;
+        lofi_boss_spawned = false;
+        is_dead = true;
         displayGameOver();
         return;
     }
@@ -664,6 +669,37 @@ function drawGameOverMainMenuButton() {
 
   if (!mouseIsPressed) {
     gameOverMouseLock = false;
+  }
+
+  imageMode(CORNER);
+}
+
+/**
+ * main menu button on end screen
+ */
+function drawEndScreenMainMenuButton() {
+  const w = 240;
+  const h = 60;
+  const x = CANVAS_WIDTH / 2;
+  const y = CANVAS_HEIGHT - 35;
+
+  imageMode(CENTER);
+  image(returnMenuButton[0], x, y, w, h);
+
+  if (isHovering("gameover_menu", x, y, w, h)) {
+    image(returnMenuButton[1], x, y, w, h);
+
+    if (mouseIsPressed && !endScreenMouseLock) {
+      endScreenMouseLock = true;
+      playSFX("click");
+
+      levelRender = 'menu';
+      playLevelMusic();
+    }
+  }
+
+  if (!mouseIsPressed) {
+    endScreenMouseLock = false;
   }
 
   imageMode(CORNER);

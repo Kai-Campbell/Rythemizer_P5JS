@@ -1,4 +1,4 @@
-var lofi_wave_length = 2;
+var lofi_wave_length = 0;
 var lofi_boss_spawned = false;
 
 function lofiSetup() {
