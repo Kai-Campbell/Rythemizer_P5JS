@@ -1,4 +1,4 @@
-var lofi_wave_length = 0;
+var lofi_wave_length = 2;
 var lofi_boss_spawned = false;
 
 function lofiSetup() {
@@ -20,9 +20,10 @@ function spawnLofiBaddies(count) {
     } else {
       random_y = random(CANVAS_HEIGHT + 20, CANVAS_HEIGHT + 50); // this one they spawn at the bottom
     }
-    enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, 3, 30));
-    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, 1.5, 120, 100));
-    enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
+    enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, pedal_floaterData, pedal_floaterSheet, 0.1, 3, 30));
+    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, cat_riderData, cat_riderSheet, 0.1, 1.5, 120, 100));
+    //enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
+  
   }
 }
 
@@ -190,7 +191,7 @@ function lofiDraw() {
     // Wave logic
     if (enemies.length === 0) {
       if (lofi_wave_length != 0) {
-        spawnEdmBaddies(8);
+        spawnLofiBaddies(8);
         lofi_wave_length--;
         console.log("this is the wave");
         console.log(lofi_wave_length);

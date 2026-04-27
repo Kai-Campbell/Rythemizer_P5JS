@@ -149,6 +149,12 @@ function preload() {
     // Small Amp
     amp_smallSheet = loadImage('../Assets/Enemies/small_amp.png');
     amp_smallData = loadJSON('../Assets/Enemies/small_amp.json');
+    // Cat Rider
+    cat_riderSheet = loadImage('../Assets/Enemies/cat_waverider.png');
+    cat_riderData = loadJSON('../Assets/Enemies/cat_waverider.json');
+    // Pedal Floater
+    pedal_floaterSheet = loadImage('../Assets/Enemies/pedal_floater.png');
+    pedal_floaterData = loadJSON('../Assets/Enemies/pedal_floater.json');
     // ---------------------
 
     // Fireball Projectile
