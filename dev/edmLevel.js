@@ -21,7 +21,7 @@ function spawnEdmBaddies(count) {
       random_y = random(CANVAS_HEIGHT + 20, CANVAS_HEIGHT + 50); // this one they spawn at the bottom
     }
     enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, 3, 30));
-    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, disc_throwerData, disc_throwerSheet, 0.1, 1.5, 120, 100));
+    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, disc_throwerData, disc_throwerSheet, 0.1, 1.5, 80, 275 * 0.75, 175 * 0.75));
     //enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
   }
 }
