@@ -3,6 +3,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms)); // this helps with 
 let spriteImages = [];
 let pressedKeys = {};
 let weapon = 0;
+this.isMoving = false;
 
 class Player {
   constructor(x, y, spritedata, spritesheet, Anispeed) {
@@ -72,11 +73,14 @@ class Player {
     if (mvmt.mag() > 0) {
       mvmt.setMag(this.speed);
       // update left/right direction
+      this.isMoving = true;
       if (mvmt.x < 0) {
         this.facingLeft = true;
       } else if (mvmt.x > 0) {
         this.facingLeft = false;
       }
+    } else {
+      this.isMoving = false;
     }
     
     this.x += mvmt.x;
@@ -92,8 +96,12 @@ class Player {
   draw() {
     if (this.is_visible === true) {
       //circle(this.pos.x, this.pos.y, this.r) // here for testing if needed.
-      this.player_ani.show(this.pos.x - 20, this.pos.y - 20, this.facingLeft);
-      this.player_ani.animate();
+      if (this.isMoving) {
+        this.player_ani.showFrame(this.pos.x - 20, this.pos.y - 20, this.facingLeft, 3, 6);
+        this.player_ani.animateRange(3, 6);
+      } else {
+        this.player_ani.showFrame(this.pos.x - 20, this.pos.y - 20, this.facingLeft, 0, 0);
+      }
       // Aim gun with the right stick when available, otherwise use the mouse.
       let aimX = mouseX - this.pos.x;
       let aimY = mouseY - this.pos.y;
@@ -181,7 +189,6 @@ class Player {
       this.is_entering = false;
     }
   }
-
 
   // these 2 functions are specifically for the ending scene
 
