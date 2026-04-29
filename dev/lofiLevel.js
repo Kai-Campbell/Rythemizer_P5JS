@@ -58,6 +58,8 @@ function lofiDraw() {
             let rand = random(5); // around 10 percent chance of spawning
             if (rand <= 1.5) {
               items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+            } else if (rand > 14) {
+              items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
             }
             playSFX("enemyGone");
             enemies.splice(j, 1);
