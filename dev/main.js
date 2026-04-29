@@ -27,6 +27,7 @@ let gameOverMouseLock = false;
 let tutorialIndex = 0;
 let tutorialClickFlag = false;
 let tutorialMusicPlaying = false;
+let showTutorialOverlay = false;
 var tutorialImages = []; // Array to hold tutorial images
 
 // End screen variables
@@ -288,7 +289,10 @@ function draw() {
 
     // If the game is paused, draw pause menu overtop the game
     if (levelRender != 'menu' && paused) {
-        pauseMenuDraw();
+    pauseMenuDraw();
+    if (showTutorialOverlay) {
+        displayTutorial();
+        }
     }
 
     // FPS Counter 
@@ -414,7 +418,10 @@ function keyPressed() {
     }
     if (key == 'Escape' && levelRender != 'menu') {
         // Toggle pausing variable
-       paused = !paused; 
+        if (showTutorialOverlay) {
+            return
+        };
+        paused = !paused; 
     }
 }
 
@@ -662,8 +669,12 @@ function displayTutorial() {
         drawExitX(rightArrowX, buttonY, buttonSize);
         if (isHoveringButton(rightArrowX, buttonY, buttonSize) && mouseIsPressed && !tutorialClickFlag) {
             tutorialClickFlag = true;
-            levelRender = "menu";
-            playLevelMusic();
+            if (showTutorialOverlay) {
+                showTutorialOverlay = false; // ← just hide the overlay, pause menu stays
+            } else {
+                levelRender = "menu";
+                playLevelMusic();
+            }
         }
     }
     

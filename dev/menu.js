@@ -55,6 +55,9 @@ function menuDraw() {
  * Appears when the escape key (and eventually start button on controller)
  */
 function pauseMenuDraw() {
+  if (showTutorialOverlay) {
+    return;
+  }
   // Draw main menu relative to screen resolution
   image(menuBacking, (CANVAS_WIDTH / 2) - (MENU_WIDTH / 2), MENU_Y, MENU_WIDTH, MENU_HEIGHT);
   
@@ -121,7 +124,7 @@ function startButton(x, y, w, h) {
 }
 
 function resumeButton(x, y, w, h) {
-  image(menuResumeButton[0], x, y, w, h); 
+  image(menuResumeButton[0], x, y, w, h);
 
   if (isHovering("res", x, y, w, h)) {
     image(menuResumeButton[1], x, y, w, h);
@@ -181,9 +184,14 @@ function tutorialButton(x, y, w, h) {
     if (mouseIsPressed && !tutorialClicked) {
       playSFX("click");
       tutorialClicked = true;
-      levelRender = "tutorial";
-      playLevelMusic();
       tutorialIndex = 0;
+      if (paused) {
+        showTutorialOverlay = true;
+      } else {
+        levelRender = "tutorial";
+        playLevelMusic();
+        tutorialIndex = 0;
+      }
     }
   }
   
