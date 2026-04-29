@@ -107,7 +107,7 @@ function preload() {
 
     // EDM level
     edm_back = loadImage('../Assets/Levels/test_level_edm.png');
-    edmMusic = loadSound('../Assets/Music/ThatsSoRAVEn.mp3');
+    edmMusic = loadSound('../Assets/Music/Game_Audio.wav');
     rave_knightJSON = loadJSON('../Assets/Bosses/rave_knight.json');
     rave_knightSheet = loadImage('../Assets/Bosses/rave_knight.png');
 
