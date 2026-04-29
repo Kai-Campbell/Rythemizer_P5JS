@@ -1,9 +1,11 @@
-var edm_wave_length = 3;
-var edm_boss_spawned = false;
+var edm_wave_length;
+var edm_boss_spawned;
 
 function edmSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
+  edm_wave_length = 3;
+  edm_boss_spawned = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
   boss = [];
@@ -103,7 +105,7 @@ function edmDraw() {
           }
 
           // Checks to see if boss hit player 
-          if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter" && player_1.can_hit == true) { // this detects hits on the player
+          if (projectiles[i].checkHit(player_1) && (projectiles[i].getPlayType() == "edmBoss" || projectiles[i].getPlayType() == "edmShooter") && player_1.can_hit == true) { // this detects hits on the player
             player_1.health--;
             player_1.invincible();
             console.log(player_1.health);

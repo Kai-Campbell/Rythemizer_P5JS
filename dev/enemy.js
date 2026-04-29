@@ -129,6 +129,9 @@ class Shooter extends Enemy {
         if (((frameCount + this.shootSeed) % this.shootSpeed == 0) && levelRender == 'edm') {
             projectiles.push(new Projectile(this.pos.x, this.pos.y, obj.pos.x, obj.pos.y, "edmShooter"));
         }
+        if (((frameCount + this.shootSeed) % this.shootSpeed == 0) && levelRender == 'lofi') {
+            projectiles.push(new Projectile(this.pos.x, this.pos.y, obj.pos.x, obj.pos.y, "rockShooter"));
+        }
     }
 
     // Override draw to not draw the last frame

@@ -162,9 +162,11 @@ function preload() {
     pedal_floaterData = loadJSON('../Assets/Enemies/pedal_floater.json');
     // ---------------------
 
-    // Fireball Projectile
-    fireballSheet = loadImage('../Assets/Projectiles/fireball.png')
-    fireballData = loadJSON('../Assets/Projectiles/fireball.json')
+    // Enemy Projectiles
+    fireballSheet = loadImage('../Assets/Projectiles/fireball.png');
+    fireballData = loadJSON('../Assets/Projectiles/fireball.json');
+    quarterNote = loadImage('../Assets/Projectiles/quarter_note.png');
+    hypnoWaveSheet = loadImage('../Assets/Projectiles/hypno_wave.png');
 
     // Elemental explosion
     eleExplodeSprite = loadImage('../Assets/element_explosion.png');
