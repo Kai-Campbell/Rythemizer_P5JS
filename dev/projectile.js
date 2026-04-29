@@ -48,17 +48,25 @@ class Projectile {
 
             if (weapon == 1) {
                 let frame = bulletData.frames[spriteIndex].position;
+                
+                const spacing = 10; // Adjust this to control gap between bullets
+                
+                // Perpendicular offset (normal vector rotated 90° from travel direction)
+                const offsetX = Math.cos(angle + Math.PI / 2) * spacing;
+                const offsetY = Math.sin(angle + Math.PI / 2) * spacing;
 
+                // offset to the left
                 push();
-                translate(this.pos.x, this.pos.y);
+                translate(this.pos.x - offsetX, this.pos.y - offsetY);
                 rotate(angle);
-                image(
-                    bullet,             // Actual sprite sheet file 
-                    -10, -10,               // dx, dy: Coordinates to draw image onto canvas 
-                    30, 20,             // dWidth, dHeight: How large it draws onto the canvas
-                    frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
-                    frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
-                );
+                image(fastBullet, -10, -10, 30, 20, frame.x, frame.y, frame.w, frame.h);
+                pop();
+
+                // offset to the right
+                push();
+                translate(this.pos.x + offsetX, this.pos.y + offsetY);
+                rotate(angle);
+                image(fastBullet, -10, -10, 30, 20, frame.x, frame.y, frame.w, frame.h);
                 pop();
             }
 
