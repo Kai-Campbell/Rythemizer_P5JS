@@ -169,16 +169,16 @@ class Player {
       translate(this.pos.x, this.pos.y);
       rotate(angle);
       if (weapon == 0) {
-        image(pistolSprite, 0, 0, 50, 28);
+        image(pistolSprite, 0, 0, 65 * .75, 40 * .75);
       }
       if (weapon == 1) {
-        image(shotgunSprite, 0, 0, 50, 28);
+        image(shotgunSprite, 0, 0, 85 * .75, 45 * .75);
       }
       if (weapon == 2) {
-        image(laserSprite, 0, 0, 50, 28);
+        image(laserSprite, 0, 0, 120 * .50, 107 * .50);
       }
       if (weapon == 3) {
-        image(discThrowerSprite, 0, 0, 50, 28);
+        image(discThrowerSprite, 0, 0, 120 * .75, 50 * .75);
       }
       pop();
     }

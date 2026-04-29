@@ -71,7 +71,7 @@ class Projectile {
                 image(
                     laserPink,             // Actual sprite sheet file 
                     -10, -10,               // dx, dy: Coordinates to draw image onto canvas 
-                    30, 20,             // dWidth, dHeight: How large it draws onto the canvas
+                    495 * 0.50, 125 * 0.50,             // dWidth, dHeight: How large it draws onto the canvas
                     frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
                     frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
                 );
@@ -111,6 +111,30 @@ class Projectile {
             rotate(angle);
             image(
                 fireballSheet,      // Actual sprite sheet file 
+                0 - 10, 0 - 10,     // dx, dy: Coordinates to draw image onto canvas (10 to center sprite)
+                20, 28,             // dWidth, dHeight: How large it draws onto the canvas
+                frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
+                frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
+            );
+            pop();
+        }
+
+        if (this.playType == "edmShooter") {
+            // fill(255);
+            // noStroke();
+            // ellipse(this.pos.x, this.pos.y, 20, 20);
+            
+            let angle = atan2(this.vel.y, this.vel.x);
+            let spriteIndex = Math.floor(millis() / 100) % 2;
+
+            // Get the frame position from json
+            let frame = fireballData.frames[spriteIndex].position;
+            
+            push();
+            translate(this.pos.x, this.pos.y);
+            rotate(angle);
+            image(
+                vinylPink,      // Actual sprite sheet file 
                 0 - 10, 0 - 10,     // dx, dy: Coordinates to draw image onto canvas (10 to center sprite)
                 20, 28,             // dWidth, dHeight: How large it draws onto the canvas
                 frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet

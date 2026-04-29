@@ -123,8 +123,11 @@ class Shooter extends Enemy {
     update(obj) {
         this.evasiveMovement(obj);
         // Shoot the player every shootSpeed frames
-        if ((frameCount + this.shootSeed) % this.shootSpeed == 0) {
+        if (((frameCount + this.shootSeed) % this.shootSpeed == 0) && levelRender == 'rock') {
             projectiles.push(new Projectile(this.pos.x, this.pos.y, obj.pos.x, obj.pos.y, "rockShooter"));
+        }
+        if (((frameCount + this.shootSeed) % this.shootSpeed == 0) && levelRender == 'edm') {
+            projectiles.push(new Projectile(this.pos.x, this.pos.y, obj.pos.x, obj.pos.y, "edmShooter"));
         }
     }
 
