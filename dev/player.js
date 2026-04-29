@@ -3,6 +3,8 @@ const delay = ms => new Promise(res => setTimeout(res, ms)); // this helps with 
 let spriteImages = [];
 let pressedKeys = {};
 let weapon = 0;
+let powerUpTimer;
+const POWERUP_DURATION = 600;
 this.isMoving = false;
 
 class Player {
@@ -16,7 +18,8 @@ class Player {
     this.health = 5; 
     this.can_hit = true;
     this.is_visible = true;
-    this.is_rolling = false
+    this.is_rolling = false;
+    this.powerUpTimer = 0;
 
     this.is_entering = true; // true
     this.is_exiting = false;
@@ -34,6 +37,16 @@ class Player {
   
   update() {
     let mvmt = createVector(0, 0);
+
+    // Power Up Timer
+    if (weapon != 0) {
+        if (this.powerUpTimer > 0) {
+            this.powerUpTimer--;
+        }
+        if (this.powerUpTimer <= 0) {
+            weapon = 0;
+        }
+    }
     
     // Player movement
     if (!paused && !this.is_entering && !this.is_exiting) { // Disables player from moving when pause menu is open
@@ -162,13 +175,34 @@ class Player {
         image(pistolSprite, 0, 0, 65 * .75, 40 * .75);
       }
       if (weapon == 1) {
-        image(shotgunSprite, 0, 0, 85 * .75, 45 * .75);
+        let shouldDraw = true;
+        if (this.powerUpTimer < 180) {
+          let blinkRate = this.powerUpTimer < 60 ? 6 : 15;
+          shouldDraw = (frameCount % blinkRate < blinkRate / 2);
+        }
+        if (shouldDraw) {
+          image(shotgunSprite, 0, 0, 85 * .75, 45 * .75);
+        }
       }
       if (weapon == 2) {
-        image(laserSprite, 0, 0, 120 * .50, 107 * .50);
+        let shouldDraw = true;
+        if (this.powerUpTimer < 180) {
+          let blinkRate = this.powerUpTimer < 60 ? 6 : 15;
+          shouldDraw = (frameCount % blinkRate < blinkRate / 2);
+        }
+        if (shouldDraw) {
+          image(laserSprite, 0, 0, 120 * .50, 107 * .50);
+        }
       }
       if (weapon == 3) {
-        image(discThrowerSprite, 0, 0, 120 * .75, 50 * .75);
+        let shouldDraw = true;
+        if (this.powerUpTimer < 180) {
+          let blinkRate = this.powerUpTimer < 60 ? 6 : 15;
+          shouldDraw = (frameCount % blinkRate < blinkRate / 2);
+        }
+        if (shouldDraw) {
+          image(discThrowerSprite, 0, 0, 120 * .75, 50 * .75);
+        }
       }
       pop();
     }

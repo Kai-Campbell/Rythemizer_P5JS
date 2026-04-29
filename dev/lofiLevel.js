@@ -14,6 +14,7 @@ function lofiSetup() {
   if (game_mode == 'story') {
     weapon = 0;
   }
+  player_1.powerUpTimer = POWERUP_DURATION;
 }
 
 function spawnLofiBaddies(count) {
@@ -170,6 +171,7 @@ function lofiDraw() {
         if (items[i] instanceof ExitItem) {
           player_1.is_exiting = true;
           weapon = 3;
+          player_1.powerUpTimer = POWERUP_DURATION;
           items.splice(i, 1);
         }
       }

@@ -22,6 +22,7 @@ function rockSetup() {
   enemies = [];
   boss = [];
   items = [];
+  player_1.powerUpTimer = POWERUP_DURATION;
 }
 
 function spawnRockBaddies(count, waveConfig = null) {
@@ -268,6 +269,7 @@ function rockDraw() {
           }
           if (items[i].getImage() == shotgunBox) {
             weapon = 1;
+            player_1.powerUpTimer = POWERUP_DURATION;
             items.splice(i, 1);
           }
         }
@@ -278,6 +280,7 @@ function rockDraw() {
         if (items[i] instanceof ExitItem && game_mode == 'arcade') {
           player_1.is_exiting = true; // starts the leave animation
           weapon = 1;
+          player_1.powerUpTimer = POWERUP_DURATION;
           items.splice(i, 1);
         }
       }
