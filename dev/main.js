@@ -104,8 +104,10 @@ function preload() {
     menuArcadeButton = [loadImage('../Assets/Buttons/arcade.png'), loadImage('../Assets/Buttons/arcade_select.png')];
     menuChaoButton = [loadImage('../Assets/Buttons/chao.png'), loadImage('../Assets/Buttons/chao_select.png')];
     returnMenuButton = [loadImage('../Assets/Buttons/main_menu.png'), loadImage('../Assets/Buttons/main_menu_select.png')];
-    resumeButton = [loadImage('../Assets/Buttons/resume.png'), loadImage('../Assets/Buttons/resume_select.png')];
+    menuResumeButton = [loadImage('../Assets/Buttons/resume.png'), loadImage('../Assets/Buttons/resume_select.png')];
     menuLogoGlow = loadImage('../Assets/GUI/logo_glow.png');
+    
+    
 
     // Metal level
     metal_back = loadImage('../Assets/Levels/Test_Level_Lava.png');
@@ -170,9 +172,11 @@ function preload() {
     pedal_floaterData = loadJSON('../Assets/Enemies/pedal_floater.json');
     // ---------------------
 
-    // Fireball Projectile
-    fireballSheet = loadImage('../Assets/Projectiles/fireball.png')
-    fireballData = loadJSON('../Assets/Projectiles/fireball.json')
+    // Enemy Projectiles
+    fireballSheet = loadImage('../Assets/Projectiles/fireball.png');
+    fireballData = loadJSON('../Assets/Projectiles/fireball.json');
+    quarterNote = loadImage('../Assets/Projectiles/quarter_note.png');
+    hypnoWaveSheet = loadImage('../Assets/Projectiles/hypno_wave.png');
 
     // Elemental explosion
     eleExplodeSprite = loadImage('../Assets/element_explosion.png');

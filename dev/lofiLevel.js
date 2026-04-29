@@ -1,14 +1,19 @@
-var lofi_wave_length = 2;
-var lofi_boss_spawned = false;
+var lofi_wave_length;
+var lofi_boss_spawned;
 
 function lofiSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
+  lofi_wave_length = 2;
+  lofi_boss_spawned = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
   boss = [];
   enemies = [];
   items = [];
+  if (game_mode == 'story') {
+    weapon = 0;
+  }
 }
 
 function spawnLofiBaddies(count) {
@@ -21,7 +26,7 @@ function spawnLofiBaddies(count) {
       random_y = random(CANVAS_HEIGHT + 20, CANVAS_HEIGHT + 50); // this one they spawn at the bottom
     }
     enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, pedal_floaterData, pedal_floaterSheet, 0.1, 3, 30));
-    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, cat_riderData, cat_riderSheet, 0.1, 1.5, 100, 230 * 0.75, 125 * 0.75));
+    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, cat_riderData, cat_riderSheet, 0.1, 1.5, 100, 230 * 0.65, 125 * 0.65)); // change the multiplier to resize
     //enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
   }
 }
@@ -103,7 +108,7 @@ function lofiDraw() {
           }
 
           // Checks to see if boss hit player 
-          if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter" && player_1.can_hit == true) { // this detects hits on the player
+          if (projectiles[i].checkHit(player_1) && (projectiles[i].getPlayType() == "lofiBoss" || projectiles[i].getPlayType() == "rockShooter") && player_1.can_hit == true) { // this detects hits on the player
             player_1.health--;
             player_1.invincible();
             console.log(player_1.health);

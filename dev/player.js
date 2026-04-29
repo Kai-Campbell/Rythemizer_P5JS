@@ -37,47 +37,29 @@ class Player {
     
     // Player movement
     if (!paused && !this.is_entering && !this.is_exiting) { // Disables player from moving when pause menu is open
-      if(pressedKeys.a || pressedKeys.A || pressedKeys.ArrowLeft) {
-        if (this.is_rolling) {
-          return;
-        }
+      if((pressedKeys.a || pressedKeys.A || pressedKeys.ArrowLeft) && !this.is_rolling) {
         if (this.x > 0) {
           mvmt.x -= 1;
         }
       }
-      if(pressedKeys.d || pressedKeys.D || pressedKeys.ArrowRight) {
-        if (this.is_rolling) {
-          return;
-        }
+      if((pressedKeys.d || pressedKeys.D || pressedKeys.ArrowRight) && !this.is_rolling) {
         if (this.x < CANVAS_WIDTH - this.w) {
           mvmt.x += 1;
         }
       }
-      if(pressedKeys.w || pressedKeys.W || pressedKeys.ArrowUp) {
-        if (this.is_rolling) {
-          return;
-        }
+      if((pressedKeys.w || pressedKeys.W || pressedKeys.ArrowUp) && !this.is_rolling) {
         if (this.y > 0) {
           mvmt.y -= 1;
         }
       }
-      if(pressedKeys.s || pressedKeys.S || pressedKeys.ArrowDown) {
-        if (this.is_rolling) {
-          return;
-        }
+      if((pressedKeys.s || pressedKeys.S || pressedKeys.ArrowDown) && !this.is_rolling) {
+
         if (this.y < CANVAS_HEIGHT - this.h) {
           mvmt.y += 1;
         }
       }
 
-      if(this.is_rolling) {
-        if (this.facingLeft) {
-          mvmt.x -= 100;
-        } else { 
-          mvmt.x += 100;
       
-        }
-      }
 
       if (keyIsDown(32) && !this.is_rolling) {
         console.log("im here")
@@ -112,6 +94,14 @@ class Player {
     } else {
       this.isMoving = false;
     }
+
+    if(this.is_rolling) {
+        if (this.facingLeft) {
+          mvmt.x -= 7; //change these for how far player goes
+        } else { 
+          mvmt.x += 7;
+        }
+      }
     
     this.x += mvmt.x;
     this.y += mvmt.y;
@@ -132,7 +122,7 @@ class Player {
     this.can_hit = false
     this.roll_animation.index = 0
 
-    await delay(1000);
+    await delay(475); //change for duration of roll
 
     this.is_rolling = false
     if (this.is_visible) {
