@@ -100,7 +100,6 @@ class Player {
           mvmt.x -= 7; //change these for how far player goes
         } else { 
           mvmt.x += 7;
-      
         }
       }
     
@@ -123,7 +122,7 @@ class Player {
     this.can_hit = false
     this.roll_animation.index = 0
 
-    await delay(475); //change for duration of roll, different from how far/fast
+    await delay(475); //change for duration of roll
 
     this.is_rolling = false
     if (this.is_visible) {
