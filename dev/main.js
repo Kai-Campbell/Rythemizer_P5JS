@@ -236,9 +236,64 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    const cnv = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    // Move the p5 canvas into our flex-centered, letterboxed wrapper.
+    cnv.parent('game-container');
     noSmooth();
+    fitCanvasToWindow();
     playLevelMusic();
+}
+
+/**
+ * p5.js callback fired whenever the browser window changes size.
+ * We deliberately do NOT call resizeCanvas() here — the drawing buffer
+ * (and therefore all game coordinates / physics) must stay at the fixed
+ * virtual resolution CANVAS_WIDTH x CANVAS_HEIGHT. Only the on-screen
+ * display size changes.
+ */
+function windowResized() {
+    fitCanvasToWindow();
+}
+
+/**
+ * Scales the canvas's CSS display size so it fits inside the browser
+ * window while preserving the game's aspect ratio (uniform scale, no
+ * distortion, no cropping). Using Math.min picks the largest scale that
+ * still keeps the whole 1000x750 game visible — the unused space on the
+ * short side of the window shows through as black letterbox / pillarbox
+ * bars from the #game-container background.
+ *
+ * Game logic is unaffected: createCanvas() still uses the fixed virtual
+ * resolution CANVAS_WIDTH x CANVAS_HEIGHT, so all coordinates, physics,
+ * and asset positions stay the same.
+ *
+ * Why CSS width/height instead of `transform: scale()`?
+ *   p5.js translates browser mouse positions to canvas-space using
+ *   `canvas.scrollWidth / canvas.width` (and the matching height ratio).
+ *   CSS transforms do NOT update scrollWidth, so a transform-based scale
+ *   would leave mouseX / mouseY reporting raw screen pixels and break
+ *   every click target in the game. Setting style.width / style.height
+ *   is the canonical p5 approach and keeps mouseX / mouseY in virtual
+ *   game coordinates with zero changes to game logic.
+ */
+function fitCanvasToWindow() {
+    const cnvElt = (typeof drawingContext !== 'undefined' && drawingContext && drawingContext.canvas)
+        ? drawingContext.canvas
+        : document.querySelector('#game-container canvas');
+    if (!cnvElt) {
+        return;
+    }
+
+    const scale = Math.min(
+        window.innerWidth / CANVAS_WIDTH,
+        window.innerHeight / CANVAS_HEIGHT
+    );
+
+    const displayWidth = Math.floor(CANVAS_WIDTH * scale);
+    const displayHeight = Math.floor(CANVAS_HEIGHT * scale);
+
+    cnvElt.style.width = displayWidth + 'px';
+    cnvElt.style.height = displayHeight + 'px';
 }
 
 function draw() {
