@@ -125,7 +125,7 @@ class Projectile {
     }
 
     checkHit(target) {
-        circle(this.pos.x, this.pos.y, this.r) // this is for testing rn
+        //circle(this.pos.x, this.pos.y, this.r) // this is for testing rn
         let distance = dist(this.pos.x, this.pos.y, target.pos.x, target.pos.y);
         if (distance < target.r + this.r) { // if the 2 raidus' collide
             target.hit = true; // every enemy needs to have this variable
