@@ -4,7 +4,7 @@ var edm_boss_spawned;
 function edmSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
-  edm_wave_length = 3;
+  edm_wave_length = 0;
   edm_boss_spawned = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
@@ -47,6 +47,12 @@ function edmDraw() {
 
   if (!paused && !player_1.is_entering) {
     player_1.update();
+
+    if (firePending) {
+      projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
+      firePending = false;
+    }
+    
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
       projectiles[i].update();
 

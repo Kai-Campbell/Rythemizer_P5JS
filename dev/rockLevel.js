@@ -101,12 +101,48 @@ function rockDraw() {
   if (!paused && !player_1.is_entering) {
     // Updates player position
     player_1.update();
+    if (firePending) {
+    // Calculate angle from player to mouse
+      let angle = atan2(mouseY - player_1.pos.y, mouseX - player_1.pos.x);
+      
+      // Offset the spawn point by gun length along that angle
+      let gunLength = 120 * .50; // adjust this to match where your gun tip visually is
+      let spawnX = player_1.pos.x + cos(angle) * gunLength;
+      let spawnY = player_1.pos.y + sin(angle) * gunLength;
+      
+      projectiles.push(new Projectile(spawnX, spawnY, mouseX, mouseY, "player"));
+      firePending = false;
+    }
 
     /**
      * Collision checking for all projectiles types
      */
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
+       if (weapon == 2 && projectiles[i].getPlayType() === 'player') {
+        let angle = atan2(mouseY - player_1.pos.y, mouseX - player_1.pos.x);
+        let gunLength = 20;
+        projectiles[i].pos.x = player_1.pos.x + cos(angle) * gunLength;
+        projectiles[i].pos.y = player_1.pos.y + sin(angle) * gunLength;
+        projectiles[i].vel = createVector(mouseX - player_1.pos.x, mouseY - player_1.pos.y);
+        projectiles[i].vel.setMag(8);
+      }
       projectiles[i].update();
+
+      if (weapon == 2 && projectiles[i].laserShot && projectiles[i].getPlayType() === 'player') {
+        for (let j = enemies.length - 1; j >= 0; j--) {
+          // Check if enemy falls anywhere along the laser line
+          let d = distToSegment(
+              enemies[j].pos.x, enemies[j].pos.y,
+              player_1.pos.x, player_1.pos.y,
+              player_1.pos.x + projectiles[i].vel.x * 50,  // extend beam forward
+              player_1.pos.y + projectiles[i].vel.y * 50
+          );
+          if (d < enemies[j].r) {
+              enemies[j].hit = true;
+              enemies.splice(j, 1);
+          }
+        }
+      }
 
       // Check for collisions of projectiles 
       for (let j = enemies.length - 1; j >= 0; j--) {
@@ -185,7 +221,7 @@ function rockDraw() {
       
 
       // Remove bullet once it's off-screen
-      if (projectiles[i] && projectiles[i].isOffScreen()) { // first check is added because you need to check if the bullet is still there
+      if (projectiles[i] && projectiles[i].isDone()) { // first check is added because you need to check if the bullet is still there
         projectiles.splice(i, 1);
       }
     }
@@ -309,6 +345,16 @@ function rockDraw() {
   for (let i = items.length - 1; i >= 0; i--) {
     items[i].draw();
     items[i].timer();
+  }
+
+  function distToSegment(px, py, ax, ay, bx, by) {
+    let dx = bx - ax, dy = by - ay;
+    let lenSq = dx * dx + dy * dy;
+    let t = ((px - ax) * dx + (py - ay) * dy) / lenSq;
+    t = constrain(t, 0, 1);
+    let closestX = ax + t * dx;
+    let closestY = ay + t * dy;
+    return dist(px, py, closestX, closestY);
   }
   
   // Display health bar

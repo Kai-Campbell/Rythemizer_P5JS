@@ -78,6 +78,9 @@ let items = [];
 /** Shared fire rate for mouse and gamepad (ms between shots). */
 const PLAYER_FIRE_INTERVAL_MS = 150;
 let lastPlayerFireAt = 0;
+let laserCooldown = 0;
+const LASER_DURATION = 60; 
+let firePending = false;
 
 /** In-game settings (gear) button state. */
 const IN_GAME_SETTINGS_BTN_X = 15;
@@ -246,6 +249,7 @@ function draw() {
         boss_spawned = false;
         edm_boss_spawned = false;
         lofi_boss_spawned = false;
+        projectiles = [];
         is_dead = true;
         displayGameOver();
         return;
@@ -256,6 +260,7 @@ function draw() {
     }
     if (!paused) {
         handleHeldFire();
+        if (laserCooldown > 0) laserCooldown--;
     }
     switch (levelRender) {
         case 'menu':
@@ -416,6 +421,9 @@ function keyPressed() {
     if (key === 'v') { // added for testing
         switchLevel('rock');
     }
+    if (key === 'e') { // added for testing
+        switchLevel('edm');
+    }
     if (key == 'Escape' && levelRender != 'menu') {
         // Toggle pausing variable
         if (showTutorialOverlay) {
@@ -455,12 +463,14 @@ function tryFireMouseProjectile() {
     }
 
     const now = millis();
-    if (now - lastPlayerFireAt < PLAYER_FIRE_INTERVAL_MS) {
-        return;
-    }
+    if (now - lastPlayerFireAt < PLAYER_FIRE_INTERVAL_MS) return;
+    if (weapon == 2 && laserCooldown > 0) return;
 
-    projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
     lastPlayerFireAt = now;
+    if (weapon == 2) laserCooldown = LASER_DURATION;
+
+    // Signal to the level that a shot was fired
+    firePending = true;
 }
 
 /**
