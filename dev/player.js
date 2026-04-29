@@ -38,28 +38,51 @@ class Player {
     // Player movement
     if (!paused && !this.is_entering && !this.is_exiting) { // Disables player from moving when pause menu is open
       if(pressedKeys.a || pressedKeys.A || pressedKeys.ArrowLeft) {
+        if (this.is_rolling) {
+          return;
+        }
         if (this.x > 0) {
           mvmt.x -= 1;
         }
       }
       if(pressedKeys.d || pressedKeys.D || pressedKeys.ArrowRight) {
+        if (this.is_rolling) {
+          return;
+        }
         if (this.x < CANVAS_WIDTH - this.w) {
           mvmt.x += 1;
         }
       }
       if(pressedKeys.w || pressedKeys.W || pressedKeys.ArrowUp) {
+        if (this.is_rolling) {
+          return;
+        }
         if (this.y > 0) {
           mvmt.y -= 1;
         }
       }
       if(pressedKeys.s || pressedKeys.S || pressedKeys.ArrowDown) {
+        if (this.is_rolling) {
+          return;
+        }
         if (this.y < CANVAS_HEIGHT - this.h) {
           mvmt.y += 1;
         }
       }
+
+      if(this.is_rolling) {
+        if (this.facingLeft) {
+          mvmt.x -= 100;
+        } else { 
+          mvmt.x += 100;
+      
+        }
+      }
+
       if (keyIsDown(32) && !this.is_rolling) {
         console.log("im here")
         this.roll()
+
       }
       
 
@@ -109,7 +132,7 @@ class Player {
     this.can_hit = false
     this.roll_animation.index = 0
 
-    await delay(1000)
+    await delay(1000);
 
     this.is_rolling = false
     if (this.is_visible) {
