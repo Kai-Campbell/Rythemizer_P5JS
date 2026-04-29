@@ -145,6 +145,7 @@ function mainMenuButton(x, y, w, h) {
     if (mouseIsPressed) {
       playSFX("click");
       paused = false;
+      switchLevel('menu'); // temporary while waiting on confirmation sprites
     }
   }
 }

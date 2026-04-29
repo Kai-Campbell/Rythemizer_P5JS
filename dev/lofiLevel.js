@@ -50,6 +50,11 @@ function lofiDraw() {
 
   if (!paused && !player_1.is_entering) {
     player_1.update();
+
+    if (firePending) {
+      projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
+      firePending = false;
+    }
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
       projectiles[i].update();
 

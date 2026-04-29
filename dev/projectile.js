@@ -1,3 +1,4 @@
+
 class Projectile {
     constructor(x, y, targetX, targetY, playType) {
     this.playType = playType // string that determines the type of projectile being shot 
@@ -8,13 +9,18 @@ class Projectile {
     this.h = 20 // I'm gonna be honest I think this isn't needed but I'm leaving it here in case because I forgot, just in case DO NOT REMOVE IT I WILL CHECK IT LATER
     this.r = 10
     this.frameCounter = 0; // Counter for sprite animation
+    this.laserShot = false;
   }
 
     // update position of projectile every frame
     update() {
-        // Stop projectile from moving when game is paused
-        if (!paused) {
-            this.frameCounter++; // Increment counter for sprite animation
+        if (!paused && weapon == 2 && this.playType === 'player') {
+            this.frameCounter++;
+            this.laserShot = true;
+        }
+
+        if (!paused && (weapon != 2 || this.playType !== 'player')) {
+            this.frameCounter++;
             this.pos.add(this.vel);
         }
     }
@@ -202,6 +208,13 @@ class Projectile {
 
     isOffScreen() {
         return (this.pos.x < 0 || this.pos.x > width || this.pos.y < 0 || this.pos.y > height);
+    }
+
+    isDone() {
+        if (this.playType === "player" && weapon == 2) {
+            return this.frameCounter >= LASER_DURATION;
+        }
+        return this.isOffScreen();
     }
 
     checkHit(target) {
