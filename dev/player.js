@@ -16,11 +16,13 @@ class Player {
     this.health = 5; 
     this.can_hit = true;
     this.is_visible = true;
+    this.is_rolling = false
 
     this.is_entering = true; // true
     this.is_exiting = false;
 
     this.player_ani = new Sprite(spritedata, spritesheet, Anispeed);
+    this.roll_animation = new Sprite(rollJSON, rollspritesheet, 0.2)
 
     this.w = this.player_ani.width // these are needed for hit detections
     this.h = this.player_ani.height // these are needed for hit detections
@@ -55,6 +57,11 @@ class Player {
           mvmt.y += 1;
         }
       }
+      if (keyIsDown(32) && !this.is_rolling) {
+        console.log("im here")
+        this.roll()
+      }
+      
 
       if (typeof gamepadInput !== "undefined") {
         const gs = gamepadInput.leftStick;
@@ -92,6 +99,24 @@ class Player {
     
     this.pos.set(this.x, this.y)
   }
+
+  async roll(){  // this method is kinda jank so it might need further testing, only can roll when no i frames are present because it makes it buggy otherwise
+    if (this.is_rolling || !this.can_hit) {
+      return;
+    }
+
+    this.is_rolling = true
+    this.can_hit = false
+    this.roll_animation.index = 0
+
+    await delay(1000)
+
+    this.is_rolling = false
+    if (this.is_visible) {
+      this.can_hit = true
+    }
+  }
+
   
   draw() {
     if (this.is_visible === true) {
@@ -101,6 +126,10 @@ class Player {
         this.player_ani.animateRange(3, 6);
       } else {
         this.player_ani.showFrame(this.pos.x - 20, this.pos.y - 20, this.facingLeft, 0, 0);
+      }
+      if (this.is_rolling) {
+        this.roll_animation.showFrame(this.pos.x - 20, this.pos.y - 20, this.facingLeft, 0, 3);
+        this.roll_animation.animateRange(0, 3);
       }
       // Aim gun with the right stick when available, otherwise use the mouse.
       let aimX = mouseX - this.pos.x;
@@ -142,6 +171,9 @@ class Player {
   }
 
   async invincible() {
+    if (this.is_rolling) {
+      return;
+    }
     this.can_hit = false;
     this.blink();
     console.log("cant hit me!");

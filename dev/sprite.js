@@ -76,6 +76,7 @@ class Sprite {
             image(this.animation[index], x, y, 40, 40);
         }
     }
+    
     animateRange(startFrame, endFrame) {
         if (floor(this.index) < startFrame || floor(this.index) > endFrame) {
             this.index = startFrame; 

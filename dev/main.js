@@ -67,6 +67,7 @@ var gameOverMusic; // Game over music
 var tutorialMusic; // Tutorial background music
 var endScene, endScenePlayer;
 var exitItem, healthBox;
+var rollJSON, rollspritesheet;
 
 let enemies = [];
 let boss = [];
@@ -119,6 +120,8 @@ function preload() {
     // Player 
     spritesheet = loadImage('../Assets/Player/red_guy_sheet.png');
     spriteData = loadJSON('../Assets/Player/redguy.json');
+    rollJSON = loadJSON('../Assets/Player/roll_anim.json')
+    rollspritesheet = loadImage('../Assets/Player/roll_anim.png')
 
     // Player Bullets
     bullet = loadImage('../Assets/Projectiles/bullet.png');
