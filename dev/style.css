@@ -1,6 +1,18 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+
+  /* horizontal alignment */
+  justify-content: center;
+
+  /* vertical alignment */
+  align-items: center;
 }
 
 canvas {
