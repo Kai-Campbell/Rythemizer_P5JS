@@ -62,6 +62,7 @@ var rave_knightJSON, rave_knightSheet // Rave Boss
 var bard_JSON, bard_spriteSheet // Bard boss
 var shotgunSprite
 var healthBarSheet, healthBarData; // Health bar display
+var settingsIconSheet, settingsIconData; // In-game gear/settings button (sprite sheet)
 var gameOverImage; // Game over screen image
 var gameOverMusic; // Game over music
 var tutorialMusic; // Tutorial background music
@@ -76,6 +77,13 @@ let items = [];
 /** Shared fire rate for mouse and gamepad (ms between shots). */
 const PLAYER_FIRE_INTERVAL_MS = 150;
 let lastPlayerFireAt = 0;
+
+/** In-game settings (gear) button state. */
+const IN_GAME_SETTINGS_BTN_X = 15;
+const IN_GAME_SETTINGS_BTN_Y = 15;
+const IN_GAME_SETTINGS_BTN_SIZE = 50;
+let inGameSettingsClickLock = false;
+let inGameSettingsHovered = false;
 
 /*
 ======================================
@@ -183,6 +191,10 @@ function preload() {
     // Health Bar
     healthBarSheet = loadImage('../Assets/GUI/health_bar.png');
     healthBarData = loadJSON('../Assets/GUI/health_bar.json');
+
+    // In-game settings (gear) button
+    settingsIconSheet = loadImage('../Assets/GUI/setting.png');
+    settingsIconData = loadJSON('../Assets/GUI/setting.json');
     
     // Game Over
     gameOverImage = loadImage('../Assets/GUI/death_screen.png');
@@ -262,6 +274,14 @@ function draw() {
         default:
             break;
     }
+    // In-game settings button (top-left). Only show during gameplay levels and when
+    // the pause menu isn't already up, so it doesn't draw over the pause UI.
+    if (isGameplayLevel(levelRender) && !paused) {
+        drawInGameSettingsButton();
+    } else {
+        inGameSettingsHovered = false;
+    }
+
     // If the game is paused, draw pause menu overtop the game
     if (levelRender != 'menu' && paused) {
         pauseMenuDraw();
@@ -269,6 +289,84 @@ function draw() {
 
     // FPS Counter 
     //fpsCounter();
+}
+
+/**
+ * Returns true when the current level is an active gameplay level
+ * (so we can decide whether to show the in-game settings button).
+ */
+function isGameplayLevel(level) {
+    return level === 'rock' || level === 'edm' || level === 'lofi';
+}
+
+/**
+ * Draws the gear icon button at the top-left of the screen during gameplay.
+ * Clicking it pauses the game, which causes pauseMenuDraw() to render the pause menu.
+ */
+function drawInGameSettingsButton() {
+    if (typeof settingsIconSheet === "undefined" || !settingsIconSheet ||
+        typeof settingsIconData === "undefined" || !settingsIconData) {
+        return;
+    }
+
+    const x = IN_GAME_SETTINGS_BTN_X;
+    const y = IN_GAME_SETTINGS_BTN_Y;
+    const size = IN_GAME_SETTINGS_BTN_SIZE;
+
+    const hovering =
+        mouseX >= x && mouseX <= x + size &&
+        mouseY >= y && mouseY <= y + size;
+
+    // Hover SFX (only fire once when entering the button)
+    if (hovering && !inGameSettingsHovered) {
+        if (typeof playSFX === "function") {
+            playSFX("hover");
+        }
+    }
+    inGameSettingsHovered = hovering;
+
+    // Pick a sprite frame: idle vs hovered/pressed.
+    const frames = settingsIconData.frames;
+    let frameIndex = 0;
+    if (hovering) {
+        frameIndex = mouseIsPressed ? 2 : 1;
+    }
+    if (frameIndex >= frames.length) {
+        frameIndex = frames.length - 1;
+    }
+    const frame = frames[frameIndex].position;
+
+    push();
+    imageMode(CORNER);
+    image(
+        settingsIconSheet,
+        x, y,
+        size, size,
+        frame.x, frame.y,
+        frame.w, frame.h
+    );
+    pop();
+
+    // Click to open the pause menu.
+    if (hovering && mouseIsPressed && !inGameSettingsClickLock) {
+        inGameSettingsClickLock = true;
+        if (typeof playSFX === "function") {
+            playSFX("click");
+        }
+        paused = true;
+    }
+    if (!mouseIsPressed) {
+        inGameSettingsClickLock = false;
+    }
+}
+
+/** True when the mouse is over the in-game settings button hitbox. */
+function isMouseOverInGameSettingsButton() {
+    const x = IN_GAME_SETTINGS_BTN_X;
+    const y = IN_GAME_SETTINGS_BTN_Y;
+    const size = IN_GAME_SETTINGS_BTN_SIZE;
+    return mouseX >= x && mouseX <= x + size &&
+           mouseY >= y && mouseY <= y + size;
 }
 
 
@@ -338,6 +436,10 @@ function tryFireMouseProjectile() {
         return;
     }
     if (typeof player_1 === "undefined" || !player_1 || typeof projectiles === "undefined") {
+        return;
+    }
+    // Don't fire when the player is clicking the in-game settings (gear) button.
+    if (isMouseOverInGameSettingsButton()) {
         return;
     }
 
