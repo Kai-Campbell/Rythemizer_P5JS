@@ -54,7 +54,7 @@ function spawnRockBaddies(count, waveConfig = null) {
       random_y = random(CANVAS_HEIGHT + 20, CANVAS_HEIGHT + 50); // this one they spawn at the bottom
     }
     //enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, gruntSpeed, 30));
-    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, shooterMoveSpeed, shooterShootSpeed, 185 * 0.75, 240 * 0.75));
+    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, shooterMoveSpeed, shooterShootSpeed, 185 * 0.65, 240 * 0.65));
     enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, bomberSpeed, 120, 100));
   }
 }
