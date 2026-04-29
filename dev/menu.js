@@ -65,6 +65,7 @@ function pauseMenuDraw() {
     resumeButton(CENTER_OF_MENU, FIRST_BUT, BUTTON_W, BUTTON_H);
     tutorialButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP, BUTTON_W, BUTTON_H);
     settingsButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 2, BUTTON_W, BUTTON_H);
+    mainMenuButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 3, BUTTON_W, BUTTON_H);
   } else {
     drawSettingsMenu();
   }
@@ -124,6 +125,19 @@ function resumeButton(x, y, w, h) {
 
   if (isHovering("res", x, y, w, h)) {
     image(menuResumeButton[1], x, y, w, h);
+
+    if (mouseIsPressed) {
+      playSFX("click");
+      paused = false;
+    }
+  }
+}
+
+function mainMenuButton(x, y, w, h) {
+  image(returnMenuButton[0], x, y, w, h);
+
+  if (isHovering("main", x, y, w, h)) {
+    image(returnMenuButton[1], x, y, w, h);
 
     if (mouseIsPressed) {
       playSFX("click");
