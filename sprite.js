@@ -63,6 +63,30 @@ class Sprite {
         this.index += this.speed
     }
 
+    showFrame(x, y, facingLeft = false, startFrame, endFrame) {
+        let index = floor(this.index);
+        index = constrain(index, startFrame, endFrame);
+        if (facingLeft) {
+            push();
+            translate(x + 20, y + 20);
+            scale(-1, 1);
+            image(this.animation[index], -20, -20, 40, 40);
+            pop();
+        } else {
+            image(this.animation[index], x, y, 40, 40);
+        }
+    }
+    
+    animateRange(startFrame, endFrame) {
+        if (floor(this.index) < startFrame || floor(this.index) > endFrame) {
+            this.index = startFrame; 
+        }
+        this.index += this.speed;
+        if (floor(this.index) > endFrame) {
+            this.index = startFrame;
+        }
+    }
+
     flip() {
         let index = floor(this.index) % this.len;
         scale(-1, -1);

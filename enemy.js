@@ -101,11 +101,11 @@ class Grunt extends Enemy {
 class Shooter extends Enemy {
     // Constructor 
     constructor(x, y, target_x, target_y, spritedata, spritesheet, Anispeed, moveSpeed,
-        shootSpeed // Sets the shoot speed that that shooter will use to attack the player. Higher = Slower! 
+        shootSpeed, width, height // Sets the shoot speed that that shooter will use to attack the player. Higher = Slower! 
     ) {
-        super(x, y, target_x, target_y, spritedata, spritesheet, Anispeed, moveSpeed);
+        super(x, y, target_x, target_y, spritedata, spritesheet, Anispeed, moveSpeed, width, height);
         this.r = 110;
-        this.Enemy_ani = new EnemySprite(spritedata, spritesheet, Anispeed, 100, 130);
+        //this.Enemy_ani = new EnemySprite(spritedata, spritesheet, Anispeed, 100, 130);
         this.shootSpeed = shootSpeed;
 
         // Construct a random angle for random movement
@@ -117,14 +117,19 @@ class Shooter extends Enemy {
         // Number is between 0 and shootSpeed
         this.shootSeed = Math.floor(Math.random() * shootSpeed);
 
-        
     }
 
     // Update Shooter each frame
     update(obj) {
         this.evasiveMovement(obj);
         // Shoot the player every shootSpeed frames
-        if ((frameCount + this.shootSeed) % this.shootSpeed == 0) {
+        if (((frameCount + this.shootSeed) % this.shootSpeed == 0) && levelRender == 'rock') {
+            projectiles.push(new Projectile(this.pos.x, this.pos.y, obj.pos.x, obj.pos.y, "rockShooter"));
+        }
+        if (((frameCount + this.shootSeed) % this.shootSpeed == 0) && levelRender == 'edm') {
+            projectiles.push(new Projectile(this.pos.x, this.pos.y, obj.pos.x, obj.pos.y, "edmShooter"));
+        }
+        if (((frameCount + this.shootSeed) % this.shootSpeed == 0) && levelRender == 'lofi') {
             projectiles.push(new Projectile(this.pos.x, this.pos.y, obj.pos.x, obj.pos.y, "rockShooter"));
         }
     }

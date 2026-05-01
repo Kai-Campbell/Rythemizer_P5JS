@@ -4,7 +4,7 @@ var edm_boss_spawned;
 function edmSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
-  edm_wave_length = 0;
+  edm_wave_length = 3;
   edm_boss_spawned = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];

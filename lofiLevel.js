@@ -1,14 +1,20 @@
-var lofi_wave_length = 2;
-var lofi_boss_spawned = false;
+var lofi_wave_length;
+var lofi_boss_spawned;
 
 function lofiSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
+  lofi_wave_length = 2;
+  lofi_boss_spawned = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
   boss = [];
   enemies = [];
   items = [];
+  if (game_mode == 'story') {
+    weapon = 0;
+  }
+  player_1.powerUpTimer = POWERUP_DURATION;
 }
 
 function spawnLofiBaddies(count) {
@@ -20,9 +26,9 @@ function spawnLofiBaddies(count) {
     } else {
       random_y = random(CANVAS_HEIGHT + 20, CANVAS_HEIGHT + 50); // this one they spawn at the bottom
     }
-    enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, 3, 30));
-    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, 1.5, 120, 100));
-    enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
+    enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, pedal_floaterData, pedal_floaterSheet, 0.1, 3, 30));
+    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, cat_riderData, cat_riderSheet, 0.1, 1.5, 100, 230 * 0.65, 125 * 0.65)); // change the multiplier to resize
+    //enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
   }
 }
 
@@ -45,6 +51,11 @@ function lofiDraw() {
 
   if (!paused && !player_1.is_entering) {
     player_1.update();
+
+    if (firePending) {
+      projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
+      firePending = false;
+    }
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
       projectiles[i].update();
 
@@ -58,6 +69,8 @@ function lofiDraw() {
             let rand = random(5); // around 10 percent chance of spawning
             if (rand <= 1.5) {
               items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+            } else if (rand > 14) {
+              items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
             }
             playSFX("enemyGone");
             enemies.splice(j, 1);
@@ -94,14 +107,14 @@ function lofiDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
-              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y));
+              items.push(new ExitItem(vinylBox, boss[b].pos.x, boss[b].pos.y));
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
           }
 
           // Checks to see if boss hit player 
-          if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter" && player_1.can_hit == true) { // this detects hits on the player
+          if (projectiles[i].checkHit(player_1) && (projectiles[i].getPlayType() == "lofiBoss" || projectiles[i].getPlayType() == "rockShooter") && player_1.can_hit == true) { // this detects hits on the player
             player_1.health--;
             player_1.invincible();
             console.log(player_1.health);
@@ -157,6 +170,8 @@ function lofiDraw() {
         }
         if (items[i] instanceof ExitItem) {
           player_1.is_exiting = true;
+          weapon = 3;
+          player_1.powerUpTimer = POWERUP_DURATION;
           items.splice(i, 1);
         }
       }
@@ -189,7 +204,7 @@ function lofiDraw() {
     // Wave logic
     if (enemies.length === 0) {
       if (lofi_wave_length != 0) {
-        spawnEdmBaddies(8);
+        spawnLofiBaddies(8);
         lofi_wave_length--;
         console.log("this is the wave");
         console.log(lofi_wave_length);
