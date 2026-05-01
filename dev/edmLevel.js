@@ -4,7 +4,7 @@ var edm_boss_spawned;
 function edmSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
-  edm_wave_length = 0;
+  edm_wave_length = 3;
   edm_boss_spawned = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
@@ -65,10 +65,15 @@ function edmDraw() {
             enemies[j].explode();
           } else {
             let rand = random(10); // around 10 percent chance of spawning
-            if (rand <= 1.5) {
-              items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
-            } else if (rand > 14) {
-              items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
+            if (random(1) < 0.3) {
+              let itemRoll = random(3);
+              if (itemRoll < 1) {
+                items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+              } else if (itemRoll < 2) {
+                items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
+              } else {
+                items.push(new PowerUp(shieldBox, enemies[j].pos.x, enemies[j].pos.y));
+              }
             }
             playSFX("enemyGone");
             enemies.splice(j, 1);
@@ -89,15 +94,12 @@ function edmDraw() {
       }
 
       // Checks for collisions for player and boss projectiles
+      // Checks for collisions for player and boss projectiles
       if (edm_boss_spawned) {
-
-        // Checks to see if player hit boss
         for (let b = boss.length - 1; b >= 0; b--) {
           if (projectiles[i].getPlayType() === 'player' && projectiles[i].checkHit(boss[b]) && boss[b].entered_scene == true) {
             if (boss[b].can_hit === true) {
-              // play Boss hurt SFX
               playSFX("bossHurt");
-
               boss[b].health--;
               boss[b].invincible();
             }
@@ -108,11 +110,10 @@ function edmDraw() {
               items.push(new ExitItem(laserBox, boss[b].pos.x, boss[b].pos.y));
               boss.splice(b, 1);
             }
-            break; // leaves loop because enemy gone
+            break;
           }
 
-          // Checks to see if boss hit player 
-          if (projectiles[i].checkHit(player_1) && (projectiles[i].getPlayType() == "edmBoss" || projectiles[i].getPlayType() == "edmShooter") && player_1.can_hit == true) { // this detects hits on the player
+          if (projectiles[i] && projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "edmBoss" && player_1.can_hit == true) {
             player_1.health--;
             player_1.invincible();
             console.log(player_1.health);
@@ -120,17 +121,15 @@ function edmDraw() {
               gameOver = true;
             }
             break;
-        }
+          }
         }
       }
-      
 
-      // Remove bullet once it's off-screen
-      if (projectiles[i] && projectiles[i].isOffScreen()) { // first check is added because you need to check if the bullet is still there
+      // ✅ Add this guard before isOffScreen — skip if already spliced
+      if (projectiles[i] && projectiles[i].isOffScreen()) {
         projectiles.splice(i, 1);
       }
     }
-
     /**
      * Checks for collision of any enemy type and the player. Detracts health if a collision occurs.
      * Collision occurs if the enemies radius (r) is within the player's radius (r). 
@@ -165,15 +164,27 @@ function edmDraw() {
           player_1.increaseHealth();
           healthIndex++;
           items.splice(i, 1);
-        }
-        if (items[i] instanceof ExitItem) {
+          continue;
+        } else if (items[i] instanceof PowerUp) {
+          if (items[i].getImage() == shieldBox) {
+            player_1.shieldImmunity();
+            items.splice(i, 1);
+            continue;
+          }
+          if (items[i].getImage() == shotgunBox) {
+            weapon = 1;
+            player_1.powerUpTimer = POWERUP_DURATION;
+            items.splice(i, 1);
+            continue;
+          }
+        } else if (items[i] instanceof ExitItem) {
           player_1.is_exiting = true;
           weapon = 2;
           player_1.powerUpTimer = POWERUP_DURATION;
           items.splice(i, 1);
+          continue;
         }
       }
-
       if (items[i] && items[i].despawn) { // if item is still there, then despawn it
         items.splice(i, 1);
       }

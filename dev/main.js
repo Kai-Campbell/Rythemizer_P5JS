@@ -195,6 +195,10 @@ function preload() {
     laserSprite = loadImage('../Assets/Weapons/beat_laser.png')
     discThrowerSprite = loadImage('../Assets/Weapons/disc_thrower.png')
     shotgunSprite = loadImage('../Assets/Weapons/shotgun.png')
+
+    // Shield
+    shieldSheet = loadImage('../Assets/Player/shield.png')
+    shieldData = loadJSON('../Assets/Player/shield.json')
     
     // Health Bar
     healthBarSheet = loadImage('../Assets/GUI/health_bar.png');
