@@ -19,4 +19,5 @@ function endScreenDraw() {
   } else {
     image(endScenePlayer, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   }
+  drawEndScreenMainMenuButton();
 }

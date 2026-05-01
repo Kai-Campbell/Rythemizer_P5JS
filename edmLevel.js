@@ -1,14 +1,17 @@
-var edm_wave_length = 3;
-var edm_boss_spawned = false;
+var edm_wave_length;
+var edm_boss_spawned;
 
 function edmSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
+  edm_wave_length = 3;
+  edm_boss_spawned = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
   boss = [];
   enemies = [];
   items = [];
+  player_1.powerUpTimer = POWERUP_DURATION;
 }
 
 function spawnEdmBaddies(count) {
@@ -21,8 +24,8 @@ function spawnEdmBaddies(count) {
       random_y = random(CANVAS_HEIGHT + 20, CANVAS_HEIGHT + 50); // this one they spawn at the bottom
     }
     enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, 3, 30));
-    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, 1.5, 120, 100));
-    enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
+    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, disc_throwerData, disc_throwerSheet, 0.1, 1.5, 80, 275 * 0.65, 175 * 0.65)); // change multiplier to resize
+    //enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
   }
 }
 
@@ -45,6 +48,12 @@ function edmDraw() {
 
   if (!paused && !player_1.is_entering) {
     player_1.update();
+
+    if (firePending) {
+      projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
+      firePending = false;
+    }
+    
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
       projectiles[i].update();
 
@@ -58,6 +67,8 @@ function edmDraw() {
             let rand = random(10); // around 10 percent chance of spawning
             if (rand <= 1.5) {
               items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+            } else if (rand > 14) {
+              items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
             }
             playSFX("enemyGone");
             enemies.splice(j, 1);
@@ -66,7 +77,7 @@ function edmDraw() {
           break; // leaves loop because enemy gone
         }
 
-        if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter" && player_1.can_hit == true) { // this detects hits on the player
+        if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "edmShooter" && player_1.can_hit == true) { // this detects hits on the player
           player_1.health--;
           player_1.invincible();
           console.log(player_1.health);
@@ -94,14 +105,14 @@ function edmDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
-              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y));
+              items.push(new ExitItem(laserBox, boss[b].pos.x, boss[b].pos.y));
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
           }
 
           // Checks to see if boss hit player 
-          if (projectiles[i].checkHit(player_1) && projectiles[i].getPlayType() == "rockShooter" && player_1.can_hit == true) { // this detects hits on the player
+          if (projectiles[i].checkHit(player_1) && (projectiles[i].getPlayType() == "edmBoss" || projectiles[i].getPlayType() == "edmShooter") && player_1.can_hit == true) { // this detects hits on the player
             player_1.health--;
             player_1.invincible();
             console.log(player_1.health);
@@ -157,6 +168,8 @@ function edmDraw() {
         }
         if (items[i] instanceof ExitItem) {
           player_1.is_exiting = true;
+          weapon = 2;
+          player_1.powerUpTimer = POWERUP_DURATION;
           items.splice(i, 1);
         }
       }

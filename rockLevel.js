@@ -2,7 +2,7 @@ let projectiles = [];
 let player_x = 200;
 let player_y = -300;
 let player_1;
-const story_wave_length = 2;
+const story_wave_length = 3;
 var wave_length = story_wave_length;
 var boss_spawned = false;
 var arcade_wave = 0;
@@ -22,6 +22,7 @@ function rockSetup() {
   enemies = [];
   boss = [];
   items = [];
+  player_1.powerUpTimer = POWERUP_DURATION;
 }
 
 function spawnRockBaddies(count, waveConfig = null) {
@@ -53,8 +54,8 @@ function spawnRockBaddies(count, waveConfig = null) {
     } else {
       random_y = random(CANVAS_HEIGHT + 20, CANVAS_HEIGHT + 50); // this one they spawn at the bottom
     }
-    enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, gruntSpeed, 30));
-    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, shooterMoveSpeed, shooterShootSpeed, 100));
+    //enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, runnerData, runnerSheet, 0.1, gruntSpeed, 30));
+    enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, big_bassData, big_bassSheet, 0.1, shooterMoveSpeed, shooterShootSpeed, 185 * 0.65, 240 * 0.65));
     enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, bomberSpeed, 120, 100));
   }
 }
@@ -92,17 +93,57 @@ function rockDraw() {
    */
 
   player_1.enterScene(); // these two functions handle level transitions
-  player_1.leaveScene('end'); // this one will be changed when end screen level is done
+  if (game_mode === 'story') {
+    player_1.leaveScene('end');
+  } else {
+    player_1.leaveScene('lofi');
+  }
 
   if (!paused && !player_1.is_entering) {
     // Updates player position
     player_1.update();
+    if (firePending) {
+    // Calculate angle from player to mouse
+      let angle = atan2(mouseY - player_1.pos.y, mouseX - player_1.pos.x);
+      
+      // Offset the spawn point by gun length along that angle
+      let gunLength = 120 * .50; // adjust this to match where your gun tip visually is
+      let spawnX = player_1.pos.x + cos(angle) * gunLength;
+      let spawnY = player_1.pos.y + sin(angle) * gunLength;
+      
+      projectiles.push(new Projectile(spawnX, spawnY, mouseX, mouseY, "player"));
+      firePending = false;
+    }
 
     /**
      * Collision checking for all projectiles types
      */
     for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
+       if (weapon == 2 && projectiles[i].getPlayType() === 'player') {
+        let angle = atan2(mouseY - player_1.pos.y, mouseX - player_1.pos.x);
+        let gunLength = 20;
+        projectiles[i].pos.x = player_1.pos.x + cos(angle) * gunLength;
+        projectiles[i].pos.y = player_1.pos.y + sin(angle) * gunLength;
+        projectiles[i].vel = createVector(mouseX - player_1.pos.x, mouseY - player_1.pos.y);
+        projectiles[i].vel.setMag(8);
+      }
       projectiles[i].update();
+
+      if (weapon == 2 && projectiles[i].laserShot && projectiles[i].getPlayType() === 'player') {
+        for (let j = enemies.length - 1; j >= 0; j--) {
+          // Check if enemy falls anywhere along the laser line
+          let d = distToSegment(
+              enemies[j].pos.x, enemies[j].pos.y,
+              player_1.pos.x, player_1.pos.y,
+              player_1.pos.x + projectiles[i].vel.x * 50,  // extend beam forward
+              player_1.pos.y + projectiles[i].vel.y * 50
+          );
+          if (d < enemies[j].r) {
+              enemies[j].hit = true;
+              enemies.splice(j, 1);
+          }
+        }
+      }
 
       // Check for collisions of projectiles 
       for (let j = enemies.length - 1; j >= 0; j--) {
@@ -155,7 +196,12 @@ function rockDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
-              items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
+              if (game_mode == 'story') {
+                items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
+              }
+              if (game_mode == 'arcade') {
+                items.push(new ExitItem(shotgunSprite, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
+              }
               boss.splice(b, 1);
             }
             break; // leaves loop because enemy gone
@@ -176,7 +222,7 @@ function rockDraw() {
       
 
       // Remove bullet once it's off-screen
-      if (projectiles[i] && projectiles[i].isOffScreen()) { // first check is added because you need to check if the bullet is still there
+      if (projectiles[i] && projectiles[i].isDone()) { // first check is added because you need to check if the bullet is still there
         projectiles.splice(i, 1);
       }
     }
@@ -223,11 +269,18 @@ function rockDraw() {
           }
           if (items[i].getImage() == shotgunBox) {
             weapon = 1;
+            player_1.powerUpTimer = POWERUP_DURATION;
             items.splice(i, 1);
           }
         }
-        if (items[i] instanceof ExitItem) {
+        if (items[i] instanceof ExitItem && game_mode == 'story') {
           player_1.is_exiting = true; // starts the leave animation
+          items.splice(i, 1);
+        }
+        if (items[i] instanceof ExitItem && game_mode == 'arcade') {
+          player_1.is_exiting = true; // starts the leave animation
+          weapon = 1;
+          player_1.powerUpTimer = POWERUP_DURATION;
           items.splice(i, 1);
         }
       }
@@ -295,6 +348,16 @@ function rockDraw() {
   for (let i = items.length - 1; i >= 0; i--) {
     items[i].draw();
     items[i].timer();
+  }
+
+  function distToSegment(px, py, ax, ay, bx, by) {
+    let dx = bx - ax, dy = by - ay;
+    let lenSq = dx * dx + dy * dy;
+    let t = ((px - ax) * dx + (py - ay) * dy) / lenSq;
+    t = constrain(t, 0, 1);
+    let closestX = ax + t * dx;
+    let closestY = ay + t * dy;
+    return dist(px, py, closestX, closestY);
   }
   
   // Display health bar

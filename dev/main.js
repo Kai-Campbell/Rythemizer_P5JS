@@ -34,6 +34,9 @@ var tutorialImages = []; // Array to hold tutorial images
 let endMusicPlaying = false;
 let endScreenMouseLock = false;
 
+// Cooldown variable for menus
+let menuCooldownTimer = 0;
+
 // Set Screen size
 const CANVAS_HEIGHT = 1500 / 2;
 const CANVAS_WIDTH = 2000 / 2;
@@ -110,6 +113,9 @@ function preload() {
     returnMenuButton = [loadImage('../Assets/Buttons/main_menu.png'), loadImage('../Assets/Buttons/main_menu_select.png')];
     menuResumeButton = [loadImage('../Assets/Buttons/resume.png'), loadImage('../Assets/Buttons/resume_select.png')];
     menuLogoGlow = loadImage('../Assets/GUI/logo_glow.png');
+    returnMenuLava   = loadImage('../Assets/GUI/return_menu_lava.png');
+    returnMenuYes    = [loadImage('../Assets/Buttons/return_menu_yes.png'),    loadImage('../Assets/Buttons/return_menu_yes_select.png')];
+    returnMenuNo     = [loadImage('../Assets/Buttons/return_menu_no.png'),     loadImage('../Assets/Buttons/return_menu_no_select.png')];
     
     
 
@@ -127,7 +133,7 @@ function preload() {
 
     // Lofi level
     lofi_back = loadImage('../Assets/Levels/test_level_lofi.png');
-    lofiMusic = loadSound('../Assets/Music/PoopMusic.mp3');
+    lofiMusic = loadSound('../Assets/Music/Welcome_to_the_Green_Room.mp3');
     bard_JSON = loadJSON('../Assets/Bosses/vibe_bard.json');
     bard_spriteSheet = loadImage('../Assets/Bosses/vibe_bard.png');
 
@@ -419,8 +425,9 @@ function drawInGameSettingsButton() {
     );
     pop();
 
-    // Click to open the pause menu.
-    if (hovering && mouseIsPressed && !inGameSettingsClickLock) {
+    // Click to open the pause menu with added cooldown
+    if (hovering && mouseIsPressed && !inGameSettingsClickLock && millis() > menuCooldownTimer) {
+        menuCooldownTimer = millis() + 500;
         inGameSettingsClickLock = true;
         if (typeof playSFX === "function") {
             playSFX("click");
@@ -563,7 +570,6 @@ function playLevelMusic() {
     }
     levelMusic.setVolume(music_volume); // change the volume between 0.0 and 1.0 if needed
     levelMusic.loop();
-    levelMusic.play();
     userStartAudio();
 }
 
@@ -722,6 +728,7 @@ function displayTutorial() {
     if (tutorialIndex > 0) {
         drawLeftArrow(leftArrowX, buttonY, buttonSize);
         if (isHoveringButton(leftArrowX, buttonY, buttonSize) && mouseIsPressed && !tutorialClickFlag) {
+            menuCooldownTimer = millis() + 500;
             tutorialClickFlag = true;
             tutorialIndex--;
         }
@@ -731,12 +738,14 @@ function displayTutorial() {
     if (tutorialIndex < tutorialImages.length - 1) {
         drawRightArrow(rightArrowX, buttonY, buttonSize);
         if (isHoveringButton(rightArrowX, buttonY, buttonSize) && mouseIsPressed && !tutorialClickFlag) {
+            menuCooldownTimer = millis() + 500;
             tutorialClickFlag = true;
             tutorialIndex++;
         }
     } else {
         drawExitX(rightArrowX, buttonY, buttonSize);
         if (isHoveringButton(rightArrowX, buttonY, buttonSize) && mouseIsPressed && !tutorialClickFlag) {
+            menuCooldownTimer = millis() + 500;
             tutorialClickFlag = true;
             if (showTutorialOverlay) {
                 showTutorialOverlay = false; // ← just hide the overlay, pause menu stays
@@ -852,7 +861,8 @@ function drawGameOverMainMenuButton() {
   if (isHovering("gameover_menu", x, y, w, h)) {
     image(returnMenuButton[1], x, y, w, h);
 
-    if (mouseIsPressed && !gameOverMouseLock) {
+    if (mouseIsPressed && !gameOverMouseLock && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
       gameOverMouseLock = true;
       playSFX("click");
 
@@ -886,7 +896,8 @@ function drawEndScreenMainMenuButton() {
   if (isHovering("gameover_menu", x, y, w, h)) {
     image(returnMenuButton[1], x, y, w, h);
 
-    if (mouseIsPressed && !endScreenMouseLock) {
+    if (mouseIsPressed && !endScreenMouseLock && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
       endScreenMouseLock = true;
       playSFX("click");
 

@@ -20,6 +20,10 @@ let settingsUIMouseLock = false;
 // Keeps track of the button that currently hover, useful for SFX
 let currentHoveredID = null;
 
+// Return to main menu variables
+let showReturnConfirm = false;
+let returnConfirmMouseLock = false;
+
 const SETTINGS_SLIDER_W = 260;
 const SETTINGS_SLIDER_H = 22;
 const SETTINGS_ROW_SFX_Y = FIRST_BUT + 30;
@@ -55,6 +59,16 @@ function menuDraw() {
  * Appears when the escape key (and eventually start button on controller)
  */
 function pauseMenuDraw() {
+  if (showTutorialOverlay) {
+    return;
+  }
+
+  // shows the return to main menu confirmation overlay instead of the normal pause menu
+  if (showReturnConfirm) {
+    drawReturnConfirmMenu();
+    return;
+  }
+
   // Draw main menu relative to screen resolution
   image(menuBacking, (CANVAS_WIDTH / 2) - (MENU_WIDTH / 2), MENU_Y, MENU_WIDTH, MENU_HEIGHT);
   
@@ -62,9 +76,10 @@ function pauseMenuDraw() {
   imageMode(CENTER);
   pulsingLogo();
   if (!showSettings) {
-    startButton(CENTER_OF_MENU, FIRST_BUT, BUTTON_W, BUTTON_H);
+    resumeButton(CENTER_OF_MENU, FIRST_BUT, BUTTON_W, BUTTON_H);
     tutorialButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP, BUTTON_W, BUTTON_H);
     settingsButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 2, BUTTON_W, BUTTON_H);
+    mainMenuButton(CENTER_OF_MENU, FIRST_BUT + BUTTON_GAP * 3, BUTTON_W, BUTTON_H);
   } else {
     drawSettingsMenu();
   }
@@ -85,10 +100,8 @@ function pulsingLogo() {
   let baseHeight = menuLogoGlow.height * scaleFactor;
   let centerX = 10 + baseWidth / 2;
   let centerY = 10 + baseHeight / 2;
-  // let x = centerX - (baseWidth * scale / 2);
-  // let y = centerY - (baseHeight * scale / 2);
   let x = CENTER_OF_MENU;
-  let y = MENU_Y + 10;
+  let y = MENU_Y + 60;
   image(menuLogoGlow, x, y, baseWidth * scale, baseHeight * scale);
 }
 
@@ -101,7 +114,8 @@ function startButton(x, y, w, h) {
   if (isHovering("strt", x, y, w, h)) {
     image(menuStartButton[1], x, y, w, h);
 
-    if (mouseIsPressed) {
+    if (mouseIsPressed && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
       playSFX("click");
       if (currentMode === 1) {
         game_mode = 'arcade';
@@ -118,6 +132,81 @@ function startButton(x, y, w, h) {
     }
   }
 }
+
+function resumeButton(x, y, w, h) {
+  image(menuResumeButton[0], x, y, w, h);
+
+  if (isHovering("res", x, y, w, h)) {
+    image(menuResumeButton[1], x, y, w, h);
+
+    if (mouseIsPressed && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
+      playSFX("click");
+      paused = false;
+    }
+  }
+}
+
+function mainMenuButton(x, y, w, h) {
+  image(returnMenuButton[0], x, y, w, h);
+
+  if (isHovering("main", x, y, w, h)) {
+    image(returnMenuButton[1], x, y, w, h);
+
+    if (mouseIsPressed && !returnConfirmMouseLock && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
+      playSFX("click");
+      returnConfirmMouseLock = true;
+      showReturnConfirm = true;
+    }
+  }
+
+  if (!mouseIsPressed) {
+    returnConfirmMouseLock = false;
+  }
+}
+
+function drawReturnConfirmMenu() {
+
+  fill(0, 0, 0, 160);
+  noStroke();
+  rect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+  imageMode(CENTER);
+  image(returnMenuLava, CENTER_OF_MENU, CANVAS_HEIGHT / 2, 550, 300);
+
+  image(returnMenuYes[0], CANVAS_WIDTH / 2 - 100, 450, 60, 40);
+  if (isHovering("confirm_yes", CANVAS_WIDTH / 2 - 100, 450, 60, 40)) {
+    image(returnMenuYes[1], CANVAS_WIDTH / 2 - 100, 450, 60, 40);
+
+    if (mouseIsPressed && !returnConfirmMouseLock && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
+      playSFX("click");
+      returnConfirmMouseLock = true;
+      showReturnConfirm = false;
+      paused = false;
+      switchLevel('menu');
+    }
+  }
+
+  image(returnMenuNo[0], CANVAS_WIDTH / 2 + 100, 450, 60, 40);
+  if (isHovering("confirm_no", CANVAS_WIDTH / 2 + 100, 450, 60, 40)) {
+    image(returnMenuNo[1], CANVAS_WIDTH / 2 + 100, 450, 60, 40);
+
+    if (mouseIsPressed && !returnConfirmMouseLock && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
+      playSFX("click");
+      returnConfirmMouseLock = true;
+      showReturnConfirm = false;
+    }
+  }
+
+  if (!mouseIsPressed) {
+    returnConfirmMouseLock = false;
+  }
+
+  imageMode(CORNER);
+}
  
 /**
  * Level Button - Changes difficulty / mode
@@ -130,7 +219,8 @@ function levelButton(x, y, w, h) {
   if (isHovering("lvl", x, y, w, h)) {
     image(modeButtons[currentMode][1], x, y, w, h);
 
-    if (mouseIsPressed && !modeClicked) {
+    if (mouseIsPressed && !modeClicked && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
       playSFX("click");
       modeClicked = true;
       currentMode = (currentMode + 1) % 3;
@@ -151,12 +241,18 @@ function tutorialButton(x, y, w, h) {
   if (isHovering("tut", x, y, w, h)) {
     image(menuHowToButton[1], x, y, w, h);
     
-    if (mouseIsPressed && !tutorialClicked) {
+    if (mouseIsPressed && !tutorialClicked && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
       playSFX("click");
       tutorialClicked = true;
-      levelRender = "tutorial";
-      playLevelMusic();
       tutorialIndex = 0;
+      if (paused) {
+        showTutorialOverlay = true;
+      } else {
+        levelRender = "tutorial";
+        playLevelMusic();
+        tutorialIndex = 0;
+      }
     }
   }
   
@@ -174,7 +270,8 @@ function settingsButton(x, y, w, h) {
   if (isHovering("set", x, y, w, h)) {
     image(menuSettingsButton[1], x, y, w, h);
 
-    if (mouseIsPressed && !settingsUIMouseLock) {
+    if (mouseIsPressed && !settingsUIMouseLock && millis() > menuCooldownTimer) {
+      menuCooldownTimer = millis() + 500;
       playSFX("click");
       settingsUIMouseLock = true;
       showSettings = true;
@@ -297,7 +394,8 @@ function drawSettingsBackButton(x, y) {
   textSize(20);
   text("Back", x, y);
 
-  if (hovering && mouseIsPressed && !settingsUIMouseLock) {
+  if (hovering && mouseIsPressed && !settingsUIMouseLock && millis() > menuCooldownTimer) {
+    menuCooldownTimer = millis() + 500;
     playSFX("click");
     settingsUIMouseLock = true;
     showSettings = false;
