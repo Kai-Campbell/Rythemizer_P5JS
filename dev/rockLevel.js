@@ -2,7 +2,7 @@ let projectiles = [];
 let player_x = 200;
 let player_y = -300;
 let player_1;
-const story_wave_length = 3;
+const story_wave_length = 5;
 var wave_length = story_wave_length;
 var boss_spawned = false;
 var arcade_wave = 0;
@@ -78,7 +78,7 @@ function spawnBoss() {
   } else {
     let startX = CANVAS_WIDTH + 500; 
     let targetX = CANVAS_WIDTH - 200;
-    boss.push(new rockBoss(startX, CANVAS_HEIGHT - 450, targetX, player_1.y, 200, dragonJSON, dragonSpriteSheet, 0.1, 0.3, 30, 10))
+    boss.push(new rockBoss(startX, CANVAS_HEIGHT - 450, targetX, player_1.y, 200, dragonJSON, dragonSpriteSheet, 0.1, 0.3, 50, 10))
     boss_spawned = true;
   }
 }

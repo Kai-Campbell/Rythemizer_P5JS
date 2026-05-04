@@ -4,7 +4,7 @@ var lofi_boss_spawned;
 function lofiSetup() {
   gameOver = false;
   gameOverMusicPlaying = false;
-  lofi_wave_length = 2;
+  lofi_wave_length = 3;
   lofi_boss_spawned = false;
   player_1 = new Player(player_x, player_y, spriteData, spritesheet, 0.1);
   projectiles = [];
@@ -28,7 +28,6 @@ function spawnLofiBaddies(count) {
     }
     enemies.push(new Grunt(random_x, random_y, player_1.x, player_1.y, pedal_floaterData, pedal_floaterSheet, 0.1, 3, 30));
     enemies.push(new Shooter(random_x, random_y, player_1.x, player_1.y, cat_riderData, cat_riderSheet, 0.1, 1.5, 100, 230 * 0.65, 125 * 0.65)); // change the multiplier to resize
-    //enemies.push(new Bomber(random_x, random_y, player_1.x, player_1.y, amp_smallData, amp_smallSheet, 0.1, 1.5, 120, 100));
   }
 }
 
@@ -101,6 +100,7 @@ function lofiDraw() {
               playSFX("bossHurt");
 
               boss[b].health--;
+              //console.log(boss[b].health)
               boss[b].invincible();
             }
             console.log(boss[b].health);

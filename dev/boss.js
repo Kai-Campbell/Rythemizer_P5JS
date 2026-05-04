@@ -80,12 +80,13 @@ class rockBoss extends Boss {
 
     async shootPattern(player) {
         if (this.is_dead != true) {
-            //shoots top to bottom
-            let bottom = CANVAS_HEIGHT - 150;
             if (this.is_shooting) {
                 return;
             }
             this.is_shooting = true;
+
+            //shoots top to bottom
+            let bottom = CANVAS_HEIGHT - 150;
             for (let i = 0; i <= bottom; i += 50) {
                 projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "rockShooter"));
                 await delay(100);
@@ -94,6 +95,7 @@ class rockBoss extends Boss {
             if (this.is_dead) { // this is necessary after each call to stop the shooting if the enemy dies while shooting
                 return;
             }
+
             // shoots bottom to top
             let top = 150;
             for (let i = CANVAS_HEIGHT; i >= top; i -= 50) {
@@ -104,34 +106,49 @@ class rockBoss extends Boss {
             if (this.is_dead) {
                 return;
             }
-            // shoots middle area
-            let center_top = (CANVAS_HEIGHT / 2) - 150;
-            let center_bottom = (CANVAS_HEIGHT / 2) + 250;
-            for (let i = center_top; i <= center_bottom; i += 20) {
+
+            // shoots bloom
+            for (let i = CANVAS_HEIGHT; i >= top; i -= 150) {
                 projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "rockShooter"));
-                await delay(50);
+            }
+            await delay(1000);
+            if (this.is_dead) {
+                return;
+            }
+
+            // shoots funny bloom waves
+            for (let i = -100; i <= 100; i += 10) {
+                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "rockShooter"));
+                await delay(10)
+            }
+            for (let i = 300; i <= 500; i += 10) {
+                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "rockShooter"));
+                await delay(10)
+            }
+            for (let i = 700; i <= 900; i += 10) {
+                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "rockShooter"));
+                await delay(10)
             }
             await delay(2000);
             if (this.is_dead) {
                 return;
             }
-            // shoots from the low center to the middle
-            let middle_bottom = (CANVAS_HEIGHT * 2);
-            let middle = CANVAS_HEIGHT / 2;
-            for (let i = middle_bottom; i >= middle; i -= 50) {
-                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "rockShooter"));
-                await delay(50);
+
+            // shoots many blooms
+            for (let x = 0; x < 15; x++) {
+                for (let i = CANVAS_HEIGHT; i >= 0; i -= 150) {
+                    projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "rockShooter"));
+                }
+                await delay(50)
             }
-            await delay(2000);
-            if (this.is_dead) {
-                return;
+            await delay(1000)
+            for (let x = 0; x < 15; x++) {
+                for (let i = CANVAS_HEIGHT; i >= 0; i -= 170) {
+                    projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "rockShooter"));
+                }
+                await delay(50)
             }
-            // shoots from the top center to the middle
-            let top_middle = 0 - CANVAS_HEIGHT;
-            for (let i = top_middle; i <= middle; i += 50) {
-                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "rockShooter"));
-                await delay(50);
-            }
+
             await delay(2000);
             this.is_shooting = false;
         }
@@ -140,7 +157,7 @@ class rockBoss extends Boss {
 
 class EDMBoss extends rockBoss {
     constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed) {
-        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, 20, shootSpeed)
+        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed)
 
     }
 
@@ -157,20 +174,32 @@ class EDMBoss extends rockBoss {
 
     async shootPattern(player) {
         if (this.is_dead != true) {
-            //shoots top to bottom
-            let bottom = CANVAS_HEIGHT - 150;
             if (this.is_shooting) {
                 return;
             }
             this.is_shooting = true;
-            for (let i = 0; i <= bottom; i += 50) {
-                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "edmBoss"));
-                await delay(100);
+            
+            // shoots weird waves 
+            let middle = CANVAS_HEIGHT / 2;
+            let upper_middle = (CANVAS_HEIGHT / 2) - 250
+            let lower_middle = (CANVAS_HEIGHT / 2) + 250
+            let timer = 0;
+            while (timer <= 5) {
+                for (let i = upper_middle; i <= middle; i += 50) {
+                    projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "edmBoss"));
+                    await delay(50);
+                }
+                for (let i = lower_middle; i <= middle + 450; i += 50) {
+                    projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "edmBoss"));
+                    await delay(50);
+                }
+                timer++;
             }
-            await delay(2000); // 2 second delay;
+            await delay(2000)
             if (this.is_dead) { // this is necessary after each call to stop the shooting if the enemy dies while shooting
                 return;
             }
+
             // shoots bottom to top
             let top = 150;
             for (let i = CANVAS_HEIGHT; i >= top; i -= 50) {
@@ -181,6 +210,7 @@ class EDMBoss extends rockBoss {
             if (this.is_dead) {
                 return;
             }
+
             // shoots middle area
             let center_top = (CANVAS_HEIGHT / 2) - 150;
             let center_bottom = (CANVAS_HEIGHT / 2) + 250;
@@ -192,24 +222,22 @@ class EDMBoss extends rockBoss {
             if (this.is_dead) {
                 return;
             }
-            // shoots from the low center to the middle
-            let middle_bottom = (CANVAS_HEIGHT * 2);
-            let middle = CANVAS_HEIGHT / 2;
-            for (let i = middle_bottom; i >= middle; i -= 50) {
+
+            // bloom shot
+            let bottom = CANVAS_HEIGHT;
+            for (let i = 0; i <= bottom; i += 150) {
                 projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "edmBoss"));
-                await delay(50);
             }
-            await delay(2000);
-            if (this.is_dead) {
-                return;
-            }
-            // shoots from the top center to the middle
-            let top_middle = 0 - CANVAS_HEIGHT;
-            for (let i = top_middle; i <= middle; i += 50) {
+            await delay(500);
+            for (let i = 0; i <= bottom; i += 150) {
                 projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "edmBoss"));
-                await delay(50);
             }
-            await delay(2000);
+            await delay(500);
+            for (let i = 0; i <= bottom; i += 150) {
+                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "edmBoss"));
+            }
+
+            await delay(2000)
             this.is_shooting = false;
         }
     }
@@ -217,7 +245,7 @@ class EDMBoss extends rockBoss {
 
 class LofiBoss extends rockBoss {
     constructor(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed) {
-        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, 15, shootSpeed) // for some reason his health isn't changing lol
+        super(x, y, target_x, target_y, r, spritedata, spritesheet, Anispeed, moveSpeed, health, shootSpeed) // for some reason his health isn't changing lol
     }
 
     draw() {
@@ -233,41 +261,31 @@ class LofiBoss extends rockBoss {
 
     async shootPattern(player) {
         if (this.is_dead != true) {
-            //shoots top to bottom
-            let bottom = CANVAS_HEIGHT - 150;
             if (this.is_shooting) {
                 return;
             }
-            this.is_shooting = true;
-            for (let i = 0; i <= bottom; i += 50) {
+            this.is_shooting = true; // start of shooting
+            
+            // bloom shot
+            let bottom = CANVAS_HEIGHT;
+            for (let i = 0; i <= bottom; i += 150) {
                 projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "lofiBoss"));
-                await delay(100);
             }
             await delay(2000); // 2 second delay;
             if (this.is_dead) { // this is necessary after each call to stop the shooting if the enemy dies while shooting
                 return;
             }
-            // shoots bottom to top
+
+            // bloom shot
             let top = 150;
-            for (let i = CANVAS_HEIGHT; i >= top; i -= 50) {
+            for (let i = CANVAS_HEIGHT; i >= top; i -= 150) {
                 projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "lofiBoss"));
-                await delay(100);
             }
             await delay(2000)
             if (this.is_dead) {
                 return;
             }
-            // shoots middle area
-            let center_top = (CANVAS_HEIGHT / 2) - 150;
-            let center_bottom = (CANVAS_HEIGHT / 2) + 250;
-            for (let i = center_top; i <= center_bottom; i += 20) {
-                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "lofiBoss"));
-                await delay(50);
-            }
-            await delay(2000);
-            if (this.is_dead) {
-                return;
-            }
+            
             // shoots from the low center to the middle
             let middle_bottom = (CANVAS_HEIGHT * 2);
             let middle = CANVAS_HEIGHT / 2;
@@ -275,10 +293,11 @@ class LofiBoss extends rockBoss {
                 projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "lofiBoss"));
                 await delay(50);
             }
-            await delay(2000);
+            await delay(100);
             if (this.is_dead) {
                 return;
             }
+
             // shoots from the top center to the middle
             let top_middle = 0 - CANVAS_HEIGHT;
             for (let i = top_middle; i <= middle; i += 50) {
@@ -286,6 +305,22 @@ class LofiBoss extends rockBoss {
                 await delay(50);
             }
             await delay(2000);
+            if (this.is_dead) {
+                return;
+            }
+
+            // shoots from middle out
+            for (let i = middle; i <= bottom; i += 50) {
+                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "lofiBoss"));
+                await delay(50);
+            }
+            await delay(500);
+            for (let i = middle; i >= 0; i -= 50) {
+                projectiles.push(new Projectile(this.pos.x, this.pos.y, player.pos.x, i, "lofiBoss"));
+                await delay(50);
+            }
+            await delay(2000);
+
             this.is_shooting = false;
         }
     }

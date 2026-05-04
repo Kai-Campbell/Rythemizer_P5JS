@@ -77,7 +77,6 @@ class Player {
       if (keyIsDown(32) && !this.is_rolling) {
         console.log("im here")
         this.roll()
-
       }
       
 

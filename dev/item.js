@@ -59,6 +59,16 @@ class ExitItem extends Item {
         super(image, x, y)
     }
 
+    draw() {
+        if (levelRender == 'rock') { // spawns party hat
+            if (this.is_visible) {
+                image(this.image, this.x - 10, this.y - 10, 50, 100);
+            }
+        } else {
+            super.draw(); // draws regular items
+        }
+    }
+
     async timer() { // this function will make it so the level transition doesn't despawn
         return;
     }
