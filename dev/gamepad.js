@@ -52,6 +52,7 @@ function updateGamepads() {
     gamepadInput.dpad.down = false;
     gamepadInput.dpad.left = false;
     gamepadInput.dpad.right = false;
+    gamepadInput.leftTrigger = false;
     return;
   }
 
@@ -64,6 +65,8 @@ function updateGamepads() {
   gamepadInput.dpad.down = gamepadButtonPressed(gp, 13);
   gamepadInput.dpad.left = gamepadButtonPressed(gp, 14);
   gamepadInput.dpad.right = gamepadButtonPressed(gp, 15);
+
+  gamepadInput.leftTrigger = gamepadButtonPressed(gp, 6);
 
   const fireNow = gamepadButtonPressed(gp, 7) || Math.hypot(gamepadInput.rightStick.x, gamepadInput.rightStick.y) > 0;
   if (fireNow) {

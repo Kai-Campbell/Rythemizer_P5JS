@@ -69,6 +69,7 @@ var healthBarSheet, healthBarData; // Health bar display
 var settingsIconSheet, settingsIconData; // In-game gear/settings button (sprite sheet)
 var gameOverImage; // Game over screen image
 var gameOverMusic; // Game over music
+var pixelFont; // 8-bit style pixel font (supersoft.ttf)
 var tutorialMusic; // Tutorial background music
 var endScene, endScenePlayer;
 var exitItem, healthBox;
@@ -217,6 +218,9 @@ function preload() {
     // Game Over
     gameOverImage = loadImage('../Assets/GUI/death_screen.png');
     gameOverMusic = loadSound('../Assets/Music/29_Ghosts_IV.mp3');
+
+    // Pixel font used for arcade-style overlays (e.g. wave counter)
+    pixelFont = loadFont('../Assets/GUI/pixel-font-supersoft-assets/ttf/supersoft.ttf');
 
     // Items
     healthBox = loadImage('../Assets/Items/health_box.png');
@@ -692,12 +696,15 @@ function drawArcadeWavesSurvivedOverlay() {
         return;
     }
     push();
+    if (typeof pixelFont !== "undefined" && pixelFont) {
+        textFont(pixelFont);
+    }
     textAlign(CENTER, CENTER);
-    textSize(28);
+    textSize(64);
     const x = CANVAS_WIDTH / 2;
     const y = CANVAS_HEIGHT / 2 + 55;
     fill(0, 0, 0, 200);
-    text(`Waves survived: ${arcade_waves_survived}`, x + 2, y + 2);
+    text(`Waves survived: ${arcade_waves_survived}`, x + 3, y + 3);
     fill(255, 230, 120);
     text(`Waves survived: ${arcade_waves_survived}`, x, y);
     pop();

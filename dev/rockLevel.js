@@ -2,6 +2,8 @@ let projectiles = [];
 let player_x = 200;
 let player_y = -300;
 let player_1;
+let aimX = 0;
+let aimY = 0;
 const story_wave_length = 5;
 var wave_length = story_wave_length;
 var boss_spawned = false;
@@ -100,47 +102,52 @@ function rockDraw() {
   }
 
   if (!paused && !player_1.is_entering) {
+    let aimX = mouseX;
+    let aimY = mouseY;
+    const gp = navigator.getGamepads ? navigator.getGamepads()[0] : null;
+    if (gp && (abs(gp.axes[2]) > 0.1 || abs(gp.axes[3]) > 0.1)) {
+      const aimDist = 200;
+      aimX = player_1.pos.x + gp.axes[2] * aimDist;
+      aimY = player_1.pos.y + gp.axes[3] * aimDist;
+    }
+
     // Updates player position
     player_1.update();
-    if (firePending) {
-    // Calculate angle from player to mouse
-      let angle = atan2(mouseY - player_1.pos.y, mouseX - player_1.pos.x);
-      
-      // Offset the spawn point by gun length along that angle
-      let gunLength = 120 * .50; // adjust this to match where your gun tip visually is
+    if (firePending) { // Calculate position from the controller aim to the player
+      let angle = atan2(aimY - player_1.pos.y, aimX - player_1.pos.x);
+      let gunLength = 120 * .50;
       let spawnX = player_1.pos.x + cos(angle) * gunLength;
       let spawnY = player_1.pos.y + sin(angle) * gunLength;
-      
-      projectiles.push(new Projectile(spawnX, spawnY, mouseX, mouseY, "player"));
+      projectiles.push(new Projectile(spawnX, spawnY, aimX, aimY, "player"));
       firePending = false;
     }
 
     /**
      * Collision checking for all projectiles types
      */
-    for (let i = projectiles.length - 1; i >= 0; i--) { // apparently theres actually a good reason for looping backwards
-       if (weapon == 2 && projectiles[i].getPlayType() === 'player') {
-        let angle = atan2(mouseY - player_1.pos.y, mouseX - player_1.pos.x);
+    for (let i = projectiles.length - 1; i >= 0; i--) {
+      if (weapon == 2 && projectiles[i].getPlayType() === 'player') {
+        // Use aimX/aimY so the laser tracks controller or mouse
+        let angle = atan2(aimY - player_1.pos.y, aimX - player_1.pos.x);
         let gunLength = 20;
         projectiles[i].pos.x = player_1.pos.x + cos(angle) * gunLength;
         projectiles[i].pos.y = player_1.pos.y + sin(angle) * gunLength;
-        projectiles[i].vel = createVector(mouseX - player_1.pos.x, mouseY - player_1.pos.y);
+        projectiles[i].vel = createVector(aimX - player_1.pos.x, aimY - player_1.pos.y);
         projectiles[i].vel.setMag(8);
       }
       projectiles[i].update();
 
       if (weapon == 2 && projectiles[i].laserShot && projectiles[i].getPlayType() === 'player') {
         for (let j = enemies.length - 1; j >= 0; j--) {
-          // Check if enemy falls anywhere along the laser line
           let d = distToSegment(
-              enemies[j].pos.x, enemies[j].pos.y,
-              player_1.pos.x, player_1.pos.y,
-              player_1.pos.x + projectiles[i].vel.x * 50,  // extend beam forward
-              player_1.pos.y + projectiles[i].vel.y * 50
+            enemies[j].pos.x, enemies[j].pos.y,
+            player_1.pos.x, player_1.pos.y,
+            player_1.pos.x + projectiles[i].vel.x * 50,
+            player_1.pos.y + projectiles[i].vel.y * 50
           );
           if (d < enemies[j].r) {
-              enemies[j].hit = true;
-              enemies.splice(j, 1);
+            enemies[j].hit = true;
+            enemies.splice(j, 1);
           }
         }
       }
