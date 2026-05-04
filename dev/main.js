@@ -234,8 +234,8 @@ function preload() {
     tutorialImages[0] = loadImage('../Assets/GUI/tutorial_1.png');
     tutorialImages[1] = loadImage('../Assets/GUI/tutorial_2.png');
     tutorialImages[2] = loadImage('../Assets/GUI/tutorial_3.png');
-    tutorialImages[3] = loadImage('../Assets/GUI/tutorial_4.png');
-    tutorialGif[0] = loadImage('../Assets/GUI/rolling.gif');
+    //tutorialImages[3] = loadImage('../Assets/GUI/tutorial_4.png');
+    //tutorialGif[0] = loadImage('../Assets/GUI/rolling.gif');
 
     
     // End screen gifs
