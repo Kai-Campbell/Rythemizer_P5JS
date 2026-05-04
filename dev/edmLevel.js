@@ -66,13 +66,15 @@ function edmDraw() {
           } else {
             let rand = random(10); // around 10 percent chance of spawning
             if (random(1) < 0.3) {
-              let itemRoll = random(3);
+              let itemRoll = random(4);
               if (itemRoll < 1) {
                 items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
               } else if (itemRoll < 2) {
                 items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
-              } else {
+              } else if (itemRoll < 3) {
                 items.push(new PowerUp(shieldBox, enemies[j].pos.x, enemies[j].pos.y));
+              } else {
+                items.push(new PowerUp(vinylBox, enemies[j].pos.x, enemies[j].pos.y));
               }
             }
             playSFX("enemyGone");
@@ -173,6 +175,12 @@ function edmDraw() {
           }
           if (items[i].getImage() == shotgunBox) {
             weapon = 1;
+            player_1.powerUpTimer = POWERUP_DURATION;
+            items.splice(i, 1);
+            continue;
+          }
+          if (items[i].getImage() == vinylBox) {
+            weapon = 3;
             player_1.powerUpTimer = POWERUP_DURATION;
             items.splice(i, 1);
             continue;
