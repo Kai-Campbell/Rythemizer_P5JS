@@ -117,6 +117,10 @@ class Player {
         if (pad.right) mvmt.x += 1;
         if (pad.up) mvmt.y -= 1;
         if (pad.down) mvmt.y += 1;
+
+        if (gamepadInput.leftTrigger && !this.is_rolling) {
+          this.roll();
+        }
       }
     }
     
