@@ -528,6 +528,10 @@ function tryFireMouseProjectile() {
         return;
     }
 
+    if (player_1.is_entering) {
+        return;
+    }
+
     const now = millis();
     if (now - lastPlayerFireAt < PLAYER_FIRE_INTERVAL_MS) return;
     if (weapon == 2 && laserCooldown > 0) return;

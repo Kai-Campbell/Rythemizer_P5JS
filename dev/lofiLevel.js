@@ -51,7 +51,7 @@ function lofiDraw() {
   if (!paused && !player_1.is_entering) {
     player_1.update();
 
-    if (firePending) {
+    if (firePending && !player_1.is_entering) {
       projectiles.push(new Projectile(player_1.x, player_1.y, mouseX, mouseY, "player"));
       firePending = false;
     }
