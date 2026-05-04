@@ -230,10 +230,13 @@ function preload() {
     vinylBox = loadImage('../Assets/Items/disc_shooter_box.png');
     exitItem = loadImage('../Assets/Items/end_story_item.png');
     
-    // Tutorial images
+    // Tutorial images/gif
     tutorialImages[0] = loadImage('../Assets/GUI/tutorial_1.png');
     tutorialImages[1] = loadImage('../Assets/GUI/tutorial_2.png');
     tutorialImages[2] = loadImage('../Assets/GUI/tutorial_3.png');
+    tutorialImages[3] = loadImage('../Assets/GUI/tutorial_4.png');
+    tutorialGif = loadImage('../Assets/GUI/rolling.gif');
+
     
     // End screen gifs
     playerWalking = loadImage('../Assets/GUI/player_walking.gif');
