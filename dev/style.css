@@ -6,13 +6,29 @@ html, body {
   overflow: hidden;
 }
 
-/*
- * #game-container fills the viewport and centers the p5 canvas.
- * The canvas keeps its fixed virtual resolution (set by createCanvas)
- * and is visually scaled via canvas.style.width / .height in main.js.
- * Any leftover space around the scaled canvas shows the container's
- * black background as letterbox / pillarbox bars.
- */
+#p5_loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  z-index: 9999;
+}
+
+#p5_loading img {
+  width: 1280px;
+  height: 960px;
+  max-width: 100vw;
+  max-height: 100vh;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
 #game-container {
   position: fixed;
   top: 0;
@@ -28,7 +44,6 @@ html, body {
 
 canvas {
   display: block;
-  /* Pixel art looks crisper when the browser doesn't smooth it during scaling. */
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }

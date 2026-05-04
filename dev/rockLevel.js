@@ -154,10 +154,15 @@ function rockDraw() {
           } else {
             let rand = random(15); // around 10 percent chance of spawning
             console.log(rand)
-            if (rand <= 1.5) {
-              items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
-            } else if (rand > 14) {
-              items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
+            if (random(1) < 0.3) {
+              let itemRoll = random(3);
+              if (itemRoll < 1) {
+                items.push(new HealthItem(healthBox, enemies[j].pos.x, enemies[j].pos.y));
+              } else if (itemRoll < 2) {
+                items.push(new PowerUp(shotgunBox, enemies[j].pos.x, enemies[j].pos.y));
+              } else {
+                items.push(new PowerUp(shieldBox, enemies[j].pos.x, enemies[j].pos.y));
+              }
             }
             // Play SFX for when enemy dies
             playSFX("enemyGone");
@@ -261,27 +266,29 @@ function rockDraw() {
           player_1.increaseHealth();
           healthIndex++;
           items.splice(i, 1);
-        }
-        if (items[i] instanceof PowerUp) {
+          continue;
+        } else if (items[i] instanceof PowerUp) {
           if (items[i].getImage() == shieldBox) {
             player_1.shieldImmunity();
             items.splice(i, 1);
+            continue;
           }
           if (items[i].getImage() == shotgunBox) {
             weapon = 1;
             player_1.powerUpTimer = POWERUP_DURATION;
             items.splice(i, 1);
+            continue;
           }
-        }
-        if (items[i] instanceof ExitItem && game_mode == 'story') {
-          player_1.is_exiting = true; // starts the leave animation
-          items.splice(i, 1);
-        }
-        if (items[i] instanceof ExitItem && game_mode == 'arcade') {
-          player_1.is_exiting = true; // starts the leave animation
+        } else if (items[i] instanceof ExitItem && game_mode == 'arcade') {
+          player_1.is_exiting = true;
           weapon = 1;
           player_1.powerUpTimer = POWERUP_DURATION;
           items.splice(i, 1);
+          continue;
+        } else if (items[i] instanceof ExitItem && game_mode == 'story') {
+          player_1.is_exiting = true; // starts the leave animation
+          items.splice(i, 1);
+          continue;
         }
       }
 

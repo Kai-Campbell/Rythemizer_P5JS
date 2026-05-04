@@ -3,7 +3,9 @@ const delay = ms => new Promise(res => setTimeout(res, ms)); // this helps with 
 let spriteImages = [];
 let pressedKeys = {};
 let weapon = 0;
+let shield;
 let powerUpTimer;
+let spriteIndex;
 const POWERUP_DURATION = 600;
 this.isMoving = false;
 
@@ -15,7 +17,8 @@ class Player {
     this.spritesheet = spritesheet;
     this.Anispeed = Anispeed;
     this.r = 40 // if the scale is changed, change this
-    this.health = 5; 
+    this.health = 5;
+    this.shield = false; 
     this.can_hit = true;
     this.is_visible = true;
     this.is_rolling = false;
@@ -38,6 +41,8 @@ class Player {
   update() {
     let mvmt = createVector(0, 0);
 
+    let spriteIndex = Math.floor(millis() / 100) % 2;
+
     // Power Up Timer
     if (weapon != 0) {
         if (this.powerUpTimer > 0) {
@@ -46,6 +51,27 @@ class Player {
         if (this.powerUpTimer <= 0) {
             weapon = 0;
         }
+    }
+
+    if (this.shield) {
+      let frameH = shieldSheet.height / 2; 
+      let frameW = shieldSheet.width;
+      let frameY = 0; 
+
+      if (this.shieldBlinking) {
+        let blinkRate = 8;
+        frameY = (frameCount % blinkRate < blinkRate / 2) ? 0 : frameH; // alternates between frame 1 and 2
+      }
+
+      push();
+      image(
+        shieldSheet,
+        this.pos.x - frameW / 2,   // center horizontally
+        this.pos.y - frameH / 2,   // center vertically
+        frameW, frameH,             // display size
+        0, frameY, frameW, frameH  // source crop from spritesheet
+      );
+      pop();
     }
     
     // Player movement
@@ -239,9 +265,16 @@ class Player {
 
   async shieldImmunity() {
     this.can_hit = false;
-    console.log("cant hit me!");
-    // shield animation here
-    await delay(8000); // this is 3 seconds delay, change this and the for loop above to show change in blinking.
+    this.shield = true;
+    this.shieldBlinking = false;
+    console.log("shield active!");
+    
+    await delay(5000); // 5 seconds of solid shield
+    this.shieldBlinking = true; // start blinking
+    await delay(3000); // 3 seconds of blinking before it expires
+    
+    this.shield = false;
+    this.shieldBlinking = false;
     this.can_hit = true;
   }
 
