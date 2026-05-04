@@ -4,6 +4,7 @@ let player_y = -300;
 let player_1;
 let aimX = 0;
 let aimY = 0;
+const GUN_BARREL_OFFSET = 60; // tweak this to match the pixel distance of the laser and the gun
 const story_wave_length = 5;
 var wave_length = story_wave_length;
 var boss_spawned = false;
@@ -115,9 +116,8 @@ function rockDraw() {
     player_1.update();
     if (firePending) { // Calculate position from the controller aim to the player
       let angle = atan2(aimY - player_1.pos.y, aimX - player_1.pos.x);
-      let gunLength = 120 * .50;
-      let spawnX = player_1.pos.x + cos(angle) * gunLength;
-      let spawnY = player_1.pos.y + sin(angle) * gunLength;
+      let spawnX = player_1.pos.x + cos(angle) * GUN_BARREL_OFFSET;
+      let spawnY = player_1.pos.y + sin(angle) * GUN_BARREL_OFFSET;
       projectiles.push(new Projectile(spawnX, spawnY, aimX, aimY, "player"));
       firePending = false;
     }
@@ -129,9 +129,8 @@ function rockDraw() {
       if (weapon == 2 && projectiles[i].getPlayType() === 'player') {
         // Use aimX/aimY so the laser tracks controller or mouse
         let angle = atan2(aimY - player_1.pos.y, aimX - player_1.pos.x);
-        let gunLength = 20;
-        projectiles[i].pos.x = player_1.pos.x + cos(angle) * gunLength;
-        projectiles[i].pos.y = player_1.pos.y + sin(angle) * gunLength;
+        projectiles[i].pos.x = player_1.pos.x + cos(angle) * GUN_BARREL_OFFSET;
+        projectiles[i].pos.y = player_1.pos.y + sin(angle) * GUN_BARREL_OFFSET;
         projectiles[i].vel = createVector(aimX - player_1.pos.x, aimY - player_1.pos.y);
         projectiles[i].vel.setMag(8);
       }
