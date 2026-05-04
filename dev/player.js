@@ -155,8 +155,8 @@ class Player {
     this.pos.set(this.x, this.y)
   }
 
-  async roll(){  // this method is kinda jank so it might need further testing, only can roll when no i frames are present because it makes it buggy otherwise
-    if (this.is_rolling || !this.can_hit) {
+  async roll(){  // this method is kinda jank so it might need further testing, only can roll when no i frames are present because it makes it buggy otherwise    
+    if (this.is_rolling || !this.can_hit || this.roll_cooldown) {
       return;
     }
 
@@ -167,9 +167,14 @@ class Player {
     await delay(475); //change for duration of roll
 
     this.is_rolling = false
+
     if (this.is_visible) {
       this.can_hit = true
     }
+
+    this.roll_cooldown = true
+    await delay(1000);
+    this.roll_cooldown = false
   }
 
   
