@@ -62,7 +62,7 @@ class ExitItem extends Item {
     draw() {
         if (levelRender == 'rock') { // spawns party hat
             if (this.is_visible) {
-                image(this.image, this.x - 10, this.y - 10, 50, 100);
+                image(this.image, this.x - 10, this.y - 10, 50, 60);
             }
         } else {
             super.draw(); // draws regular items
