@@ -235,7 +235,7 @@ function preload() {
     tutorialImages[1] = loadImage('../Assets/GUI/tutorial_2.png');
     tutorialImages[2] = loadImage('../Assets/GUI/tutorial_3.png');
     tutorialImages[3] = loadImage('../Assets/GUI/tutorial_4.png');
-    tutorialGif = loadImage('../Assets/GUI/rolling.gif');
+    tutorialGifCreate = createImg('../Assets/GUI/rolling.gif');
 
     
     // End screen gifs
@@ -729,6 +729,17 @@ function displayTutorial() {
     const imgY = margin;
     
     if (tutorialImages[tutorialIndex]) {
+        if(tutorialIndex == 3){
+            let canvasElt = document.querySelector('#game-container canvas');
+            let rect = canvasElt.getBoundingClientRect();
+            let scale = rect.width / CANVAS_WIDTH;
+
+            tutorialGifCreate.show();
+            tutorialGifCreate.size(imgWidth * scale/2.5, imgHeight * scale/2.5);
+            tutorialGifCreate.position(rect.x + ((imgX + 50) * scale), rect.y + ((imgY + 175) * scale));
+        } else{
+            tutorialGifCreate.hide();
+        }
         image(tutorialImages[tutorialIndex], imgX, imgY, imgWidth, imgHeight);
     }
     
@@ -755,12 +766,14 @@ function displayTutorial() {
             menuCooldownTimer = millis() + 500;
             tutorialClickFlag = true;
             tutorialIndex++;
+            
         }
     } else {
         drawExitX(rightArrowX, buttonY, buttonSize);
         if (isHoveringButton(rightArrowX, buttonY, buttonSize) && mouseIsPressed && !tutorialClickFlag) {
             menuCooldownTimer = millis() + 500;
             tutorialClickFlag = true;
+            tutorialGifCreate.hide();
             if (showTutorialOverlay) {
                 showTutorialOverlay = false; // ← just hide the overlay, pause menu stays
             } else {
