@@ -25,6 +25,9 @@ function rockSetup() {
   enemies = [];
   boss = [];
   items = [];
+  if (game_mode == 'chaos') {
+    wave_length = 0;
+  }
   player_1.powerUpTimer = POWERUP_DURATION;
 }
 
@@ -78,10 +81,15 @@ function getArcadeWaveConfig(waveNumber) {
 function spawnBoss() {
   if (boss_spawned === true) {
     return;
-  } else {
+  } else  if (game_mode === 'story' || game_mode === 'arcade') {
     let startX = CANVAS_WIDTH + 500; 
     let targetX = CANVAS_WIDTH - 200;
     boss.push(new rockBoss(startX, CANVAS_HEIGHT - 450, targetX, player_1.y, 200, dragonJSON, dragonSpriteSheet, 0.1, 0.3, 50, 10))
+    boss_spawned = true;
+  } else {
+    let startX = CANVAS_WIDTH + 500; 
+    let targetX = CANVAS_WIDTH - 200;
+    boss.push(new rockBoss(startX, CANVAS_HEIGHT - 450, targetX, player_1.y, 200, dragonJSON, dragonSpriteSheet, 0.1, 0.3, 1, 10))
     boss_spawned = true;
   }
 }
@@ -96,7 +104,7 @@ function rockDraw() {
    */
 
   player_1.enterScene(); // these two functions handle level transitions
-  if (game_mode === 'story') {
+  if (game_mode === 'story' || game_mode === 'chaos') {
     player_1.leaveScene('end');
   } else {
     player_1.leaveScene('lofi');
@@ -209,7 +217,7 @@ function rockDraw() {
             projectiles.splice(i, 1);
             if (boss[b].health <= 0) {
               boss[b].is_dead = true;
-              if (game_mode == 'story') {
+              if (game_mode == 'story' || game_mode == 'chaos') {
                 items.push(new ExitItem(exitItem, boss[b].pos.x, boss[b].pos.y)); // spawns the new exit level item
               }
               if (game_mode == 'arcade') {
@@ -299,7 +307,7 @@ function rockDraw() {
           player_1.powerUpTimer = POWERUP_DURATION;
           items.splice(i, 1);
           continue;
-        } else if (items[i] instanceof ExitItem && game_mode == 'story') {
+        } else if (items[i] instanceof ExitItem && game_mode == 'story' || game_mode == 'chaos') {
           player_1.is_exiting = true; // starts the leave animation
           items.splice(i, 1);
           continue;

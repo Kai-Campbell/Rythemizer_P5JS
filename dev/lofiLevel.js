@@ -14,6 +14,9 @@ function lofiSetup() {
   if (game_mode == 'story') {
     weapon = 0;
   }
+  if (game_mode == 'chaos') {
+    lofi_wave_length = 0;
+  }
   player_1.powerUpTimer = POWERUP_DURATION;
 }
 
@@ -34,10 +37,15 @@ function spawnLofiBaddies(count) {
 function spawnBossLofi() {
   if (lofi_boss_spawned === true) {
     return;
-  } else {
+  } else  if (game_mode === 'story' || game_mode === 'arcade') {
     let startX = CANVAS_WIDTH + 500; 
     let targetX = CANVAS_WIDTH - 200;
     boss.push(new LofiBoss(startX, CANVAS_HEIGHT - 400, targetX, player_1.y, 200, bard_JSON, bard_spriteSheet, 0.1, 0.3, 30, 10))
+    lofi_boss_spawned = true;
+  } else {
+    let startX = CANVAS_WIDTH + 500; 
+    let targetX = CANVAS_WIDTH - 200;
+    boss.push(new LofiBoss(startX, CANVAS_HEIGHT - 400, targetX, player_1.y, 200, bard_JSON, bard_spriteSheet, 0.1, 0.3, 1, 10))
     lofi_boss_spawned = true;
   }
 }

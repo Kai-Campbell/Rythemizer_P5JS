@@ -86,7 +86,6 @@ class Projectile {
 
             if (weapon == 2) {
                 let frame = laserPinkData.frames[spriteIndex].position;
-                this.vel.setMag(8); 
 
                 push();
                 translate(this.pos.x, this.pos.y);

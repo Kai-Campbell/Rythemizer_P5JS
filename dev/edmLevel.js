@@ -11,6 +11,9 @@ function edmSetup() {
   boss = [];
   enemies = [];
   items = [];
+  if (game_mode == 'chaos') {
+    edm_wave_length = 0;
+  }
   player_1.powerUpTimer = POWERUP_DURATION;
 }
 
@@ -32,10 +35,15 @@ function spawnEdmBaddies(count) {
 function spawnBossEDM() {
   if (edm_boss_spawned === true) {
     return;
-  } else {
+  } else if (game_mode === 'story' || game_mode === 'arcade') {
     let startX = CANVAS_WIDTH + 500; 
     let targetX = CANVAS_WIDTH - 200;
     boss.push(new EDMBoss(startX, CANVAS_HEIGHT - 400, targetX, player_1.y, 200, rave_knightJSON, rave_knightSheet, 0.1, 0.3, 30, 10))
+    edm_boss_spawned = true;
+  } else {
+    let startX = CANVAS_WIDTH + 500; 
+    let targetX = CANVAS_WIDTH - 200;
+    boss.push(new EDMBoss(startX, CANVAS_HEIGHT - 400, targetX, player_1.y, 200, rave_knightJSON, rave_knightSheet, 0.1, 0.3, 1, 10))
     edm_boss_spawned = true;
   }
 }
