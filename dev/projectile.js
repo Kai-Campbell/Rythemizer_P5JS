@@ -10,6 +10,7 @@ class Projectile {
     this.r = 10
     this.frameCounter = 0; // Counter for sprite animation
     this.laserShot = false;
+    this.vinylShot = false;
   }
 
     // update position of projectile every frame
@@ -19,7 +20,12 @@ class Projectile {
             this.laserShot = true;
         }
 
-        if (!paused && (weapon != 2 || this.playType !== 'player')) {
+        if (!paused && weapon == 3 && this.playType === 'player') {
+            this.frameCounter++;
+            this.vinylShot = true;
+        }
+
+        if (!paused && (weapon != 2 || weapon != 3 || this.playType !== 'player')) {
             this.frameCounter++;
             this.pos.add(this.vel);
         }
@@ -38,6 +44,7 @@ class Projectile {
             // Get the frame position from json
             if (weapon == 0) {
                 let frame = bulletData.frames[spriteIndex].position;
+                this.vel.setMag(8); 
 
                 push();
                 translate(this.pos.x, this.pos.y);
@@ -54,6 +61,7 @@ class Projectile {
 
             if (weapon == 1) {
                 let frame = bulletData.frames[spriteIndex].position;
+                this.vel.setMag(6); 
                 
                 const spacing = 10; // Adjust this to control gap between bullets
                 
@@ -78,6 +86,7 @@ class Projectile {
 
             if (weapon == 2) {
                 let frame = laserPinkData.frames[spriteIndex].position;
+                this.vel.setMag(8); 
 
                 push();
                 translate(this.pos.x, this.pos.y);
@@ -93,17 +102,43 @@ class Projectile {
             }
 
             if (weapon == 3) {
-                let frame = vinylGreenData.frames[spriteIndex].position;
+                let frameB = vinylGreenData.frames[spriteIndex].position;
+                let frameG = vinylGreenData.frames[spriteIndex].position;     
+                this.vel.setMag(13);           
 
                 push();
                 translate(this.pos.x, this.pos.y);
                 rotate(angle);
                 image(
-                    vinylGreen,             // Actual sprite sheet file 
+                    vinylBlue,             // Actual sprite sheet file 
                     -10, -10,               // dx, dy: Coordinates to draw image onto canvas 
                     30, 20,             // dWidth, dHeight: How large it draws onto the canvas
-                    frame.x, frame.y,   // sx, xy: Where to start cropping on the sprite sheet
-                    frame.w, frame.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
+                    frameB.x, frameB.y,   // sx, xy: Where to start cropping on the sprite sheet
+                    frameB.w, frameB.h    // sWidth, sHeight: Exact width and height to crop from sprite sheet
+                );
+                pop();
+
+                push();
+                translate(this.pos.x - 20, this.pos.y - 20);
+                rotate(angle - 45);
+                image(
+                    vinylGreen,             
+                    -10, -10,               
+                    30, 20,           
+                    frameG.x, frameG.y,  
+                    frameG.w, frameG.h    
+                );
+                pop();
+
+                push();
+                translate(this.pos.x + 20, this.pos.y + 20);
+                rotate(angle + 45);
+                image(
+                    vinylGreen,            
+                    -10, -10,              
+                    30, 20,            
+                    frameG.x, frameG.y,  
+                    frameG.w, frameG.h  
                 );
                 pop();
             }
