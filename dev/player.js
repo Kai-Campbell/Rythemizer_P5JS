@@ -23,6 +23,8 @@ class Player {
     this.is_visible = true;
     this.is_rolling = false;
     this.powerUpTimer = 0;
+    this.cooldownEndTime = 0;
+    this.roll_cooldown = false;
 
     this.is_entering = true; // true
     this.is_exiting = false;
@@ -155,8 +157,8 @@ class Player {
     this.pos.set(this.x, this.y)
   }
 
-  async roll(){  // this method is kinda jank so it might need further testing, only can roll when no i frames are present because it makes it buggy otherwise
-    if (this.is_rolling || !this.can_hit) {
+  async roll(){  // this method is kinda jank so it might need further testing, only can roll when no i frames are present because it makes it buggy otherwise    
+    if (this.is_rolling || !this.can_hit || this.roll_cooldown) {
       return;
     }
 
@@ -167,9 +169,16 @@ class Player {
     await delay(475); //change for duration of roll
 
     this.is_rolling = false
+
     if (this.is_visible) {
       this.can_hit = true
     }
+
+    this.roll_cooldown = true
+    this.cooldownEndTime = millis() + 1000;
+    
+    await delay(1000);
+    this.roll_cooldown = false
   }
 
   
@@ -234,8 +243,22 @@ class Player {
         }
       }
       pop();
+
+      let remaining = this.cooldownEndTime - millis();
+      if (remaining > 0 && !this.is_rolling) {
+        push();
+        textAlign(CENTER);
+        textSize(35);
+        if (typeof pixelFont !== "undefined") textFont(pixelFont);
+        
+        fill(0);
+        text((remaining / 1000).toFixed(1), this.pos.x + 1, this.pos.y - 39); //shadow text
+        fill(255, 0, 0);
+        text((remaining / 1000).toFixed(1), this.pos.x, this.pos.y - 40);
+        pop();
     }
   }
+}
 
   async blink() { // this makes the character blink when invincible
     for (let i = 0; i < 15; i++) { // until 15 because of the 2 delays and 3 seconds of i frames
